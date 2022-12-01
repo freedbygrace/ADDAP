@@ -1,0 +1,207 @@
+﻿**********************
+Windows PowerShell transcript start
+Start time: 20221130172019
+Username: \SYSTEM
+RunAs User: \SYSTEM
+Configuration Name: 
+Machine: MININT-SL7O86I (Microsoft Windows NT 6.2.9200.0)
+Host Application: E:\MININT\Modules\Microsoft.BDD.TaskSequenceModule\Microsoft.BDD.TaskSequencePSHost40.exe \\10.10.10.27\OSDProduction\Scripts\Custom\Invoke-DriverPackageAction\Invoke-DriverPackageDownload.ps1 E:\MININT\SMSOSD\OSDLOGS -Stage -StagingRootDirectory 'E:\DriverCache'
+Process ID: 668
+PSVersion: 5.1.22000.1
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.22000.1
+BuildVersion: 10.0.22000.1
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+VERBOSE: 11/30/2022 17:20:19.132 - Execution of script "Invoke-DriverPackageDownload.ps1" began on Wednesday, November 30, 2022 @ 05:20:12.992 PM
+VERBOSE: 11/30/2022 17:20:19.132 - Script Path = \\10.10.10.27\OSDProduction\Scripts\Custom\Invoke-DriverPackageAction\Invoke-DriverPackageDownload.ps1
+VERBOSE: 11/30/2022 17:20:19.242 - Available Script Parameter(s) = -DriverPackageRootDirectory:DirectoryInfo, -DriverPackageMetadataPath:FileInfo, -DisableDownLeveling:SwitchParameter, -SegmentSize:Int32, -RandomDelay:SwitchParameter, -Stage:SwitchParameter, -StagingRootDirectory:DirectoryInfo, -TaskSequenceVariables:String[], -LogDirectory:DirectoryInfo, -ContinueOnError:SwitchParameter
+VERBOSE: 11/30/2022 17:20:19.257 - Supplied Script Parameter(s) = -Stage:SwitchParameter, -StagingRootDirectory:DirectoryInfo
+VERBOSE: 11/30/2022 17:20:19.257 - Parameter Set Name = __AllParameterSets
+VERBOSE: 11/30/2022 17:20:19.257 - Command Line: "E:\MININT\Modules\Microsoft.BDD.TaskSequenceModule\Microsoft.BDD.TaskSequencePSHost40.exe"  "\\10.10.10.27\OSDProduction\Scripts\Custom\Invoke-DriverPackageAction\Invoke-DriverPackageDownload.ps1" "E:\MININT\SMSOSD\OSDLOGS" -Stage -StagingRootDirectory 'E:\DriverCache'
+VERBOSE: 11/30/2022 17:20:19.273 - 2 command line parameter(s) were specified.
+VERBOSE: 11/30/2022 17:20:19.351 - ProductName:
+VERBOSE: 11/30/2022 17:20:19.351 - Version: 10.0.22000.1
+VERBOSE: 11/30/2022 17:20:19.351 - Architecture: 64-bit
+VERBOSE: 11/30/2022 17:20:19.367 - ReleaseVersion: 2009
+VERBOSE: 11/30/2022 17:20:19.367 - ReleaseID: Dev
+VERBOSE: 11/30/2022 17:20:19.367 - Powershell Version: 5.1.22000.1
+VERBOSE: 11/30/2022 17:20:19.382 - The powershell execution policy is currently set to "Undefined" for the "MachinePolicy" scope.
+VERBOSE: 11/30/2022 17:20:19.382 - The powershell execution policy is currently set to "Undefined" for the "UserPolicy" scope.
+VERBOSE: 11/30/2022 17:20:19.382 - The powershell execution policy is currently set to "Bypass" for the "Process" scope.
+VERBOSE: 11/30/2022 17:20:19.382 - The powershell execution policy is currently set to "Undefined" for the "CurrentUser" scope.
+VERBOSE: 11/30/2022 17:20:19.382 - The powershell execution policy is currently set to "Bypass" for the "LocalMachine" scope.
+VERBOSE: 11/30/2022 17:20:19.492 - Attempting to display device information properties from the "MS_SystemInformation" WMI class located within the "root\WMI" WMI namespace. Please Wait...
+VERBOSE: 11/30/2022 17:20:19.507 - BaseBoardManufacturer = Dell Inc.
+VERBOSE: 11/30/2022 17:20:19.507 - BaseBoardProduct = 01Y2TP
+VERBOSE: 11/30/2022 17:20:19.507 - BaseBoardVersion = A00
+VERBOSE: 11/30/2022 17:20:19.507 - BIOSReleaseDate = 06/20/2022
+VERBOSE: 11/30/2022 17:20:19.507 - BIOSVendor = Dell Inc.
+VERBOSE: 11/30/2022 17:20:19.507 - BIOSVersion = 1.4.0
+VERBOSE: 11/30/2022 17:20:19.523 - SystemFamily = Latitude
+VERBOSE: 11/30/2022 17:20:19.523 - SystemManufacturer = Dell Inc.
+VERBOSE: 11/30/2022 17:20:19.523 - SystemProductName = Latitude 5430
+VERBOSE: 11/30/2022 17:20:19.523 - SystemSKU = 0B04
+VERBOSE: 11/30/2022 17:20:19.554 - There are 0 log file(s) requiring cleanup.
+VERBOSE: 11/30/2022 17:20:19.663 - Attempting to dot source the functions contained within the dependency script "Convert-FileSize.ps1". Please Wait... [Script Path: "\\10.10.10.27\OSDProduction\Scripts\Custom\Invoke-DriverPackageAction\Functions\Convert-FileSize.ps1"]
+VERBOSE: 11/30/2022 17:20:19.679 - Attempting to dot source the functions contained within the dependency script "Copy-ItemWithProgress.ps1". Please Wait... [Script Path: "\\10.10.10.27\OSDProduction\Scripts\Custom\Invoke-DriverPackageAction\Functions\Copy-ItemWithProgress.ps1"]
+VERBOSE: 11/30/2022 17:20:19.726 - Attempting to dot source the functions contained within the dependency script "Get-WindowsReleaseHistory.ps1". Please Wait... [Script Path: "\\10.10.10.27\OSDProduction\Scripts\Custom\Invoke-DriverPackageAction\Functions\Get-WindowsReleaseHistory.ps1"]
+VERBOSE: 11/30/2022 17:20:19.742 - Attempting to dot source the functions contained within the dependency script "Invoke-FileDownload.ps1". Please Wait... [Script Path: "\\10.10.10.27\OSDProduction\Scripts\Custom\Invoke-DriverPackageAction\Functions\Invoke-FileDownload.ps1"]
+VERBOSE: 11/30/2022 17:20:19.773 - Attempting to dot source the functions contained within the dependency script "Invoke-FileDownloadWithProgress.ps1". Please Wait... [Script Path: "\\10.10.10.27\OSDProduction\Scripts\Custom\Invoke-DriverPackageAction\Functions\Invoke-FileDownloadWithProgress.ps1"]
+VERBOSE: 11/30/2022 17:20:19.804 - Attempting to dot source the functions contained within the dependency script "Invoke-RegistryHiveAction.ps1". Please Wait... [Script Path: "\\10.10.10.27\OSDProduction\Scripts\Custom\Invoke-DriverPackageAction\Functions\Invoke-RegistryHiveAction.ps1"]
+VERBOSE: 11/30/2022 17:20:19.96 - Attempting to dot source the functions contained within the dependency script "Invoke-SQLDBQuery.ps1". Please Wait... [Script Path: "\\10.10.10.27\OSDProduction\Scripts\Custom\Invoke-DriverPackageAction\Functions\Invoke-SQLDBQuery.ps1"]
+VERBOSE: 11/30/2022 17:20:20.117 - Attempting to dot source the functions contained within the dependency script "Start-ProcessWithOutput.ps1". Please Wait... [Script Path: "\\10.10.10.27\OSDProduction\Scripts\Custom\Invoke-DriverPackageAction\Functions\Start-ProcessWithOutput.ps1"]
+VERBOSE: 11/30/2022 17:20:20.21 - A task sequence is currently running.
+VERBOSE: 11/30/2022 17:20:20.21 - Attempting to retrieve the task sequence variable list. Please Wait...
+VERBOSE: 11/30/2022 17:20:20.335 - A task sequence is currently running.
+VERBOSE: 11/30/2022 17:20:20.335 - Attempting to read the contents of "\\10.10.10.27\OSDProduction\Out-Of-Box-Driver-Packages\Metadata\DriverPackageList.xml". Please Wait...
+VERBOSE: 11/30/2022 17:20:20.413 - The current system manufacturer of "Dell Inc." matches the manufacturer list for "Dell" [Eligibility Expression: (^.*Dell.*$)].
+VERBOSE: 11/30/2022 17:20:20.429 - 1 model(s) contain the product ID of "0B04".
+VERBOSE: 11/30/2022 17:20:20.429 - The current product ID of "0B04" is contained within the product ID list for the "Latitude 5430" device model.
+VERBOSE: 11/30/2022 17:20:20.429 - Product ID List: 0B04, 0B05]
+VERBOSE: 11/30/2022 17:20:20.476 - Attempting to check fixed volume "W:" for a valid installation of Windows.
+VERBOSE: 11/30/2022 17:20:20.476 - Attempting to check fixed volume "F:" for a valid installation of Windows.
+VERBOSE: 11/30/2022 17:20:20.476 - Attempting to check fixed volume "E:" for a valid installation of Windows.
+VERBOSE: 11/30/2022 17:20:20.491 - Fixed volume "E:" contains a valid installation of Windows.
+VERBOSE: 11/30/2022 17:20:20.57 - Function 'Invoke-RegistryHiveAction' is beginning. Please Wait...
+VERBOSE: 11/30/2022 17:20:20.585 - Available Function Parameter(s) = -HivePath:FileInfo, -KeyPath:String[], -ValueNameExpression:Regex[], -ContinueOnError:SwitchParameter
+VERBOSE: 11/30/2022 17:20:20.585 - Supplied Function Parameter(s) = -HivePath:FileInfo, -KeyPath:String[], -ValueNameExpression:Regex[], -ContinueOnError:SwitchParameter, -Verbose:SwitchParameter
+VERBOSE: 11/30/2022 17:20:20.585 - Execution of Invoke-RegistryHiveAction began on Wednesday, November 30, 2022 @ 05:20:20.554 PM
+VERBOSE: 11/30/2022 17:20:20.632 - Attempting to load assembly "\\10.10.10.27\OSDProduction\Scripts\Custom\Invoke-DriverPackageAction\Functions\Libraries\NFluent.dll". Please Wait...
+VERBOSE: 11/30/2022 17:20:20.71 - Attempting to load assembly "\\10.10.10.27\OSDProduction\Scripts\Custom\Invoke-DriverPackageAction\Functions\Libraries\NLog.dll". Please Wait...
+VERBOSE: 11/30/2022 17:20:20.741 - Attempting to load assembly "\\10.10.10.27\OSDProduction\Scripts\Custom\Invoke-DriverPackageAction\Functions\Libraries\Registry.dll". Please Wait...
+VERBOSE: 11/30/2022 17:20:20.741 - Attempting to load registry hive "E:\Windows\System32\Config\SOFTWARE" on demand. Please Wait...
+VERBOSE: 11/30/2022 17:20:20.882 - Attempting to retrieve the details of registry key path "Root\Microsoft\Windows NT\CurrentVersion". Please Wait...
+VERBOSE: 11/30/2022 17:20:20.976 - Execution of Invoke-RegistryHiveAction ended on Wednesday, November 30, 2022 @ 05:20:20.976 PM
+VERBOSE: 11/30/2022 17:20:20.976 - Function execution took 0 hour(s), 0 minute(s), 0 second(s), and 421 millisecond(s)
+VERBOSE: 11/30/2022 17:20:20.991 - Function 'Invoke-RegistryHiveAction' is completed.
+VERBOSE: 11/30/2022 17:20:21.023 - Deployed Operating System - MajorVersionNumber: 10
+VERBOSE: 11/30/2022 17:20:21.023 - Deployed Operating System - MinorVersionNumber: 0
+VERBOSE: 11/30/2022 17:20:21.023 - Deployed Operating System - BuildNumber: 19045
+VERBOSE: 11/30/2022 17:20:21.023 - Deployed Operating System - RevisionNumber: 1826
+VERBOSE: 11/30/2022 17:20:21.023 - Deployed Operating System - Version: 10.0.19045.1826
+VERBOSE: 11/30/2022 17:20:21.023 - Deployed Operating System - ReleaseNumber: 2009
+VERBOSE: 11/30/2022 17:20:21.023 - Deployed Operating System - ReleaseID: 22H2
+VERBOSE: 11/30/2022 17:20:21.023 - Deployed Operating System - BuildLabEX: 19041.1.amd64fre.vb_release.191206-1406
+VERBOSE: 11/30/2022 17:20:21.023 - Deployed Operating System - Architecture: X64
+VERBOSE: 11/30/2022 17:20:21.038 - The deployed operating system image kernel version of 10.0 matches 2 supported operating system(s).
+VERBOSE: 11/30/2022 17:20:21.038 - Supported Operating System #01 - Windows 10 - [Minimum Version: 10.0.10240]
+VERBOSE: 11/30/2022 17:20:21.038 - Supported Operating System #02 - Windows 11 - [Minimum Version: 10.0.22000]
+VERBOSE: 11/30/2022 17:20:21.054 - 1 driver package(s) were found.
+VERBOSE: 11/30/2022 17:20:21.054 - Driver Package #01 - Dell-0B04-H2VD7-A05-W10-X64-All.wim [Minimum Operating System Version: 10.0.10240] [Release Date: 2022-11-06]
+VERBOSE: 11/30/2022 17:20:21.116 - Selected the most recent driver package of "Dell-0B04-H2VD7-A05-W10-X64-All.wim" [Release Date: 2022-11-06].
+VERBOSE: 11/30/2022 17:20:21.163 - Attempting to add driver package "\\10.10.10.27\OSDProduction\Out-Of-Box-Driver-Packages\Dell\0B04\W10\X64\Dell-0B04-H2VD7-A05-W10-X64-All.wim" to the download list. Please Wait...
+VERBOSE: 11/30/2022 17:20:21.444 - Attempting to add generic driver package "\\10.10.10.27\OSDProduction\Out-Of-Box-Driver-Packages\Generic\Adapters\Generic-Adapters.wim" to the download list. Please Wait...
+VERBOSE: 11/30/2022 17:20:21.46 - The generic driver package of "Generic-Docks" is excluded because it has been disabled. Skipping...
+VERBOSE: 11/30/2022 17:20:21.476 - The generic driver package of "Generic-Miscellaneous" is excluded because it has been disabled. Skipping...
+VERBOSE: 11/30/2022 17:20:21.476 - The generic driver package of "Generic-Printers" is excluded because it has been disabled. Skipping...
+VERBOSE: 11/30/2022 17:20:21.476 - 2 driver package(s) need to be downloaded.
+VERBOSE: 11/30/2022 17:20:21.538 - Function 'Copy-ItemWithProgress' is beginning. Please Wait...
+VERBOSE: 11/30/2022 17:20:21.538 - Available Function Parameter(s) = -Path:String, -Destination:DirectoryInfo, -Include:String[], -Exclude:String[], -Recurse:SwitchParameter, -Force:SwitchParameter, -SegmentSize:Int32, -RandomDelay:SwitchParameter, -ContinueOnError:SwitchParameter
+VERBOSE: 11/30/2022 17:20:21.554 - Supplied Function Parameter(s) = -Path:String, -Destination:DirectoryInfo, -Force:SwitchParameter, -SegmentSize:Int32, -RandomDelay:SwitchParameter, -ContinueOnError:SwitchParameter, -Verbose:SwitchParameter
+VERBOSE: 11/30/2022 17:20:21.554 - Execution of Copy-ItemWithProgress began on Wednesday, November 30, 2022 @ 05:20:21.538 PM
+VERBOSE: 11/30/2022 17:20:21.554 - 1 file(s) will be copied in 8192 MB segments to the destination directory of "E:\Downloads\DriverPackages". Please Wait...
+VERBOSE: 11/30/2022 17:20:21.569 - A total of 1200.62 MB needs to be transferred.
+VERBOSE: 11/30/2022 17:20:21.585 - Attempting to copy "\\10.10.10.27\OSDProduction\Out-Of-Box-Driver-Packages\Dell\0B04\W10\X64\Dell-0B04-H2VD7-A05-W10-X64-All.wim" to "E:\Downloads\DriverPackages\Dell-0B04-H2VD7-A05-W10-X64-All.wim". Please Wait...
+VERBOSE: 11/30/2022 17:23:24.581 - 1 of 1 file(s) have a status of "Successful".
+VERBOSE: 11/30/2022 17:23:27.597 - Execution of Copy-ItemWithProgress ended on Wednesday, November 30, 2022 @ 05:23:27.597 PM
+VERBOSE: 11/30/2022 17:23:27.597 - Function execution took 0 hour(s), 3 minute(s), 6 second(s), and 58 millisecond(s)
+VERBOSE: 11/30/2022 17:23:27.597 - Function 'Copy-ItemWithProgress' is completed.
+VERBOSE: 11/30/2022 17:23:27.597 - Function 'Copy-ItemWithProgress' is beginning. Please Wait...
+VERBOSE: 11/30/2022 17:23:27.597 - Available Function Parameter(s) = -Path:String, -Destination:DirectoryInfo, -Include:String[], -Exclude:String[], -Recurse:SwitchParameter, -Force:SwitchParameter, -SegmentSize:Int32, -RandomDelay:SwitchParameter, -ContinueOnError:SwitchParameter
+VERBOSE: 11/30/2022 17:23:27.597 - Supplied Function Parameter(s) = -Path:String, -Destination:DirectoryInfo, -Force:SwitchParameter, -SegmentSize:Int32, -RandomDelay:SwitchParameter, -ContinueOnError:SwitchParameter, -Verbose:SwitchParameter
+VERBOSE: 11/30/2022 17:23:27.597 - Execution of Copy-ItemWithProgress began on Wednesday, November 30, 2022 @ 05:23:27.597 PM
+VERBOSE: 11/30/2022 17:23:27.597 - 1 file(s) will be copied in 8192 MB segments to the destination directory of "E:\Downloads\DriverPackages". Please Wait...
+VERBOSE: 11/30/2022 17:23:27.597 - A total of 51.71 MB needs to be transferred.
+VERBOSE: 11/30/2022 17:23:27.612 - Attempting to copy "\\10.10.10.27\OSDProduction\Out-Of-Box-Driver-Packages\Generic\Adapters\Generic-Adapters.wim" to "E:\Downloads\DriverPackages\Generic-Adapters.wim". Please Wait...
+VERBOSE: 11/30/2022 17:23:35.674 - 1 of 1 file(s) have a status of "Successful".
+VERBOSE: 11/30/2022 17:23:38.689 - Execution of Copy-ItemWithProgress ended on Wednesday, November 30, 2022 @ 05:23:38.689 PM
+VERBOSE: 11/30/2022 17:23:38.689 - Function execution took 0 hour(s), 0 minute(s), 11 second(s), and 92 millisecond(s)
+VERBOSE: 11/30/2022 17:23:38.689 - Function 'Copy-ItemWithProgress' is completed.
+VERBOSE: 11/30/2022 17:23:38.705 - 2 driver package(s) need to be applied to the Windows installation contained on volume "E:".
+VERBOSE: 11/30/2022 17:23:38.721 - Attempting to process driver pack image #01 - E:\Downloads\DriverPackages\Dell-0B04-H2VD7-A05-W10-X64-All.wim
+VERBOSE: 11/30/2022 17:23:39.221 - Attempting to process driver pack image index 1. Please Wait...
+VERBOSE: 11/30/2022 17:23:39.236 - Attempting to execute the command(s) associated with the "MountImage" key. Please Wait...
+VERBOSE: 11/30/2022 17:23:39.283 - Function 'Start-ProcessWithOutput' is beginning. Please Wait...
+VERBOSE: 11/30/2022 17:23:39.283 - Available Function Parameter(s) = -FilePath:String, -ArgumentList:String[], -AcceptableExitCodeList:String[], -WindowStyle:String, -CreateNoWindow:SwitchParameter, -ParseOutput:SwitchParameter, -ParsingExpression:Regex, -LogOutput:SwitchParameter
+VERBOSE: 11/30/2022 17:23:39.283 - Supplied Function Parameter(s) = -FilePath:String, -ArgumentList:String[], -AcceptableExitCodeList:String[], -CreateNoWindow:SwitchParameter, -LogOutput:SwitchParameter, -Verbose:SwitchParameter
+VERBOSE: 11/30/2022 17:23:39.283 - Execution of Start-ProcessWithOutput began on Wednesday, November 30, 2022 @ 05:23:39.283 PM
+VERBOSE: 11/30/2022 17:23:39.346 - Attempting to execute the following command: "X:\windows\system32\dism.exe" /Mount-Image /ImageFile:"E:\Downloads\DriverPackages\Dell-0B04-H2VD7-A05-W10-X64-All.wim" /Index:1 /MountDir:"E:\WIMMount\Image01\Index01" /ReadOnly /LogPath:"E:\MININT\SMSOSD\OSDLOGS\Invoke-DriverPackageDownload\DISM\DISM_MountImage_Image01_Index01.log" /LogLevel:3
+VERBOSE: 11/30/2022 17:23:39.674 - The command execution took 0 hour(s), 0 minute(s), 0 second(s), and 309 millisecond(s).
+VERBOSE: 11/30/2022 17:23:39.674 - The command execution was successful. [ExitCode: 0] [ExitCodeAsDecimal: 0] [ExitCodeAsHex: 0x00000000] [ExitCodeAsInteger: 0]
+VERBOSE: 11/30/2022 17:23:39.689 - Execution of Start-ProcessWithOutput ended on Wednesday, November 30, 2022 @ 05:23:39.689 PM
+VERBOSE: 11/30/2022 17:23:39.689 - Function execution took 0 hour(s), 0 minute(s), 0 second(s), and 406 millisecond(s).
+VERBOSE: 11/30/2022 17:23:39.689 - Function 'Start-ProcessWithOutput' is completed.
+VERBOSE: 11/30/2022 17:23:39.689 - Attempting to execute the command(s) associated with the "AddDrivers" key. Please Wait...
+VERBOSE: 11/30/2022 17:23:39.689 - Function 'Start-ProcessWithOutput' is beginning. Please Wait...
+VERBOSE: 11/30/2022 17:23:39.689 - Available Function Parameter(s) = -FilePath:String, -ArgumentList:String[], -AcceptableExitCodeList:String[], -WindowStyle:String, -CreateNoWindow:SwitchParameter, -ParseOutput:SwitchParameter, -ParsingExpression:Regex, -LogOutput:SwitchParameter
+VERBOSE: 11/30/2022 17:23:39.689 - Supplied Function Parameter(s) = -FilePath:String, -ArgumentList:String[], -AcceptableExitCodeList:String[], -CreateNoWindow:SwitchParameter, -LogOutput:SwitchParameter, -Verbose:SwitchParameter
+VERBOSE: 11/30/2022 17:23:39.689 - Execution of Start-ProcessWithOutput began on Wednesday, November 30, 2022 @ 05:23:39.689 PM
+VERBOSE: 11/30/2022 17:23:39.689 - Attempting to execute the following command: "X:\windows\system32\dism.exe" /Image:E: /Add-Driver /Driver:"E:\WIMMount\Image01\Index01" /Recurse /LogPath:"E:\MININT\SMSOSD\OSDLOGS\Invoke-DriverPackageDownload\DISM\DISM_AddDrivers_Image01_Index01.log" /LogLevel:3
+VERBOSE: 11/30/2022 17:26:15.345 - The command execution took 0 hour(s), 2 minute(s), 35 second(s), and 638 millisecond(s).
+VERBOSE: 11/30/2022 17:26:15.345 - The command execution was successful. [ExitCode: 0] [ExitCodeAsDecimal: 0] [ExitCodeAsHex: 0x00000000] [ExitCodeAsInteger: 0]
+VERBOSE: 11/30/2022 17:26:15.345 - Execution of Start-ProcessWithOutput ended on Wednesday, November 30, 2022 @ 05:26:15.345 PM
+VERBOSE: 11/30/2022 17:26:15.345 - Function execution took 0 hour(s), 2 minute(s), 35 second(s), and 655 millisecond(s).
+VERBOSE: 11/30/2022 17:26:15.345 - Function 'Start-ProcessWithOutput' is completed.
+VERBOSE: 11/30/2022 17:26:15.345 - Attempting to execute the command(s) associated with the "UnmountImage" key. Please Wait...
+VERBOSE: 11/30/2022 17:26:15.36 - Attempting to stage driver content contained within image index 1 locally on this device. Please Wait...
+VERBOSE: 11/30/2022 17:26:35.077 - Attempting to hide the driver staging directory of "E:\DriverCache". Please Wait...
+VERBOSE: 11/30/2022 17:26:35.093 - Function 'Start-ProcessWithOutput' is beginning. Please Wait...
+VERBOSE: 11/30/2022 17:26:35.093 - Available Function Parameter(s) = -FilePath:String, -ArgumentList:String[], -AcceptableExitCodeList:String[], -WindowStyle:String, -CreateNoWindow:SwitchParameter, -ParseOutput:SwitchParameter, -ParsingExpression:Regex, -LogOutput:SwitchParameter
+VERBOSE: 11/30/2022 17:26:35.093 - Supplied Function Parameter(s) = -FilePath:String, -ArgumentList:String[], -AcceptableExitCodeList:String[], -CreateNoWindow:SwitchParameter, -LogOutput:SwitchParameter, -Verbose:SwitchParameter
+VERBOSE: 11/30/2022 17:26:35.093 - Execution of Start-ProcessWithOutput began on Wednesday, November 30, 2022 @ 05:26:35.077 PM
+VERBOSE: 11/30/2022 17:26:35.093 - Attempting to execute the following command: "X:\windows\system32\dism.exe" /Unmount-Image /MountDir:"E:\WIMMount\Image01\Index01" /Discard /LogPath:"E:\MININT\SMSOSD\OSDLOGS\Invoke-DriverPackageDownload\DISM\DISM_UnmountImage_Image01_Index01.log" /LogLevel:3
+VERBOSE: 11/30/2022 17:26:35.655 - The command execution took 0 hour(s), 0 minute(s), 0 second(s), and 554 millisecond(s).
+VERBOSE: 11/30/2022 17:26:35.655 - The command execution was successful. [ExitCode: 0] [ExitCodeAsDecimal: 0] [ExitCodeAsHex: 0x00000000] [ExitCodeAsInteger: 0]
+VERBOSE: 11/30/2022 17:26:35.655 - Execution of Start-ProcessWithOutput ended on Wednesday, November 30, 2022 @ 05:26:35.655 PM
+VERBOSE: 11/30/2022 17:26:35.655 - Function execution took 0 hour(s), 0 minute(s), 0 second(s), and 577 millisecond(s).
+VERBOSE: 11/30/2022 17:26:35.655 - Function 'Start-ProcessWithOutput' is completed.
+VERBOSE: 11/30/2022 17:26:35.655 - Attempting to process driver pack image #02 - E:\Downloads\DriverPackages\Generic-Adapters.wim
+VERBOSE: 11/30/2022 17:26:35.671 - Attempting to process driver pack image index 1. Please Wait...
+VERBOSE: 11/30/2022 17:26:35.671 - Attempting to execute the command(s) associated with the "MountImage" key. Please Wait...
+VERBOSE: 11/30/2022 17:26:35.671 - Function 'Start-ProcessWithOutput' is beginning. Please Wait...
+VERBOSE: 11/30/2022 17:26:35.671 - Available Function Parameter(s) = -FilePath:String, -ArgumentList:String[], -AcceptableExitCodeList:String[], -WindowStyle:String, -CreateNoWindow:SwitchParameter, -ParseOutput:SwitchParameter, -ParsingExpression:Regex, -LogOutput:SwitchParameter
+VERBOSE: 11/30/2022 17:26:35.671 - Supplied Function Parameter(s) = -FilePath:String, -ArgumentList:String[], -AcceptableExitCodeList:String[], -CreateNoWindow:SwitchParameter, -LogOutput:SwitchParameter, -Verbose:SwitchParameter
+VERBOSE: 11/30/2022 17:26:35.671 - Execution of Start-ProcessWithOutput began on Wednesday, November 30, 2022 @ 05:26:35.671 PM
+VERBOSE: 11/30/2022 17:26:35.671 - Attempting to execute the following command: "X:\windows\system32\dism.exe" /Mount-Image /ImageFile:"E:\Downloads\DriverPackages\Generic-Adapters.wim" /Index:1 /MountDir:"E:\WIMMount\Image02\Index01" /ReadOnly /LogPath:"E:\MININT\SMSOSD\OSDLOGS\Invoke-DriverPackageDownload\DISM\DISM_MountImage_Image02_Index01.log" /LogLevel:3
+VERBOSE: 11/30/2022 17:26:35.733 - The command execution took 0 hour(s), 0 minute(s), 0 second(s), and 58 millisecond(s).
+VERBOSE: 11/30/2022 17:26:35.733 - The command execution was successful. [ExitCode: 0] [ExitCodeAsDecimal: 0] [ExitCodeAsHex: 0x00000000] [ExitCodeAsInteger: 0]
+VERBOSE: 11/30/2022 17:26:35.733 - Execution of Start-ProcessWithOutput ended on Wednesday, November 30, 2022 @ 05:26:35.733 PM
+VERBOSE: 11/30/2022 17:26:35.733 - Function execution took 0 hour(s), 0 minute(s), 0 second(s), and 62 millisecond(s).
+VERBOSE: 11/30/2022 17:26:35.733 - Function 'Start-ProcessWithOutput' is completed.
+VERBOSE: 11/30/2022 17:26:35.733 - Attempting to execute the command(s) associated with the "AddDrivers" key. Please Wait...
+VERBOSE: 11/30/2022 17:26:35.733 - Function 'Start-ProcessWithOutput' is beginning. Please Wait...
+VERBOSE: 11/30/2022 17:26:35.733 - Available Function Parameter(s) = -FilePath:String, -ArgumentList:String[], -AcceptableExitCodeList:String[], -WindowStyle:String, -CreateNoWindow:SwitchParameter, -ParseOutput:SwitchParameter, -ParsingExpression:Regex, -LogOutput:SwitchParameter
+VERBOSE: 11/30/2022 17:26:35.733 - Supplied Function Parameter(s) = -FilePath:String, -ArgumentList:String[], -AcceptableExitCodeList:String[], -CreateNoWindow:SwitchParameter, -LogOutput:SwitchParameter, -Verbose:SwitchParameter
+VERBOSE: 11/30/2022 17:26:35.733 - Execution of Start-ProcessWithOutput began on Wednesday, November 30, 2022 @ 05:26:35.733 PM
+VERBOSE: 11/30/2022 17:26:35.733 - Attempting to execute the following command: "X:\windows\system32\dism.exe" /Image:E: /Add-Driver /Driver:"E:\WIMMount\Image02\Index01" /Recurse /LogPath:"E:\MININT\SMSOSD\OSDLOGS\Invoke-DriverPackageDownload\DISM\DISM_AddDrivers_Image02_Index01.log" /LogLevel:3
+VERBOSE: 11/30/2022 17:26:42.264 - The command execution took 0 hour(s), 0 minute(s), 6 second(s), and 513 millisecond(s).
+VERBOSE: 11/30/2022 17:26:42.264 - The command execution was successful. [ExitCode: 0] [ExitCodeAsDecimal: 0] [ExitCodeAsHex: 0x00000000] [ExitCodeAsInteger: 0]
+VERBOSE: 11/30/2022 17:26:42.264 - Execution of Start-ProcessWithOutput ended on Wednesday, November 30, 2022 @ 05:26:42.264 PM
+VERBOSE: 11/30/2022 17:26:42.264 - Function execution took 0 hour(s), 0 minute(s), 6 second(s), and 530 millisecond(s).
+VERBOSE: 11/30/2022 17:26:42.264 - Function 'Start-ProcessWithOutput' is completed.
+VERBOSE: 11/30/2022 17:26:42.264 - Attempting to execute the command(s) associated with the "UnmountImage" key. Please Wait...
+VERBOSE: 11/30/2022 17:26:42.264 - Attempting to stage driver content contained within image index 1 locally on this device. Please Wait...
+VERBOSE: 11/30/2022 17:26:46.201 - Attempting to hide the driver staging directory of "E:\DriverCache". Please Wait...
+VERBOSE: 11/30/2022 17:26:46.201 - Function 'Start-ProcessWithOutput' is beginning. Please Wait...
+VERBOSE: 11/30/2022 17:26:46.201 - Available Function Parameter(s) = -FilePath:String, -ArgumentList:String[], -AcceptableExitCodeList:String[], -WindowStyle:String, -CreateNoWindow:SwitchParameter, -ParseOutput:SwitchParameter, -ParsingExpression:Regex, -LogOutput:SwitchParameter
+VERBOSE: 11/30/2022 17:26:46.201 - Supplied Function Parameter(s) = -FilePath:String, -ArgumentList:String[], -AcceptableExitCodeList:String[], -CreateNoWindow:SwitchParameter, -LogOutput:SwitchParameter, -Verbose:SwitchParameter
+VERBOSE: 11/30/2022 17:26:46.201 - Execution of Start-ProcessWithOutput began on Wednesday, November 30, 2022 @ 05:26:46.201 PM
+VERBOSE: 11/30/2022 17:26:46.201 - Attempting to execute the following command: "X:\windows\system32\dism.exe" /Unmount-Image /MountDir:"E:\WIMMount\Image02\Index01" /Discard /LogPath:"E:\MININT\SMSOSD\OSDLOGS\Invoke-DriverPackageDownload\DISM\DISM_UnmountImage_Image02_Index01.log" /LogLevel:3
+VERBOSE: 11/30/2022 17:26:46.279 - The command execution took 0 hour(s), 0 minute(s), 0 second(s), and 75 millisecond(s).
+VERBOSE: 11/30/2022 17:26:46.279 - The command execution was successful. [ExitCode: 0] [ExitCodeAsDecimal: 0] [ExitCodeAsHex: 0x00000000] [ExitCodeAsInteger: 0]
+VERBOSE: 11/30/2022 17:26:46.295 - Execution of Start-ProcessWithOutput ended on Wednesday, November 30, 2022 @ 05:26:46.295 PM
+VERBOSE: 11/30/2022 17:26:46.295 - Function execution took 0 hour(s), 0 minute(s), 0 second(s), and 93 millisecond(s).
+VERBOSE: 11/30/2022 17:26:46.295 - Function 'Start-ProcessWithOutput' is completed.
+VERBOSE: 11/30/2022 17:26:46.295 - Attempting to remove directory "E:\WIMMount". Please Wait...
+VERBOSE: 11/30/2022 17:26:46.357 - Attempting to remove directory "E:\Downloads". Please Wait...
+VERBOSE: 11/30/2022 17:26:46.451 - Script execution of "Invoke-DriverPackageDownload.ps1" ended on Wednesday, November 30, 2022 @ 05:26:46.451 PM
+VERBOSE: 11/30/2022 17:26:46.466 - Script execution took 0 hour(s), 6 minute(s), 33 second(s), and 458 millisecond(s)
+VERBOSE: 11/30/2022 17:26:46.466 - Exiting script "\\10.10.10.27\OSDProduction\Scripts\Custom\Invoke-DriverPackageAction\Invoke-DriverPackageDownload.ps1" with exit code 0.
+**********************
+Windows PowerShell transcript end
+End time: 20221130172646
+**********************

@@ -1,0 +1,31 @@
+﻿2022-11-30 17:23:39, Info                  DISM   PID=2576 TID=2484 Scratch directory set to 'X:\windows\TEMP\'. - CDISMManager::put_ScratchDir
+2022-11-30 17:23:39, Info                  DISM   PID=2576 TID=2484 DismCore.dll version: 10.0.22000.1 - CDISMManager::FinalConstruct
+2022-11-30 17:23:39, Info                  DISM   Initialized Panther logging at E:\MININT\SMSOSD\OSDLOGS\Invoke-DriverPackageDownload\DISM\DISM_MountImage_Image01_Index01.log
+2022-11-30 17:23:39, Info                  DISM   PID=2576 TID=2484 Successfully loaded the ImageSession at "X:\windows\system32\Dism" - CDISMManager::LoadLocalImageSession
+2022-11-30 17:23:39, Info                  DISM   Initialized Panther logging at E:\MININT\SMSOSD\OSDLOGS\Invoke-DriverPackageDownload\DISM\DISM_MountImage_Image01_Index01.log
+2022-11-30 17:23:39, Info                  DISM   DISM Provider Store: PID=2576 TID=2484 Found and Initialized the DISM Logger. - CDISMProviderStore::Internal_InitializeLogger
+2022-11-30 17:23:39, Info                  DISM   Initialized Panther logging at E:\MININT\SMSOSD\OSDLOGS\Invoke-DriverPackageDownload\DISM\DISM_MountImage_Image01_Index01.log
+2022-11-30 17:23:39, Info                  DISM   DISM Manager: PID=2576 TID=2484 Successfully created the local image session and provider store. - CDISMManager::CreateLocalImageSession
+2022-11-30 17:23:39, Info                  DISM   DISM.EXE: 
+2022-11-30 17:23:39, Info                  DISM   DISM.EXE: <----- Starting Dism.exe session ----->
+2022-11-30 17:23:39, Info                  DISM   DISM.EXE: 
+2022-11-30 17:23:39, Info                  DISM   DISM.EXE: Host machine information: OS Version=10.0.22000, Running architecture=amd64, Number of processors=12
+2022-11-30 17:23:39, Info                  DISM   DISM.EXE: Dism.exe version: 10.0.22000.1
+2022-11-30 17:23:39, Info                  DISM   DISM.EXE: Executing command line: "X:\windows\system32\dism.exe" /Mount-Image /ImageFile:"E:\Downloads\DriverPackages\Dell-0B04-H2VD7-A05-W10-X64-All.wim" /Index:1 /MountDir:"E:\WIMMount\Image01\Index01" /ReadOnly /LogPath:"E:\MININT\SMSOSD\OSDLOGS\Invoke-DriverPackageDownload\DISM\DISM_MountImage_Image01_Index01.log" /LogLevel:3
+2022-11-30 17:23:39, Info                  DISM   DISM Imaging Provider: PID=2576 TID=2484 WIM image specified - CGenericImagingManager::GetImageInfoCollection
+[2576.2484] Mounting new image.
+Wim:         [E:\Downloads\DriverPackages\Dell-0B04-H2VD7-A05-W10-X64-All.wim]
+Image Index: [1]
+Mount Guid:  [8503d947-dd48-493b-84f0-917f2ee6be19]
+Mount Path:  [E:\WIMMount\Image01\Index01]
+[2576.2484] Wimserv process started for mount guid 8503d947-dd48-493b-84f0-917f2ee6be19; PID is 1420
+[1420.964] Registered log file(s) for mount of wim at E:\Downloads\DriverPackages\Dell-0B04-H2VD7-A05-W10-X64-All.wim.
+[1420.964] Mount complete.
+2022-11-30 17:23:39, Info                  DISM   DISM.EXE: Image session has been closed. Reboot required=no.
+2022-11-30 17:23:39, Info                  DISM   DISM.EXE: 
+2022-11-30 17:23:39, Info                  DISM   DISM.EXE: <----- Ending Dism.exe session ----->
+2022-11-30 17:23:39, Info                  DISM   DISM.EXE: 
+[1420.1764] Received unmount request.
+[1420.1764] Unmount complete.
+[1420.480] Wimserv exiting per terminate event.
+[1420.480] Wimserv stopped.

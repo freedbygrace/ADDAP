@@ -1,0 +1,209 @@
+﻿2022-11-30 17:26:35, Info                  DISM   PID=2572 TID=780 Scratch directory set to 'X:\windows\TEMP\'. - CDISMManager::put_ScratchDir
+2022-11-30 17:26:35, Info                  DISM   PID=2572 TID=780 DismCore.dll version: 10.0.22000.1 - CDISMManager::FinalConstruct
+2022-11-30 17:26:35, Info                  DISM   Initialized Panther logging at E:\MININT\SMSOSD\OSDLOGS\Invoke-DriverPackageDownload\DISM\DISM_AddDrivers_Image02_Index01.log
+2022-11-30 17:26:35, Info                  DISM   PID=2572 TID=780 Successfully loaded the ImageSession at "X:\windows\system32\Dism" - CDISMManager::LoadLocalImageSession
+2022-11-30 17:26:35, Info                  DISM   Initialized Panther logging at E:\MININT\SMSOSD\OSDLOGS\Invoke-DriverPackageDownload\DISM\DISM_AddDrivers_Image02_Index01.log
+2022-11-30 17:26:35, Info                  DISM   DISM Provider Store: PID=2572 TID=780 Found and Initialized the DISM Logger. - CDISMProviderStore::Internal_InitializeLogger
+2022-11-30 17:26:35, Info                  DISM   Initialized Panther logging at E:\MININT\SMSOSD\OSDLOGS\Invoke-DriverPackageDownload\DISM\DISM_AddDrivers_Image02_Index01.log
+2022-11-30 17:26:35, Info                  DISM   DISM Manager: PID=2572 TID=780 Successfully created the local image session and provider store. - CDISMManager::CreateLocalImageSession
+2022-11-30 17:26:35, Info                  DISM   DISM.EXE: 
+2022-11-30 17:26:35, Info                  DISM   DISM.EXE: <----- Starting Dism.exe session ----->
+2022-11-30 17:26:35, Info                  DISM   DISM.EXE: 
+2022-11-30 17:26:35, Info                  DISM   DISM.EXE: Host machine information: OS Version=10.0.22000, Running architecture=amd64, Number of processors=12
+2022-11-30 17:26:35, Info                  DISM   DISM.EXE: Dism.exe version: 10.0.22000.1
+2022-11-30 17:26:35, Info                  DISM   DISM.EXE: Executing command line: "X:\windows\system32\dism.exe" /Image:E: /Add-Driver /Driver:"E:\WIMMount\Image02\Index01" /Recurse /LogPath:"E:\MININT\SMSOSD\OSDLOGS\Invoke-DriverPackageDownload\DISM\DISM_AddDrivers_Image02_Index01.log" /LogLevel:3
+2022-11-30 17:26:35, Info                  DISM   DISM FFU Provider: PID=2572 TID=780 [E:\] is not recognized by the DISM FFU provider. - CFfuImage::Initialize
+2022-11-30 17:26:35, Info                  DISM   DISM Imaging Provider: PID=2572 TID=780 The provider FfuManager does not support CreateDismImage on E:\ - CGenericImagingManager::CreateDismImage
+2022-11-30 17:26:35, Info                  DISM   DISM VHD Provider: PID=2572 TID=780 [E:\] is not recognized by the DISM VHD provider. - CVhdImage::Initialize
+2022-11-30 17:26:35, Info                  DISM   DISM Imaging Provider: PID=2572 TID=780 The provider VHDManager does not support CreateDismImage on E:\ - CGenericImagingManager::CreateDismImage
+[2572.780] [0x80070002] FIOReadFileIntoBuffer:(1456): The system cannot find the file specified.
+[2572.780] [0xc142011c] UnmarshallImageHandleFromDirectory:(641)
+[2572.780] [0xc142011c] WIMGetMountedImageHandle:(2910)
+2022-11-30 17:26:35, Info                  DISM   DISM WIM Provider: PID=2572 TID=780 [E:\] is not a WIM mount point. - CWimMountedImageInfo::Initialize
+2022-11-30 17:26:35, Info                  DISM   DISM Imaging Provider: PID=2572 TID=780 The provider WimManager does not support CreateDismImage on E:\ - CGenericImagingManager::CreateDismImage
+2022-11-30 17:26:35, Info                  DISM   DISM Imaging Provider: PID=2572 TID=780 No imaging provider supported CreateDismImage for this path - CGenericImagingManager::CreateDismImage
+[2572.780] [0x80070002] FIOReadFileIntoBuffer:(1456): The system cannot find the file specified.
+[2572.780] [0xc142011c] UnmarshallImageHandleFromDirectory:(641)
+[2572.780] [0xc142011c] WIMGetMountedImageHandle:(2910)
+2022-11-30 17:26:35, Info                  DISM   DISM WIM Provider: PID=2572 TID=780 [E:\] is not a WIM mount point. - CWimMountedImageInfo::Initialize
+2022-11-30 17:26:35, Info                  DISM   DISM FFU Provider: PID=2572 TID=780 [E:\] is not recognized by the DISM FFU provider. - CFfuImage::Initialize
+2022-11-30 17:26:35, Info                  DISM   DISM VHD Provider: PID=2572 TID=780 [E:\] is not recognized by the DISM VHD provider. - CVhdImage::Initialize
+2022-11-30 17:26:35, Info                  DISM   DISM Manager: PID=2572 TID=780 physical location path: E:\ - CDISMManager::CreateImageSession
+2022-11-30 17:26:35, Info                  DISM   DISM Manager: PID=2572 TID=780 Event name for current DISM session is Global\__?_Volume{3bacfaa5-ff02-424a-8864-41dd4c4eb13d}__3191579946_65536_30013 - CDISMManager::CheckSessionAndLock
+2022-11-30 17:26:35, Info                  DISM   DISM Manager: PID=2572 TID=780 Create session event 0x240 for current DISM session and event name is Global\__?_Volume{3bacfaa5-ff02-424a-8864-41dd4c4eb13d}__3191579946_65536_30013  - CDISMManager::CheckSessionAndLock
+2022-11-30 17:26:35, Info                  DISM   DISM Manager: PID=2572 TID=780 Copying DISM from "E:\Windows\System32\Dism" - CDISMManager::CreateImageSessionFromLocation
+2022-11-30 17:26:36, Info                  DISM   DISM Manager: PID=2572 TID=780 Successfully loaded the ImageSession at "X:\windows\TEMP\5FCF3DC3-7BF6-4893-8D11-A8E444DCE32E" - CDISMManager::LoadRemoteImageSession
+2022-11-30 17:26:36, Info                  DISM   DISM Image Session: PID=2932 TID=560 Instantiating the Provider Store. - CDISMImageSession::get_ProviderStore
+2022-11-30 17:26:36, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Initializing a provider store for the IMAGE session type. - CDISMProviderStore::Final_OnConnect
+2022-11-30 17:26:36, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Connecting to the provider located at X:\windows\TEMP\5FCF3DC3-7BF6-4893-8D11-A8E444DCE32E\OSProvider.dll. - CDISMProviderStore::Internal_LoadProvider
+2022-11-30 17:26:36, Info                  DISM   DISM OS Provider: PID=2932 TID=560 Defaulting SystemPath to E:\ - CDISMOSServiceManager::Final_OnConnect
+2022-11-30 17:26:36, Info                  DISM   DISM OS Provider: PID=2932 TID=560 Defaulting Windows folder to E:\Windows - CDISMOSServiceManager::Final_OnConnect
+2022-11-30 17:26:36, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Attempting to initialize the logger from the Image Session. - CDISMProviderStore::Final_OnConnect
+2022-11-30 17:26:36, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Connecting to the provider located at X:\windows\TEMP\5FCF3DC3-7BF6-4893-8D11-A8E444DCE32E\LogProvider.dll. - CDISMProviderStore::Internal_LoadProvider
+2022-11-30 17:26:36, Info                  DISM   Initialized Panther logging at E:\MININT\SMSOSD\OSDLOGS\Invoke-DriverPackageDownload\DISM\DISM_AddDrivers_Image02_Index01.log
+2022-11-30 17:26:36, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Found and Initialized the DISM Logger. - CDISMProviderStore::Internal_InitializeLogger
+2022-11-30 17:26:36, Warning               DISM   DISM Provider Store: PID=2932 TID=560 Failed to load the provider: X:\windows\TEMP\5FCF3DC3-7BF6-4893-8D11-A8E444DCE32E\PEProvider.dll. - CDISMProviderStore::Internal_GetProvider(hr:0x8007007e)
+2022-11-30 17:26:36, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Failed to get and initialize the PE Provider.  Continuing by assuming that it is not a WinPE image. - CDISMProviderStore::Final_OnConnect
+2022-11-30 17:26:36, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Finished initializing the Provider Map. - CDISMProviderStore::Final_OnConnect
+2022-11-30 17:26:36, Info                  DISM   Initialized Panther logging at E:\MININT\SMSOSD\OSDLOGS\Invoke-DriverPackageDownload\DISM\DISM_AddDrivers_Image02_Index01.log
+2022-11-30 17:26:36, Info                  DISM   Initialized Panther logging at E:\MININT\SMSOSD\OSDLOGS\Invoke-DriverPackageDownload\DISM\DISM_AddDrivers_Image02_Index01.log
+2022-11-30 17:26:36, Info                  DISM   DISM Manager: PID=2572 TID=780 Image session successfully loaded from the temporary location: X:\windows\TEMP\5FCF3DC3-7BF6-4893-8D11-A8E444DCE32E - CDISMManager::CreateImageSession
+2022-11-30 17:26:36, Info                  DISM   DISM OS Provider: PID=2932 TID=560 Setting SystemPath to E:\ - CDISMOSServiceManager::SetSystemPath
+2022-11-30 17:26:36, Info                  DISM   DISM.EXE: Target image information: OS Version=10.0.19045.1826, Image architecture=amd64
+2022-11-30 17:26:36, Info                  DISM   DISM.EXE: Image session version: 10.0.19041.746
+2022-11-30 17:26:36, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Getting the collection of providers from an image provider store type. - CDISMProviderStore::GetProviderCollection
+2022-11-30 17:26:36, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Connecting to the provider located at X:\windows\TEMP\5FCF3DC3-7BF6-4893-8D11-A8E444DCE32E\CbsProvider.dll. - CDISMProviderStore::Internal_LoadProvider
+2022-11-30 17:26:36, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Encountered a servicing provider, performing additional servicing initializations. - CDISMProviderStore::Internal_LoadProvider
+2022-11-30 17:26:36, Info                  CSI    00000001 Shim considered [l:126]'\??\E:\Windows\Servicing\amd64_microsoft-windows-servicingstack_31bf3856ad364e35_10.0.19041.1790_none_7df2aec07ca10e81\wcp.dll' : got STATUS_OBJECT_PATH_NOT_FOUND
+2022-11-30 17:26:36, Info                  CSI    00000002 Shim considered [l:123]'\??\E:\Windows\WinSxS\amd64_microsoft-windows-servicingstack_31bf3856ad364e35_10.0.19041.1790_none_7df2aec07ca10e81\wcp.dll' : got STATUS_SUCCESS
+2022-11-30 17:26:36, Info                  DISM   DISM OS Provider: PID=2932 TID=560 Determined System directory to be E:\Windows\System32 - CDISMOSServiceManager::get_SystemDirectory
+2022-11-30 17:26:36, Info                  DISM   DISM Package Manager: PID=2932 TID=560 Finished initializing the CbsConUI Handler. - CCbsConUIHandler::Initialize
+2022-11-30 17:26:36, Info                  CSI    00000001 Shim considered [l:126]'\??\E:\Windows\Servicing\amd64_microsoft-windows-servicingstack_31bf3856ad364e35_10.0.19041.1790_none_7df2aec07ca10e81\wcp.dll' : got STATUS_OBJECT_PATH_NOT_FOUND
+2022-11-30 17:26:36, Info                  CSI    00000002 Shim considered [l:123]'\??\E:\Windows\WinSxS\amd64_microsoft-windows-servicingstack_31bf3856ad364e35_10.0.19041.1790_none_7df2aec07ca10e81\wcp.dll' : got STATUS_SUCCESS
+2022-11-30 17:26:36, Info                  CSI    00000001 Shim considered [l:126]'\??\E:\Windows\Servicing\amd64_microsoft-windows-servicingstack_31bf3856ad364e35_10.0.19041.1790_none_7df2aec07ca10e81\wcp.dll' : got STATUS_OBJECT_PATH_NOT_FOUND
+2022-11-30 17:26:36, Info                  CSI    00000002 Shim considered [l:123]'\??\E:\Windows\WinSxS\amd64_microsoft-windows-servicingstack_31bf3856ad364e35_10.0.19041.1790_none_7df2aec07ca10e81\wcp.dll' : got STATUS_SUCCESS
+2022-11-30 17:26:36, Info                  CBS    Universal Time is: 2022-11-30 22:26:36.296
+2022-11-30 17:26:36, Info                  CBS    Failed to find a matching version for servicing stack: E:\Windows\WinSxS\amd64_microsoft-windows-servicingstack_31bf3856ad364e35_10.0.19041.1790_none_7df2aec07ca10e81\ [HRESULT = 0x80070490 - ERROR_NOT_FOUND]
+2022-11-30 17:26:36, Info                  CBS    Failed to find servicing stack directory in online store. [HRESULT = 0x80070490 - ERROR_NOT_FOUND]
+2022-11-30 17:26:36, Info                  CBS    Offline servicing, using stack version from: E:\Windows\WinSxS\amd64_microsoft-windows-servicingstack_31bf3856ad364e35_10.0.19041.1790_none_7df2aec07ca10e81\cbscore.dll
+2022-11-30 17:26:36, Info                  CBS    Loaded Servicing Stack v10.0.19041.1790 with Core: E:\Windows\WinSxS\amd64_microsoft-windows-servicingstack_31bf3856ad364e35_10.0.19041.1790_none_7df2aec07ca10e81\cbscore.dll
+2022-11-30 17:26:36, Info                  CBS    Setting core mode: CbsCoreModeOffline
+2022-11-30 17:26:36, Info                  CSI    00000001@2022/11/30:22:26:36.296 WcpInitialize: wcp.dll version 10.0.19041.1790 (WinBuild.160101.0800)
+2022-11-30 17:26:36, Info                  CBS    Could not load SrClient DLL from path: SrClient.dll.  Continuing without system restore points.
+2022-11-30 17:26:36, Info                  CBS    Lock: New lock added: CCbsSessionManager, level: 11, total lock:9
+2022-11-30 17:26:36, Info                  CBS    Lock: New lock added: CSIInventoryCriticalSection, level: 64, total lock:10
+2022-11-30 17:26:36, Info                  DISM   DISM Package Manager: PID=2932 TID=560 Loaded servicing stack for offline use only. - CDISMPackageManager::CreateCbsSession
+2022-11-30 17:26:36, Info                  CBS    Lazy store initialization mode
+2022-11-30 17:26:36, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Connecting to the provider located at X:\windows\TEMP\5FCF3DC3-7BF6-4893-8D11-A8E444DCE32E\MsiProvider.dll. - CDISMProviderStore::Internal_LoadProvider
+2022-11-30 17:26:36, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Encountered a servicing provider, performing additional servicing initializations. - CDISMProviderStore::Internal_LoadProvider
+2022-11-30 17:26:36, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Connecting to the provider located at X:\windows\TEMP\5FCF3DC3-7BF6-4893-8D11-A8E444DCE32E\IntlProvider.dll. - CDISMProviderStore::Internal_LoadProvider
+2022-11-30 17:26:36, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Encountered a servicing provider, performing additional servicing initializations. - CDISMProviderStore::Internal_LoadProvider
+2022-11-30 17:26:36, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Connecting to the provider located at X:\windows\TEMP\5FCF3DC3-7BF6-4893-8D11-A8E444DCE32E\IBSProvider.dll. - CDISMProviderStore::Internal_LoadProvider
+2022-11-30 17:26:36, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Encountered a servicing provider, performing additional servicing initializations. - CDISMProviderStore::Internal_LoadProvider
+2022-11-30 17:26:36, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Connecting to the provider located at X:\windows\TEMP\5FCF3DC3-7BF6-4893-8D11-A8E444DCE32E\DmiProvider.dll. - CDISMProviderStore::Internal_LoadProvider
+2022-11-30 17:26:36, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Encountered a servicing provider, performing additional servicing initializations. - CDISMProviderStore::Internal_LoadProvider
+2022-11-30 17:26:36, Info                  CSI    00000001 Shim considered [l:126]'\??\E:\Windows\Servicing\amd64_microsoft-windows-servicingstack_31bf3856ad364e35_10.0.19041.1790_none_7df2aec07ca10e81\wcp.dll' : got STATUS_OBJECT_PATH_NOT_FOUND
+2022-11-30 17:26:36, Info                  CSI    00000002 Shim considered [l:123]'\??\E:\Windows\WinSxS\amd64_microsoft-windows-servicingstack_31bf3856ad364e35_10.0.19041.1790_none_7df2aec07ca10e81\wcp.dll' : got STATUS_SUCCESS
+2022-11-30 17:26:36, Info                  DISM   DISM Driver Manager: PID=2932 TID=560 Further logs for driver related operations can be found in the target operating system at %WINDIR%\inf\setupapi.offline.log - CDriverManager::Initialize
+2022-11-30 17:26:36, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Connecting to the provider located at X:\windows\TEMP\5FCF3DC3-7BF6-4893-8D11-A8E444DCE32E\UnattendProvider.dll. - CDISMProviderStore::Internal_LoadProvider
+2022-11-30 17:26:36, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Encountered a servicing provider, performing additional servicing initializations. - CDISMProviderStore::Internal_LoadProvider
+2022-11-30 17:26:36, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Connecting to the provider located at X:\windows\TEMP\5FCF3DC3-7BF6-4893-8D11-A8E444DCE32E\SmiProvider.dll. - CDISMProviderStore::Internal_LoadProvider
+2022-11-30 17:26:36, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Encountered a servicing provider, performing additional servicing initializations. - CDISMProviderStore::Internal_LoadProvider
+2022-11-30 17:26:36, Warning               DISM   DISM Provider Store: PID=2932 TID=560 Failed to load the provider: X:\windows\TEMP\5FCF3DC3-7BF6-4893-8D11-A8E444DCE32E\EmbeddedProvider.dll. - CDISMProviderStore::Internal_GetProvider(hr:0x8007007e)
+2022-11-30 17:26:36, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Connecting to the provider located at X:\windows\TEMP\5FCF3DC3-7BF6-4893-8D11-A8E444DCE32E\AppxProvider.dll. - CDISMProviderStore::Internal_LoadProvider
+2022-11-30 17:26:36, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Encountered a servicing provider, performing additional servicing initializations. - CDISMProviderStore::Internal_LoadProvider
+2022-11-30 17:26:36, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Connecting to the provider located at X:\windows\TEMP\5FCF3DC3-7BF6-4893-8D11-A8E444DCE32E\ProvProvider.dll. - CDISMProviderStore::Internal_LoadProvider
+2022-11-30 17:26:36, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Encountered a servicing provider, performing additional servicing initializations. - CDISMProviderStore::Internal_LoadProvider
+2022-11-30 17:26:36, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Connecting to the provider located at X:\windows\TEMP\5FCF3DC3-7BF6-4893-8D11-A8E444DCE32E\AssocProvider.dll. - CDISMProviderStore::Internal_LoadProvider
+2022-11-30 17:26:36, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Encountered a servicing provider, performing additional servicing initializations. - CDISMProviderStore::Internal_LoadProvider
+2022-11-30 17:26:36, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Connecting to the provider located at X:\windows\TEMP\5FCF3DC3-7BF6-4893-8D11-A8E444DCE32E\GenericProvider.dll. - CDISMProviderStore::Internal_LoadProvider
+2022-11-30 17:26:36, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Encountered a servicing provider, performing additional servicing initializations. - CDISMProviderStore::Internal_LoadProvider
+2022-11-30 17:26:36, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Connecting to the provider located at X:\windows\TEMP\5FCF3DC3-7BF6-4893-8D11-A8E444DCE32E\OfflineSetupProvider.dll. - CDISMProviderStore::Internal_LoadProvider
+2022-11-30 17:26:36, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Encountered a servicing provider, performing additional servicing initializations. - CDISMProviderStore::Internal_LoadProvider
+2022-11-30 17:26:36, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Connecting to the provider located at X:\windows\TEMP\5FCF3DC3-7BF6-4893-8D11-A8E444DCE32E\SysprepProvider.dll. - CDISMProviderStore::Internal_LoadProvider
+2022-11-30 17:26:36, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Encountered a servicing provider, performing additional servicing initializations. - CDISMProviderStore::Internal_LoadProvider
+2022-11-30 17:26:36, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Connecting to the provider located at X:\windows\TEMP\5FCF3DC3-7BF6-4893-8D11-A8E444DCE32E\TransmogProvider.dll. - CDISMProviderStore::Internal_LoadProvider
+2022-11-30 17:26:36, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Encountered a servicing provider, performing additional servicing initializations. - CDISMProviderStore::Internal_LoadProvider
+2022-11-30 17:26:36, Info                  DISM   DISM Transmog Provider: PID=2932 TID=560 Current image session is [OFFLINE] - CTransmogManager::GetMode
+2022-11-30 17:26:36, Info                  DISM   DISM Transmog Provider: PID=2932 TID=560 Determined WinDir path = [E:\Windows] - CTransmogManager::GetWinDirPath
+2022-11-30 17:26:36, Info                  DISM   DISM Transmog Provider: PID=2932 TID=560 GetProductType: ProductType = [WinNT] - CTransmogManager::GetProductType
+2022-11-30 17:26:36, Info                  DISM   DISM Transmog Provider: PID=2932 TID=560 Product Type: [WinNT] - CTransmogManager::Initialize
+2022-11-30 17:26:36, Info                  DISM   DISM Transmog Provider: PID=2932 TID=560 Product Type ServerNT : [No] - CTransmogManager::Initialize
+2022-11-30 17:26:36, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Connecting to the provider located at X:\windows\TEMP\5FCF3DC3-7BF6-4893-8D11-A8E444DCE32E\SetupPlatformProvider.dll. - CDISMProviderStore::Internal_LoadProvider
+2022-11-30 17:26:36, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Encountered a servicing provider, performing additional servicing initializations. - CDISMProviderStore::Internal_LoadProvider
+2022-11-30 17:26:36, Warning               DISM   DISM Driver Manager: PID=2932 TID=560 Failed to find the INF package in the driver store (hr = 0x80070490); falling back to INF file name - CDriverPackage::InitPublishedInfName
+2022-11-30 17:26:36, Info                  DISM   DISM Driver Manager: PID=2932 TID=560 Signature status of driver E:\WIMMount\Image02\Index01\DLCDCNCM\dlcdcncm.inf is: SIGNED - CDriverPackage::InitSignatureStatus
+2022-11-30 17:26:36, Warning               DISM   DISM Driver Manager: PID=2932 TID=560 Failed to find the INF package in the driver store (hr = 0x80070490); falling back to INF file name - CDriverPackage::InitPublishedInfName
+2022-11-30 17:26:36, Info                  DISM   DISM Driver Manager: PID=2932 TID=560 Signature status of driver E:\WIMMount\Image02\Index01\DLCDCNCM_W10\x64\dlcdcncm.inf is: SIGNED - CDriverPackage::InitSignatureStatus
+2022-11-30 17:26:36, Warning               DISM   DISM Driver Manager: PID=2932 TID=560 Failed to find the INF package in the driver store (hr = 0x80070490); falling back to INF file name - CDriverPackage::InitPublishedInfName
+2022-11-30 17:26:36, Info                  DISM   DISM Driver Manager: PID=2932 TID=560 Signature status of driver E:\WIMMount\Image02\Index01\DLCDCNCM_W10\x86\dlcdcncm.inf is: SIGNED - CDriverPackage::InitSignatureStatus
+2022-11-30 17:26:37, Warning               DISM   DISM Driver Manager: PID=2932 TID=560 Failed to find the INF package in the driver store (hr = 0x80070490); falling back to INF file name - CDriverPackage::InitPublishedInfName
+2022-11-30 17:26:37, Info                  DISM   DISM Driver Manager: PID=2932 TID=560 Signature status of driver E:\WIMMount\Image02\Index01\DLIDUSB\x64\dlidusb.inf is: SIGNED - CDriverPackage::InitSignatureStatus
+2022-11-30 17:26:37, Warning               DISM   DISM Driver Manager: PID=2932 TID=560 Failed to find the INF package in the driver store (hr = 0x80070490); falling back to INF file name - CDriverPackage::InitPublishedInfName
+2022-11-30 17:26:37, Info                  DISM   DISM Driver Manager: PID=2932 TID=560 Signature status of driver E:\WIMMount\Image02\Index01\DLIDUSB\x86\dlidusb.inf is: SIGNED - CDriverPackage::InitSignatureStatus
+2022-11-30 17:26:37, Warning               DISM   DISM Driver Manager: PID=2932 TID=560 Failed to find the INF package in the driver store (hr = 0x80070490); falling back to INF file name - CDriverPackage::InitPublishedInfName
+2022-11-30 17:26:37, Info                  DISM   DISM Driver Manager: PID=2932 TID=560 Signature status of driver E:\WIMMount\Image02\Index01\DLUSBAUDIO\dlusbaudio.inf is: SIGNED - CDriverPackage::InitSignatureStatus
+2022-11-30 17:26:37, Warning               DISM   DISM Driver Manager: PID=2932 TID=560 Failed to find the INF package in the driver store (hr = 0x80070490); falling back to INF file name - CDriverPackage::InitPublishedInfName
+2022-11-30 17:26:38, Warning               DISM   DISM Driver Manager: PID=2932 TID=560 Could not get boot critical status for the driver class {3376F4CE-FF8D-40A2-A80F-BB4359D1415C} from driver store. Assuming that this is not boot critical. - CDriverPackage::InitBootCriticalFlag(hr:0x80070002)
+2022-11-30 17:26:38, Info                  DISM   DISM Driver Manager: PID=2932 TID=560 Class GUID {3376F4CE-FF8D-40A2-A80F-BB4359D1415C} is unknown. Unable to set class description. - CDriverPackage::FillInPackageDetails
+2022-11-30 17:26:38, Info                  DISM   DISM Driver Manager: PID=2932 TID=560 Signature status of driver E:\WIMMount\Image02\Index01\NIVO\DisplayLinkUsb.inf is: SIGNED - CDriverPackage::InitSignatureStatus
+2022-11-30 17:26:38, Info                  DISM   DISM Driver Manager: PID=2932 TID=560 Successfully proccessed driver package 'E:\WIMMount\Image02\Index01\DLCDCNCM\dlcdcncm.inf'. - CDriverPackage::InstallEx2
+2022-11-30 17:26:38, Info                  DISM   DISM Driver Manager: PID=2932 TID=560 Successfully proccessed driver package 'E:\WIMMount\Image02\Index01\DLCDCNCM_W10\x64\dlcdcncm.inf'. - CDriverPackage::InstallEx2
+2022-11-30 17:26:38, Info                  DISM   DISM Driver Manager: PID=2932 TID=560 Successfully proccessed driver package 'E:\WIMMount\Image02\Index01\DLCDCNCM_W10\x86\dlcdcncm.inf'. - CDriverPackage::InstallEx2
+2022-11-30 17:26:40, Info                  DISM   DISM Driver Manager: PID=2932 TID=560 Successfully proccessed driver package 'E:\WIMMount\Image02\Index01\DLIDUSB\x64\dlidusb.inf'. - CDriverPackage::InstallEx2
+2022-11-30 17:26:40, Info                  DISM   DISM Driver Manager: PID=2932 TID=560 Successfully proccessed driver package 'E:\WIMMount\Image02\Index01\DLIDUSB\x86\dlidusb.inf'. - CDriverPackage::InstallEx2
+2022-11-30 17:26:41, Info                  DISM   DISM Driver Manager: PID=2932 TID=560 Successfully proccessed driver package 'E:\WIMMount\Image02\Index01\DLUSBAUDIO\dlusbaudio.inf'. - CDriverPackage::InstallEx2
+2022-11-30 17:26:42, Info                  DISM   DISM Driver Manager: PID=2932 TID=560 Successfully proccessed driver package 'E:\WIMMount\Image02\Index01\NIVO\DisplayLinkUsb.inf'. - CDriverPackage::InstallEx2
+2022-11-30 17:26:42, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Found the OSServices.  Waiting to finalize it until all other providers are unloaded. - CDISMProviderStore::Final_OnDisconnect
+2022-11-30 17:26:42, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Found the OSServices.  Waiting to finalize it until all other providers are unloaded. - CDISMProviderStore::Final_OnDisconnect
+2022-11-30 17:26:42, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Found the PE Provider.  Waiting to finalize it until all other providers are unloaded. - CDISMProviderStore::Final_OnDisconnect
+2022-11-30 17:26:42, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Finalizing the servicing provider(DISM Package Manager) - CDISMProviderStore::Internal_DisconnectProvider
+2022-11-30 17:26:42, Info                  DISM   DISM Package Manager: PID=2932 TID=560 Finalizing CBS core. - CDISMPackageManager::Finalize
+2022-11-30 17:26:42, Info                  CBS    CbsCoreFinalize: ExecutionEngineFinalize
+2022-11-30 17:26:42, Info                  CBS    Execution Engine Finalize
+2022-11-30 17:26:42, Info                  CBS    Execution Engine Finalize
+2022-11-30 17:26:42, Info                  CBS    CbsCoreFinalize: ComponentAnalyzerFinalize
+2022-11-30 17:26:42, Info                  CBS    CbsCoreFinalize: PackageTrackerFinalize
+2022-11-30 17:26:42, Info                  CBS    CbsCoreFinalize: CoreResourcesUnload
+2022-11-30 17:26:42, Info                  CBS    CbsCoreFinalize: SessionManagerFinalize
+2022-11-30 17:26:42, Info                  CBS    Lock: Lock removed: CSIInventoryCriticalSection, level: 64, total lock:10
+2022-11-30 17:26:42, Info                  CBS    Lock: Lock removed: CCbsSessionManager, level: 11, total lock:9
+2022-11-30 17:26:42, Info                  CBS    CbsCoreFinalize: CapabilityManagerFinalize
+2022-11-30 17:26:42, Info                  CBS    CbsCoreFinalize: GetPublicObjectMonitor::Audit
+2022-11-30 17:26:42, Info                  CBS    CbsCoreFinalize: PublicObjectMonitorFinalize
+2022-11-30 17:26:42, Info                  CBS    CbsCoreFinalize: Enter vCoreInitializeLock
+2022-11-30 17:26:42, Info                  CBS    CbsCoreFinalize: WcpUnload
+2022-11-30 17:26:42, Info                  CBS    CbsCoreFinalize: DrupUnload
+2022-11-30 17:26:42, Info                  CBS    CbsCoreFinalize: CfgMgr32Unload
+2022-11-30 17:26:42, Info                  CBS    CbsCoreFinalize: DpxUnload
+2022-11-30 17:26:42, Info                  CBS    CbsCoreFinalize: CbsEsdUnload
+2022-11-30 17:26:42, Info                  CBS    CbsCoreFinalize: CbsTraceInfoUninitialize
+2022-11-30 17:26:42, Info                  CBS    CbsCoreFinalize: CbsEventUnregister
+2022-11-30 17:26:42, Info                  CBS    CbsCoreFinalize: AppContainerUnload
+2022-11-30 17:26:42, Info                  CBS    CbsCoreFinalize: WdsUnload, logging from cbscore will end.
+2022-11-30 17:26:42, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Disconnecting Provider: DISM Package Manager - CDISMProviderStore::Internal_DisconnectProvider
+2022-11-30 17:26:42, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Finalizing the servicing provider(MsiManager) - CDISMProviderStore::Internal_DisconnectProvider
+2022-11-30 17:26:42, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Disconnecting Provider: MsiManager - CDISMProviderStore::Internal_DisconnectProvider
+2022-11-30 17:26:42, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Finalizing the servicing provider(IntlManager) - CDISMProviderStore::Internal_DisconnectProvider
+2022-11-30 17:26:42, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Disconnecting Provider: IntlManager - CDISMProviderStore::Internal_DisconnectProvider
+2022-11-30 17:26:42, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Finalizing the servicing provider(IBSManager) - CDISMProviderStore::Internal_DisconnectProvider
+2022-11-30 17:26:42, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Disconnecting Provider: IBSManager - CDISMProviderStore::Internal_DisconnectProvider
+2022-11-30 17:26:42, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Finalizing the servicing provider(DriverManager) - CDISMProviderStore::Internal_DisconnectProvider
+2022-11-30 17:26:42, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Disconnecting Provider: DriverManager - CDISMProviderStore::Internal_DisconnectProvider
+2022-11-30 17:26:42, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Finalizing the servicing provider(DISM Unattend Manager) - CDISMProviderStore::Internal_DisconnectProvider
+2022-11-30 17:26:42, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Disconnecting Provider: DISM Unattend Manager - CDISMProviderStore::Internal_DisconnectProvider
+2022-11-30 17:26:42, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Finalizing the servicing provider(SmiManager) - CDISMProviderStore::Internal_DisconnectProvider
+2022-11-30 17:26:42, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Disconnecting Provider: SmiManager - CDISMProviderStore::Internal_DisconnectProvider
+2022-11-30 17:26:42, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Finalizing the servicing provider(AppxManager) - CDISMProviderStore::Internal_DisconnectProvider
+2022-11-30 17:26:42, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Disconnecting Provider: AppxManager - CDISMProviderStore::Internal_DisconnectProvider
+2022-11-30 17:26:42, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Finalizing the servicing provider(ProvManager) - CDISMProviderStore::Internal_DisconnectProvider
+2022-11-30 17:26:42, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Disconnecting Provider: ProvManager - CDISMProviderStore::Internal_DisconnectProvider
+2022-11-30 17:26:42, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Finalizing the servicing provider(AssocManager) - CDISMProviderStore::Internal_DisconnectProvider
+2022-11-30 17:26:42, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Disconnecting Provider: AssocManager - CDISMProviderStore::Internal_DisconnectProvider
+2022-11-30 17:26:42, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Finalizing the servicing provider(GenericManager) - CDISMProviderStore::Internal_DisconnectProvider
+2022-11-30 17:26:42, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Disconnecting Provider: GenericManager - CDISMProviderStore::Internal_DisconnectProvider
+2022-11-30 17:26:42, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Finalizing the servicing provider(OfflineSetupManager) - CDISMProviderStore::Internal_DisconnectProvider
+2022-11-30 17:26:42, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Disconnecting Provider: OfflineSetupManager - CDISMProviderStore::Internal_DisconnectProvider
+2022-11-30 17:26:42, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Finalizing the servicing provider(SysprepManager) - CDISMProviderStore::Internal_DisconnectProvider
+2022-11-30 17:26:42, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Disconnecting Provider: SysprepManager - CDISMProviderStore::Internal_DisconnectProvider
+2022-11-30 17:26:42, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Finalizing the servicing provider(Edition Manager) - CDISMProviderStore::Internal_DisconnectProvider
+2022-11-30 17:26:42, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Disconnecting Provider: Edition Manager - CDISMProviderStore::Internal_DisconnectProvider
+2022-11-30 17:26:42, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Finalizing the servicing provider(SetupPlatformManager) - CDISMProviderStore::Internal_DisconnectProvider
+2022-11-30 17:26:42, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Disconnecting Provider: SetupPlatformManager - CDISMProviderStore::Internal_DisconnectProvider
+2022-11-30 17:26:42, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Releasing the local reference to OSServices. - CDISMProviderStore::Internal_DisconnectProvider
+2022-11-30 17:26:42, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Disconnecting Provider: OSServices - CDISMProviderStore::Internal_DisconnectProvider
+2022-11-30 17:26:42, Info                  DISM   Offline Registry: PID=2932 TID=560 Hive is not mounted at HKLM\{bf1a281b-ad7b-4476-ac95-f47682990ce7}E:/Windows/system32/config/SOFTWARE. - CRegistryMapping::Init
+2022-11-30 17:26:42, Info                  DISM   Offline Registry: PID=2932 TID=560 Hive is not mounted at HKLM\{bf1a281b-ad7b-4476-ac95-f47682990ce7}E:/Windows/system32/config/SYSTEM. - CRegistryMapping::Init
+2022-11-30 17:26:42, Info                  DISM   Offline Registry: PID=2932 TID=560 Hive is not mounted at HKLM\{bf1a281b-ad7b-4476-ac95-f47682990ce7}E:/Windows/system32/config/SECURITY. - CRegistryMapping::Init
+2022-11-30 17:26:42, Info                  DISM   Offline Registry: PID=2932 TID=560 Hive is not mounted at HKLM\{bf1a281b-ad7b-4476-ac95-f47682990ce7}E:/Windows/system32/config/SAM. - CRegistryMapping::Init
+2022-11-30 17:26:42, Info                  DISM   Offline Registry: PID=2932 TID=560 Hive is not mounted at HKLM\{bf1a281b-ad7b-4476-ac95-f47682990ce7}E:/Windows/system32/config/DEFAULT. - CRegistryMapping::Init
+2022-11-30 17:26:42, Info                  DISM   Offline Registry: PID=2932 TID=560 Hive is not mounted at HKLM\{bf1a281b-ad7b-4476-ac95-f47682990ce7}E:/Users/Default/NTUSER.DAT. - CRegistryMapping::Init
+2022-11-30 17:26:42, Info                  DISM   Offline Registry: PID=2932 TID=560 Hive is not mounted at HKLM\{bf1a281b-ad7b-4476-ac95-f47682990ce7}E:/Windows/system32/config/COMPONENTS. - CRegistryMapping::Init
+2022-11-30 17:26:42, Info                  DISM   Offline Registry: PID=2932 TID=560 Hive is not mounted at HKLM\{bf1a281b-ad7b-4476-ac95-f47682990ce7}E:/Windows/system32/config/DRIVERS. - CRegistryMapping::Init
+2022-11-30 17:26:42, Info                  DISM   DISM OS Provider: PID=2932 TID=560 Successfully unloaded all registry hives. - CDISMOSServiceManager::Final_OnDisconnect
+2022-11-30 17:26:42, Info                  DISM   DISM Provider Store: PID=2932 TID=560 Releasing the local reference to DISMLogger.  Stop logging. - CDISMProviderStore::Internal_DisconnectProvider
+2022-11-30 17:26:42, Info                  DISM   DISM Manager: PID=2572 TID=780 Closing session event handle 0x240 - CDISMManager::CleanupImageSessionEntry
+2022-11-30 17:26:42, Info                  DISM   DISM.EXE: Image session has been closed. Reboot required=no.
+2022-11-30 17:26:42, Info                  DISM   DISM.EXE: 
+2022-11-30 17:26:42, Info                  DISM   DISM.EXE: <----- Ending Dism.exe session ----->
+2022-11-30 17:26:42, Info                  DISM   DISM.EXE: 

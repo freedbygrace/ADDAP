@@ -1,0 +1,170 @@
+﻿**********************
+Windows PowerShell transcript start
+Start time: 20221129081526
+Configuration Name: 
+Host Application: C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -NoExit -ExecutionPolicy Unrestricted -Command cd c:\OSDeployment\DeploymentShares\Production\Scripts\Custom\Invoke-DriverPackageAction ; & c:\OSDeployment\DeploymentShares\Production\Scripts\Custom\Invoke-DriverPackageAction\Invoke-DriverPackageCreator.ps1 
+Process ID: 19016
+PSVersion: 5.1.19041.1682
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.19041.1682
+BuildVersion: 10.0.19041.1682
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+Transcript started, output file is C:\ProgramData\Invoke-DriverPackageCreator\Logs\Invoke-DriverPackageCreator_20221129.log
+VERBOSE: 11/29/2022 08:15:26.867 - Execution of script "Invoke-DriverPackageCreator.ps1" began on Tuesday, November 29, 2022 @ 08:15:26.51 AM
+VERBOSE: 11/29/2022 08:15:26.872 - Script Path = C:\OSDeployment\DeploymentShares\Production\Scripts\Custom\Invoke-DriverPackageAction\Invoke-DriverPackageCreator.ps1
+VERBOSE: 11/29/2022 08:15:26.898 - Available Script Parameter(s) = -SettingsPath:FileInfo, -CatalogDirectory:DirectoryInfo, -DownloadDirectory:DirectoryInfo, -DriverPackageDirectory:DirectoryInfo, -DisableDownload:SwitchParameter, -EnableRobocopyIPG:SwitchParameter, -Force:SwitchParameter, -LogDirectory:DirectoryInfo, -ContinueOnError:SwitchParameter
+VERBOSE: 11/29/2022 08:15:26.905 - Supplied Script Parameter(s) =
+VERBOSE: 11/29/2022 08:15:26.908 - Parameter Set Name = __AllParameterSets
+VERBOSE: 11/29/2022 08:15:26.91 - Command Line: "C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -NoExit -ExecutionPolicy Unrestricted -Command cd c:\OSDeployment\DeploymentShares\Production\Scripts\Custom\Invoke-DriverPackageAction ; & c:\OSDeployment\DeploymentShares\Production\Scripts\Custom\Invoke-DriverPackageAction\Invoke-DriverPackageCreator.ps1"
+VERBOSE: 11/29/2022 08:15:27.013 - 0 command line parameter(s) were specified.
+VERBOSE: 11/29/2022 08:15:27.054 - ProductName: Windows 10 Enterprise
+VERBOSE: 11/29/2022 08:15:27.058 - Version: 10.0.19044.2251
+VERBOSE: 11/29/2022 08:15:27.06 - Architecture: 64-bit
+VERBOSE: 11/29/2022 08:15:27.06 - ReleaseVersion: 2009
+VERBOSE: 11/29/2022 08:15:27.062 - ReleaseID: 21H2
+VERBOSE: 11/29/2022 08:15:27.063 - Powershell Version: 5.1.19041.1682
+VERBOSE: 11/29/2022 08:15:27.104 - The powershell execution policy is currently set to "Undefined" for the "MachinePolicy" scope.
+VERBOSE: 11/29/2022 08:15:27.11 - The powershell execution policy is currently set to "Undefined" for the "UserPolicy" scope.
+VERBOSE: 11/29/2022 08:15:27.111 - The powershell execution policy is currently set to "Unrestricted" for the "Process" scope.
+VERBOSE: 11/29/2022 08:15:27.114 - The powershell execution policy is currently set to "Undefined" for the "CurrentUser" scope.
+VERBOSE: 11/29/2022 08:15:27.115 - The powershell execution policy is currently set to "Bypass" for the "LocalMachine" scope.
+VERBOSE: 11/29/2022 08:15:27.179 - Attempting to display device information properties from the "MS_SystemInformation" WMI class located within the "root\WMI" WMI namespace. Please Wait...
+VERBOSE: 11/29/2022 08:15:27.187 - BaseBoardManufacturer = Dell Inc.
+VERBOSE: 11/29/2022 08:15:27.19 - BaseBoardProduct = 01Y2TP
+VERBOSE: 11/29/2022 08:15:27.194 - BaseBoardVersion = A00
+VERBOSE: 11/29/2022 08:15:27.197 - BIOSReleaseDate = 09/05/2022
+VERBOSE: 11/29/2022 08:15:27.2 - BIOSVendor = Dell Inc.
+VERBOSE: 11/29/2022 08:15:27.203 - BIOSVersion = 1.6.1
+VERBOSE: 11/29/2022 08:15:27.206 - SystemFamily = Latitude
+VERBOSE: 11/29/2022 08:15:27.21 - SystemManufacturer = Dell Inc.
+VERBOSE: 11/29/2022 08:15:27.213 - SystemProductName = Latitude 5430
+VERBOSE: 11/29/2022 08:15:27.219 - SystemSKU = 0B04
+WARNING: 11/29/2022 08:15:27.234 - There are 1 log file(s) requiring cleanup.
+WARNING: 11/29/2022 08:15:27.242 - Attempting to cleanup log file "C:\ProgramData\Invoke-DriverPackageCreator\Logs\Invoke-DriverPackageCreator_20221111.log". Please Wait... [Last Modified: 11/11/2022 08:45:13.736] [Age: 17 day(s); 23 hours(s); 30 minute(s); 13 second(s)].
+VERBOSE: 11/29/2022 08:15:27.259 - Attempting to dot source the functions contained within the dependency script "Convert-FileSize.ps1". Please Wait... [Script Path: "C:\OSDeployment\DeploymentShares\Production\Scripts\Custom\Invoke-DriverPackageAction\Functions\Convert-FileSize.ps1"]
+VERBOSE: 11/29/2022 08:15:27.278 - Attempting to dot source the functions contained within the dependency script "Copy-ItemWithProgress.ps1". Please Wait... [Script Path: "C:\OSDeployment\DeploymentShares\Production\Scripts\Custom\Invoke-DriverPackageAction\Functions\Copy-ItemWithProgress.ps1"]
+VERBOSE: 11/29/2022 08:15:27.394 - Attempting to dot source the functions contained within the dependency script "Get-WindowsReleaseHistory.ps1". Please Wait... [Script Path: "C:\OSDeployment\DeploymentShares\Production\Scripts\Custom\Invoke-DriverPackageAction\Functions\Get-WindowsReleaseHistory.ps1"]
+VERBOSE: 11/29/2022 08:15:27.456 - Attempting to dot source the functions contained within the dependency script "Invoke-FileDownload.ps1". Please Wait... [Script Path: "C:\OSDeployment\DeploymentShares\Production\Scripts\Custom\Invoke-DriverPackageAction\Functions\Invoke-FileDownload.ps1"]
+VERBOSE: 11/29/2022 08:15:27.527 - Attempting to dot source the functions contained within the dependency script "Invoke-FileDownloadWithProgress.ps1". Please Wait... [Script Path: "C:\OSDeployment\DeploymentShares\Production\Scripts\Custom\Invoke-DriverPackageAction\Functions\Invoke-FileDownloadWithProgress.ps1"]
+VERBOSE: 11/29/2022 08:15:27.665 - Attempting to dot source the functions contained within the dependency script "Invoke-RegistryHiveAction.ps1". Please Wait... [Script Path: "C:\OSDeployment\DeploymentShares\Production\Scripts\Custom\Invoke-DriverPackageAction\Functions\Invoke-RegistryHiveAction.ps1"]
+VERBOSE: 11/29/2022 08:15:27.731 - Attempting to dot source the functions contained within the dependency script "Invoke-SQLDBQuery.ps1". Please Wait... [Script Path: "C:\OSDeployment\DeploymentShares\Production\Scripts\Custom\Invoke-DriverPackageAction\Functions\Invoke-SQLDBQuery.ps1"]
+VERBOSE: 11/29/2022 08:15:27.851 - Attempting to dot source the functions contained within the dependency script "Start-ProcessWithOutput.ps1". Please Wait... [Script Path: "C:\OSDeployment\DeploymentShares\Production\Scripts\Custom\Invoke-DriverPackageAction\Functions\Start-ProcessWithOutput.ps1"]
+VERBOSE: 11/29/2022 08:15:27.933 - Attempting to load assembly "C:\OSDeployment\DeploymentShares\Production\Scripts\Custom\Invoke-DriverPackageAction\Functions\Libraries\AlphaFS.dll". Please Wait...
+VERBOSE: 11/29/2022 08:15:27.974 - Settings Path: C:\ProgramData\Invoke-DriverPackageCreator\Settings\DriverPackageCreatorSettings.xml
+VERBOSE: 11/29/2022 08:15:27.985 - Attempting to load the configuration settings from "C:\ProgramData\Invoke-DriverPackageCreator\Settings\DriverPackageCreatorSettings.xml". Please Wait...
+VERBOSE: 11/29/2022 08:15:28.034 - Function 'Get-WindowsReleaseHistory' is beginning. Please Wait...
+VERBOSE: 11/29/2022 08:15:28.041 - Available Function Parameter(s) = -Force:SwitchParameter, -ContinueOnError:SwitchParameter
+VERBOSE: 11/29/2022 08:15:28.049 - Supplied Function Parameter(s) = -Verbose:SwitchParameter
+VERBOSE: 11/29/2022 08:15:28.05 - Execution of Get-WindowsReleaseHistory began on Tuesday, November 29, 2022 @ 08:15:28.026 AM
+VERBOSE: 11/29/2022 08:15:28.061 - Attempting to load assembly "C:\OSDeployment\DeploymentShares\Production\Scripts\Custom\Invoke-DriverPackageAction\Functions\Libraries\HtmlAgilityPack.dll". Please Wait...
+VERBOSE: 11/29/2022 08:15:28.075 - Attempting to retrieve data from "https://learn.microsoft.com/en-us/windows/release-health/release-information". Please Wait...
+VERBOSE: 11/29/2022 08:15:28.423 - Attempting to retrieve data from "https://learn.microsoft.com/en-us/windows/release-health/windows11-release-information". Please Wait...
+VERBOSE: 11/29/2022 08:15:28.474 - Execution of Get-WindowsReleaseHistory ended on Tuesday, November 29, 2022 @ 08:15:28.474 AM
+VERBOSE: 11/29/2022 08:15:28.478 - Function execution took 0 hour(s), 0 minute(s), 0 second(s), and 447 millisecond(s)
+VERBOSE: 11/29/2022 08:15:28.481 - Function 'Get-WindowsReleaseHistory' is completed.
+WARNING: 11/29/2022 08:15:28.499 - Attempting to process the driver pack catalog for "Dell". Please Wait...
+VERBOSE: 11/29/2022 08:15:28.529 - Function 'Invoke-FileDownload' is beginning. Please Wait...
+VERBOSE: 11/29/2022 08:15:28.536 - Available Function Parameter(s) = -URL:Uri, -Destination:DirectoryInfo, -FileName:String, -ContinueOnError:SwitchParameter
+VERBOSE: 11/29/2022 08:15:28.542 - Supplied Function Parameter(s) = -URL:Uri, -Destination:DirectoryInfo, -Verbose:SwitchParameter
+VERBOSE: 11/29/2022 08:15:28.542 - Execution of Invoke-FileDownload began on Tuesday, November 29, 2022 @ 08:15:28 AM
+VERBOSE: 11/29/2022 08:15:28.547 - Attempting to create a web request for "https://dl.dell.com/catalog/DriverPackCatalog.cab". Please Wait...
+VERBOSE: 11/29/2022 08:15:28.699 - Destination path "C:\ProgramData\Invoke-DriverPackageCreator\Catalogs\Dell\DriverPackCatalog.cab" already exists.
+VERBOSE: 11/29/2022 08:15:28.702 - Attempting to check the last modified date of "C:\ProgramData\Invoke-DriverPackageCreator\Catalogs\Dell\DriverPackCatalog.cab" to see if a download is necessary.
+VERBOSE: 11/29/2022 08:15:28.704 - Last Modified Date (Source): Tuesday, November 22, 2022 @ 06:14:58 AM
+VERBOSE: 11/29/2022 08:15:28.706 - Last Modified Date (Local): Tuesday, November 22, 2022 @ 06:14:58 AM
+VERBOSE: 11/29/2022 08:15:28.71 - A redownload of "https://dl.dell.com/catalog/DriverPackCatalog.cab" is not necessary.
+VERBOSE: 11/29/2022 08:15:28.715 - Execution of Invoke-FileDownload ended on Tuesday, November 29, 2022 @ 08:15:28 AM
+VERBOSE: 11/29/2022 08:15:28.718 - Function execution took 0 hour(s), 0 minute(s), 0 second(s), and 188 millisecond(s)
+VERBOSE: 11/29/2022 08:15:28.719 - Function 'Invoke-FileDownload' is completed.
+VERBOSE: 11/29/2022 08:15:28.777 - Attempting to search the "Dell" driver pack catalog for "Windows 10" drivers for model "01Y2TP" [Manufacturer: Dell Inc.] [Model: Latitude 5430] [Alias: ] [SKU: 0B04]. Please Wait...
+VERBOSE: 11/29/2022 08:15:28.995 - 1 result(s) were returned from the driver pack search.
+VERBOSE: 11/29/2022 08:15:29.004 - 1 result(s) remain after filtering, and sorting.
+VERBOSE: 11/29/2022 08:15:29.006 - Attempting to add driver pack "Latitude-5430-H2VD7_Win10_1.0_A05.exe" [Release: H2VD7] [Version: A05] released on Sunday, November 06, 2022 @ 05:59:17 PM. Please Wait...
+VERBOSE: 11/29/2022 08:15:29.063 - Attempting to search the "Dell" driver pack catalog for "Windows 11" drivers for model "01Y2TP" [Manufacturer: Dell Inc.] [Model: Latitude 5430] [Alias: ] [SKU: 0B04]. Please Wait...
+VERBOSE: 11/29/2022 08:15:29.172 - 1 result(s) were returned from the driver pack search.
+VERBOSE: 11/29/2022 08:15:29.174 - 1 result(s) remain after filtering, and sorting.
+VERBOSE: 11/29/2022 08:15:29.175 - Attempting to add driver pack "Latitude-5430-0K0J8_Win11_1.0_A05.exe" [Release: 0K0J8] [Version: A05] released on Sunday, November 06, 2022 @ 05:59:17 PM. Please Wait...
+WARNING: 11/29/2022 08:15:29.2 - Attempting to process the driver pack catalog for "HP". Please Wait...
+VERBOSE: 11/29/2022 08:15:29.202 - Function 'Invoke-FileDownload' is beginning. Please Wait...
+VERBOSE: 11/29/2022 08:15:29.204 - Available Function Parameter(s) = -URL:Uri, -Destination:DirectoryInfo, -FileName:String, -ContinueOnError:SwitchParameter
+VERBOSE: 11/29/2022 08:15:29.206 - Supplied Function Parameter(s) = -URL:Uri, -Destination:DirectoryInfo, -Verbose:SwitchParameter
+VERBOSE: 11/29/2022 08:15:29.208 - Execution of Invoke-FileDownload began on Tuesday, November 29, 2022 @ 08:15:29 AM
+VERBOSE: 11/29/2022 08:15:29.209 - Attempting to create a web request for "https://ftp.hp.com/pub/caps-softpaq/cmit/HPClientDriverPackCatalog.cab". Please Wait...
+VERBOSE: 11/29/2022 08:15:29.71 - Destination path "C:\ProgramData\Invoke-DriverPackageCreator\Catalogs\HP\HPClientDriverPackCatalog.cab" already exists.
+VERBOSE: 11/29/2022 08:15:29.712 - Attempting to check the last modified date of "C:\ProgramData\Invoke-DriverPackageCreator\Catalogs\HP\HPClientDriverPackCatalog.cab" to see if a download is necessary.
+VERBOSE: 11/29/2022 08:15:29.717 - Last Modified Date (Source): Saturday, November 26, 2022 @ 04:00:19 PM
+VERBOSE: 11/29/2022 08:15:29.718 - Last Modified Date (Local): Saturday, November 26, 2022 @ 04:00:19 PM
+VERBOSE: 11/29/2022 08:15:29.72 - A redownload of "https://ftp.hp.com/pub/caps-softpaq/cmit/HPClientDriverPackCatalog.cab" is not necessary.
+VERBOSE: 11/29/2022 08:15:29.722 - Execution of Invoke-FileDownload ended on Tuesday, November 29, 2022 @ 08:15:29 AM
+VERBOSE: 11/29/2022 08:15:29.723 - Function execution took 0 hour(s), 0 minute(s), 0 second(s), and 519 millisecond(s)
+VERBOSE: 11/29/2022 08:15:29.724 - Function 'Invoke-FileDownload' is completed.
+VERBOSE: 11/29/2022 08:15:29.754 - Attempting to search the "HP" driver pack catalog for "Windows 10" drivers for model "8736" [Manufacturer: HP] [Model: HP ZBook Studio G7 Mobile Workstation] [Alias: ] [SKU: 8YP41AV]. Please Wait...
+VERBOSE: 11/29/2022 08:15:30.458 - 2 result(s) were returned from the driver pack search.
+VERBOSE: 11/29/2022 08:15:30.464 - 1 result(s) remain after filtering, and sorting.
+VERBOSE: 11/29/2022 08:15:30.466 - Attempting to add driver pack "HP ZBook Studio G7 Windows 10 x64 Driver Pack" [Version: 6.00 A 1] released on Friday, May 21, 2021 @ 12:00:00 AM. Please Wait...
+VERBOSE: 11/29/2022 08:15:30.491 - Attempting to search the "HP" driver pack catalog for "Windows 11" drivers for model "8736" [Manufacturer: HP] [Model: HP ZBook Studio G7 Mobile Workstation] [Alias: ] [SKU: 8YP41AV]. Please Wait...
+VERBOSE: 11/29/2022 08:15:31.145 - 1 result(s) were returned from the driver pack search.
+VERBOSE: 11/29/2022 08:15:31.149 - 1 result(s) remain after filtering, and sorting.
+VERBOSE: 11/29/2022 08:15:31.15 - Attempting to add driver pack "HP ZBook Studio G7 Window 11 Driver Pack" [Version: 1.00 A 1] released on Thursday, June 23, 2022 @ 12:00:00 AM. Please Wait...
+WARNING: 11/29/2022 08:15:31.154 - Attempting to process the driver pack catalog for "Lenovo". Please Wait...
+VERBOSE: 11/29/2022 08:15:31.156 - Function 'Invoke-FileDownload' is beginning. Please Wait...
+VERBOSE: 11/29/2022 08:15:31.158 - Available Function Parameter(s) = -URL:Uri, -Destination:DirectoryInfo, -FileName:String, -ContinueOnError:SwitchParameter
+VERBOSE: 11/29/2022 08:15:31.159 - Supplied Function Parameter(s) = -URL:Uri, -Destination:DirectoryInfo, -Verbose:SwitchParameter
+VERBOSE: 11/29/2022 08:15:31.16 - Execution of Invoke-FileDownload began on Tuesday, November 29, 2022 @ 08:15:31 AM
+VERBOSE: 11/29/2022 08:15:31.163 - Attempting to create a web request for "https://download.lenovo.com/cdrt/td/catalogv2.xml". Please Wait...
+VERBOSE: 11/29/2022 08:15:31.377 - Destination path "C:\ProgramData\Invoke-DriverPackageCreator\Catalogs\Lenovo\catalogv2.xml" already exists.
+VERBOSE: 11/29/2022 08:15:31.381 - Attempting to check the last modified date of "C:\ProgramData\Invoke-DriverPackageCreator\Catalogs\Lenovo\catalogv2.xml" to see if a download is necessary.
+VERBOSE: 11/29/2022 08:15:31.387 - Last Modified Date (Source): Thursday, November 24, 2022 @ 01:10:00 PM
+VERBOSE: 11/29/2022 08:15:31.388 - Last Modified Date (Local): Thursday, November 24, 2022 @ 01:10:00 PM
+VERBOSE: 11/29/2022 08:15:31.389 - A redownload of "https://download.lenovo.com/cdrt/td/catalogv2.xml" is not necessary.
+VERBOSE: 11/29/2022 08:15:31.391 - Execution of Invoke-FileDownload ended on Tuesday, November 29, 2022 @ 08:15:31 AM
+VERBOSE: 11/29/2022 08:15:31.392 - Function execution took 0 hour(s), 0 minute(s), 0 second(s), and 235 millisecond(s)
+VERBOSE: 11/29/2022 08:15:31.395 - Function 'Invoke-FileDownload' is completed.
+VERBOSE: 11/29/2022 08:15:31.404 - Attempting to search the "Lenovo" driver pack catalog for "Windows 10" drivers for model "10AXS2CQ00" [Manufacturer: Lenovo] [Model: 10AXS2CQ00] [Alias: ThinkCentre M73] [SKU: LENOVO_MT_10AX]. Please Wait...
+VERBOSE: 11/29/2022 08:15:31.45 - Attempting to parse metadata for "ThinkCentre M73" from URL "https://download.lenovo.com/pccbbs/thinkcentre_drivers/tc_m73_w1064_201508.exe". Please Wait...
+VERBOSE: 11/29/2022 08:15:31.494 - 1 result(s) were returned from the driver pack search.
+VERBOSE: 11/29/2022 08:15:31.497 - 1 result(s) remain after filtering, and sorting.
+VERBOSE: 11/29/2022 08:15:31.5 - Attempting to add driver pack for "ThinkCentre M73" released on Saturday, August 01, 2015 @ 12:00:00 AM. Please Wait...
+VERBOSE: 11/29/2022 08:15:31.511 - Attempting to search the "Lenovo" driver pack catalog for "Windows 11" drivers for model "10AXS2CQ00" [Manufacturer: Lenovo] [Model: 10AXS2CQ00] [Alias: ThinkCentre M73] [SKU: LENOVO_MT_10AX]. Please Wait...
+VERBOSE: 11/29/2022 08:15:31.547 - 0 result(s) were returned from the driver pack search.
+VERBOSE: 11/29/2022 08:15:31.551 - 0 result(s) remain after filtering, and sorting.
+VERBOSE: 11/29/2022 08:15:31.554 - A total of 5 driver pack download(s) will be processed. Please Wait...
+VERBOSE: 11/29/2022 08:15:31.563 - Attempting to process 2 manufacturer specific download(s) for manufacturer "Dell". Please Wait...
+VERBOSE: 11/29/2022 08:15:31.572 - Attempting to process 2 product ID specific download(s) for product ID "0B04" manufactured by "Dell". Please Wait...
+WARNING: 11/29/2022 08:15:31.585 - A driver pack windows image already exists for "Windows 10 X64" for product ID "0B04" [Model: Latitude 5430] manufactured by "Dell". Skipping...
+VERBOSE: 11/29/2022 08:15:31.59 - Windows Image Path: C:\ProgramData\Invoke-DriverPackageCreator\Out-Of-Box-Driver-Packages\Dell\0B04\W10\X64\Dell-0B04-H2VD7-A05-W10-X64-All.wim
+WARNING: 11/29/2022 08:15:31.596 - A driver pack windows image already exists for "Windows 11 X64" for product ID "0B04" [Model: Latitude 5430] manufactured by "Dell". Skipping...
+VERBOSE: 11/29/2022 08:15:31.601 - Windows Image Path: C:\ProgramData\Invoke-DriverPackageCreator\Out-Of-Box-Driver-Packages\Dell\0B04\W11\X64\Dell-0B04-0K0J8-A05-W11-X64-All.wim
+VERBOSE: 11/29/2022 08:15:31.605 - Attempting to process 2 manufacturer specific download(s) for manufacturer "HP". Please Wait...
+VERBOSE: 11/29/2022 08:15:31.607 - Attempting to process 2 product ID specific download(s) for product ID "8" manufactured by "HP". Please Wait...
+WARNING: 11/29/2022 08:15:31.611 - A driver pack windows image already exists for "Windows 10 X64" for product ID "8" [Model: HP ZBook Studio G7 Mobile Workstation] manufactured by "HP". Skipping...
+VERBOSE: 11/29/2022 08:15:31.616 - Windows Image Path: C:\ProgramData\Invoke-DriverPackageCreator\Out-Of-Box-Driver-Packages\HP\8736\W10\X64\HP-8736-SP113952-W10-X64-21H2.wim
+WARNING: 11/29/2022 08:15:31.621 - A driver pack windows image already exists for "Windows 11 X64" for product ID "8" [Model: HP ZBook Studio G7 Mobile Workstation] manufactured by "HP". Skipping...
+VERBOSE: 11/29/2022 08:15:31.623 - Windows Image Path: C:\ProgramData\Invoke-DriverPackageCreator\Out-Of-Box-Driver-Packages\HP\8736\W11\X64\HP-8736-SP140788-W11-X64-21H2.wim
+VERBOSE: 11/29/2022 08:15:31.625 - Attempting to process 1 manufacturer specific download(s) for manufacturer "Lenovo". Please Wait...
+VERBOSE: 11/29/2022 08:15:31.626 - Attempting to process 1 product ID specific download(s) for product ID "10B3" manufactured by "Lenovo". Please Wait...
+WARNING: 11/29/2022 08:15:31.629 - A driver pack windows image already exists for "Windows 10 X64" for product ID "10B3" [Model: ThinkCentre M73] manufactured by "Lenovo". Skipping...
+VERBOSE: 11/29/2022 08:15:31.636 - Windows Image Path: C:\ProgramData\Invoke-DriverPackageCreator\Out-Of-Box-Driver-Packages\Lenovo\10AX\W10\X64\Lenovo-10AX-W10-X64-All.wim
+VERBOSE: 11/29/2022 08:15:31.678 - Attempting to create JSON metadata file "C:\WINDOWS\Temp\Invoke-DriverPackageCreator\Packages\Generic\Adapters\Generic-Adapters.json". Please Wait...
+VERBOSE: 11/29/2022 08:15:31.689 - Attempting to create JSON metadata file "C:\WINDOWS\Temp\Invoke-DriverPackageCreator\Packages\Generic\Docks\Generic-Docks.json". Please Wait...
+VERBOSE: 11/29/2022 08:15:31.695 - Attempting to create JSON metadata file "C:\WINDOWS\Temp\Invoke-DriverPackageCreator\Packages\Generic\Miscellaneous\Generic-Miscellaneous.json". Please Wait...
+VERBOSE: 11/29/2022 08:15:31.7 - Attempting to create JSON metadata file "C:\WINDOWS\Temp\Invoke-DriverPackageCreator\Packages\Generic\Printers\Generic-Printers.json". Please Wait...
+VERBOSE: 11/29/2022 08:15:31.714 - There are 4 windows image driver packages to copy from "C:\WINDOWS\Temp\Invoke-DriverPackageCreator\Packages" to "C:\ProgramData\Invoke-DriverPackageCreator\Out-Of-Box-Driver-Packages".
+VERBOSE: 11/29/2022 08:15:31.726 - Session 0 was not detected [User: DSW\amote]. The command window will be show.
+VERBOSE: 11/29/2022 08:15:32.789 - The command execution was successful. [Exit Code: 3]
+WARNING: 11/29/2022 08:15:32.792 - Attempting to remove local driver package directory "C:\WINDOWS\Temp\Invoke-DriverPackageCreator\Packages". Please Wait...
+VERBOSE: 11/29/2022 08:15:32.969 - New driver package list hash: B5D1B89163D7C86D865F4E64624E41D632115F92021C52CC46027521A533AD93
+VERBOSE: 11/29/2022 08:15:32.983 - Current driver package list hash: A97E7BA5415B03B4DAF7AF5BEBFF55D2497202C3C618596A99D40FA8503C6333
+WARNING: 11/29/2022 08:15:32.987 - The driver package list "C:\ProgramData\Invoke-DriverPackageCreator\Out-Of-Box-Driver-Packages\Metadata\DriverPackageList.xml" requires an update.
+VERBOSE: 11/29/2022 08:15:32.993 - Attempting to export the driver package list to "C:\ProgramData\Invoke-DriverPackageCreator\Out-Of-Box-Driver-Packages\Metadata\DriverPackageList.xml". Please Wait...
+VERBOSE: 11/29/2022 08:15:32.999 - Script execution of "Invoke-DriverPackageCreator.ps1" ended on Tuesday, November 29, 2022 @ 08:15:32.999 AM
+VERBOSE: 11/29/2022 08:15:33.001 - Script execution took 0 hour(s), 0 minute(s), 6 second(s), and 488 millisecond(s)
+VERBOSE: 11/29/2022 08:15:33.004 - Exiting script "C:\OSDeployment\DeploymentShares\Production\Scripts\Custom\Invoke-DriverPackageAction\Invoke-DriverPackageCreator.ps1" with exit code 0.
+**********************
+Windows PowerShell transcript end
+End time: 20221129081533
+**********************

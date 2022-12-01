@@ -1,0 +1,22 @@
+﻿2022-11-30 17:26:46, Info                  DISM   PID=1044 TID=2180 Scratch directory set to 'X:\windows\TEMP\'. - CDISMManager::put_ScratchDir
+2022-11-30 17:26:46, Info                  DISM   PID=1044 TID=2180 DismCore.dll version: 10.0.22000.1 - CDISMManager::FinalConstruct
+2022-11-30 17:26:46, Info                  DISM   Initialized Panther logging at E:\MININT\SMSOSD\OSDLOGS\Invoke-DriverPackageDownload\DISM\DISM_UnmountImage_Image02_Index01.log
+2022-11-30 17:26:46, Info                  DISM   PID=1044 TID=2180 Successfully loaded the ImageSession at "X:\windows\system32\Dism" - CDISMManager::LoadLocalImageSession
+2022-11-30 17:26:46, Info                  DISM   Initialized Panther logging at E:\MININT\SMSOSD\OSDLOGS\Invoke-DriverPackageDownload\DISM\DISM_UnmountImage_Image02_Index01.log
+2022-11-30 17:26:46, Info                  DISM   DISM Provider Store: PID=1044 TID=2180 Found and Initialized the DISM Logger. - CDISMProviderStore::Internal_InitializeLogger
+2022-11-30 17:26:46, Info                  DISM   Initialized Panther logging at E:\MININT\SMSOSD\OSDLOGS\Invoke-DriverPackageDownload\DISM\DISM_UnmountImage_Image02_Index01.log
+2022-11-30 17:26:46, Info                  DISM   DISM Manager: PID=1044 TID=2180 Successfully created the local image session and provider store. - CDISMManager::CreateLocalImageSession
+2022-11-30 17:26:46, Info                  DISM   DISM.EXE: 
+2022-11-30 17:26:46, Info                  DISM   DISM.EXE: <----- Starting Dism.exe session ----->
+2022-11-30 17:26:46, Info                  DISM   DISM.EXE: 
+2022-11-30 17:26:46, Info                  DISM   DISM.EXE: Host machine information: OS Version=10.0.22000, Running architecture=amd64, Number of processors=12
+2022-11-30 17:26:46, Info                  DISM   DISM.EXE: Dism.exe version: 10.0.22000.1
+2022-11-30 17:26:46, Info                  DISM   DISM.EXE: Executing command line: "X:\windows\system32\dism.exe" /Unmount-Image /MountDir:"E:\WIMMount\Image02\Index01" /Discard /LogPath:"E:\MININT\SMSOSD\OSDLOGS\Invoke-DriverPackageDownload\DISM\DISM_UnmountImage_Image02_Index01.log" /LogLevel:3
+2022-11-30 17:26:46, Info                  DISM   DISM FFU Provider: PID=1044 TID=2180 [E:\WIMMount\Image02\Index01] is not recognized by the DISM FFU provider. - CFfuImage::Initialize
+2022-11-30 17:26:46, Info                  DISM   DISM Imaging Provider: PID=1044 TID=2180 The provider FfuManager does not support CreateDismImage on E:\WIMMount\Image02\Index01 - CGenericImagingManager::CreateDismImage
+2022-11-30 17:26:46, Info                  DISM   DISM VHD Provider: PID=1044 TID=2180 [E:\WIMMount\Image02\Index01] is not recognized by the DISM VHD provider. - CVhdImage::Initialize
+2022-11-30 17:26:46, Info                  DISM   DISM Imaging Provider: PID=1044 TID=2180 The provider VHDManager does not support CreateDismImage on E:\WIMMount\Image02\Index01 - CGenericImagingManager::CreateDismImage
+2022-11-30 17:26:46, Info                  DISM   DISM.EXE: Image session has been closed. Reboot required=no.
+2022-11-30 17:26:46, Info                  DISM   DISM.EXE: 
+2022-11-30 17:26:46, Info                  DISM   DISM.EXE: <----- Ending Dism.exe session ----->
+2022-11-30 17:26:46, Info                  DISM   DISM.EXE: 
