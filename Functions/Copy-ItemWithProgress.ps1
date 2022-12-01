@@ -173,21 +173,21 @@ Function Copy-ItemWithProgress
                     [System.IO.DirectoryInfo]$FunctionDirectory = "$($FunctionPath.Directory.FullName)"
                     
                     $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Function `'$($FunctionName)`' is beginning. Please Wait..."
-                    Write-Verbose -Message ($LoggingDetails.LogMessage)
+                    Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
               
                     #Define Default Action Preferences
                       $ErrorActionPreference = 'Stop'
                       
                     [String[]]$AvailableScriptParameters = (Get-Command -Name ($FunctionName)).Parameters.GetEnumerator() | Where-Object {($_.Value.Name -inotin $CommonParameterList)} | ForEach-Object {"-$($_.Value.Name):$($_.Value.ParameterType.Name)"}
                     $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Available Function Parameter(s) = $($AvailableScriptParameters -Join ', ')"
-                    Write-Verbose -Message ($LoggingDetails.LogMessage)
+                    Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
 
                     [String[]]$SuppliedScriptParameters = $PSBoundParameters.GetEnumerator() | ForEach-Object {"-$($_.Key):$($_.Value.GetType().Name)"}
                     $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Supplied Function Parameter(s) = $($SuppliedScriptParameters -Join ', ')"
-                    Write-Verbose -Message ($LoggingDetails.LogMessage)
+                    Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
 
                     $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Execution of $($FunctionName) began on $($FunctionStartTime.ToString($DateTimeLogFormat))"
-                    Write-Verbose -Message ($LoggingDetails.LogMessage)
+                    Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
 
                     #region Load any required libraries
                       [System.IO.DirectoryInfo]$LibariesDirectory = "$($FunctionDirectory.FullName)\Libraries"
@@ -267,31 +267,31 @@ Function Copy-ItemWithProgress
                                     $GetChildItemParameters.ErrorAction = [System.Management.Automation.Actionpreference]::SilentlyContinue
             
                                 Switch ($True)
-                                    {
-                                        {([String]::IsNullOrEmpty($Include) -eq $False) -and ([String]::IsNullOrWhiteSpace($Include) -eq $False)}
-                                          {
-                                              $GetChildItemParameters.Include = $Include
-                                              
-                                              $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - File(s) matching $($GetChildItemParameters.Include -Join ', ') will be included." 
-                                              Write-Verbose -Message ($LoggingDetails.LogMessage)      
-                                          }
-            
-                                        {([String]::IsNullOrEmpty($Exclude) -eq $False) -and ([String]::IsNullOrWhiteSpace($Exclude) -eq $False)}
-                                          {
-                                              $GetChildItemParameters.Exclude = $Exclude
+                                  {
+                                      {([String]::IsNullOrEmpty($Include) -eq $False) -and ([String]::IsNullOrWhiteSpace($Include) -eq $False)}
+                                        {
+                                            $GetChildItemParameters.Include = $Include
+                                            
+                                            $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - File(s) matching $($GetChildItemParameters.Include -Join ', ') will be included." 
+                                            Write-Verbose -Message ($LoggingDetails.LogMessage)      
+                                        }
           
-                                              $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - File(s) matching $($GetChildItemParameters.Exclude -Join ', ') will be excluded." 
-                                              Write-Verbose -Message ($LoggingDetails.LogMessage)
-                                          }
-            
-                                        {($Recurse.IsPresent -eq $True)}
-                                          {
-                                              $GetChildItemParameters.Recurse = $True
+                                      {([String]::IsNullOrEmpty($Exclude) -eq $False) -and ([String]::IsNullOrWhiteSpace($Exclude) -eq $False)}
+                                        {
+                                            $GetChildItemParameters.Exclude = $Exclude
+        
+                                            $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - File(s) matching $($GetChildItemParameters.Exclude -Join ', ') will be excluded." 
+                                            Write-Verbose -Message ($LoggingDetails.LogMessage)
+                                        }
           
-                                              $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - The search will be performed recursively." 
-                                              Write-Verbose -Message ($LoggingDetails.LogMessage)
-                                          }
-                                    }
+                                      {($Recurse.IsPresent -eq $True)}
+                                        {
+                                            $GetChildItemParameters.Recurse = $True
+        
+                                            $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - The search will be performed recursively." 
+                                            Write-Verbose -Message ($LoggingDetails.LogMessage)
+                                        }
+                                  }
 
                                 $FileList = Get-ChildItem @GetChildItemParameters | Where-Object {($_ -is [System.IO.FileInfo])}
 
@@ -303,14 +303,14 @@ Function Copy-ItemWithProgress
                                       {($_ -eq $True)}
                                         {
                                             $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - $($FileListDetails.Count) file(s) will be copied in $($SegmentSize) MB segments to the destination directory of `"$($Destination.FullName)`". Please Wait..." 
-                                            Write-Verbose -Message ($LoggingDetails.LogMessage)
+                                            Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
 
                                             $FileListDetails.TotalBytes = ($FileList | Measure-Object -Sum 'Length').Sum
                                             $FileListDetails.TransferredBytes = 0
                                             $FileListDetails.PercentComplete = 0
 
                                             $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - A total of $([System.Math]::Round(($FileListDetails.TotalBytes / 1MB), 2)) MB needs to be transferred." 
-                                            Write-Verbose -Message ($LoggingDetails.LogMessage)
+                                            Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
                                           
                                             $StopWatchTable = New-Object -TypeName 'System.Collections.Specialized.OrderedDictionary'
                                               $StopWatchTable.Primary = New-Object -TypeName 'System.Diagnostics.Stopwatch'
@@ -524,7 +524,7 @@ Function Copy-ItemWithProgress
                                                               Default
                                                                 {
                                                                     $LoggingDetails.WarningMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - File `"$($FileObjectProperties.Destination.FullName)`" already exists. Skipping." 
-                                                                    Write-Warning -Message ($LoggingDetails.WarningMessage)
+                                                                    Write-Verbose -Message ($LoggingDetails.WarningMessage)
 
                                                                     $FileObjectProperties.Status = 'Skipped'
                                                                 }
@@ -557,14 +557,14 @@ Function Copy-ItemWithProgress
                                             ForEach ($FileListStatusGroup In $FileListStatusGroups)
                                               {
                                                   $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - $($FileListStatusGroup.Count) of $($FileListDetails.Count) file(s) have a status of `"$($FileListStatusGroup.Name)`"." 
-                                                  Write-Verbose -Message ($LoggingDetails.LogMessage)
+                                                  Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
                                               }
                                         }
             
                                       Default
                                         {
                                             $LoggingDetails.WarningMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - There are $($FileListDetails.Count) file(s) to copy to `"$($Destination.FullName)`". No further action will be taken." 
-                                            Write-Warning -Message ($LoggingDetails.WarningMessage)
+                                            Write-Verbose -Message ($LoggingDetails.WarningMessage) -Verbose
                                         }
                                   }
                             }
@@ -594,16 +594,16 @@ Function Copy-ItemWithProgress
                       $FunctionEndTime = (Get-Date)
 
                       $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Execution of $($FunctionName) ended on $($FunctionEndTime.ToString($DateTimeLogFormat))"
-                      Write-Verbose -Message ($LoggingDetails.LogMessage)
+                      Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
 
                     #Log the total script execution time  
                       $FunctionExecutionTimespan = New-TimeSpan -Start ($FunctionStartTime) -End ($FunctionEndTime)
 
                       $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Function execution took $($FunctionExecutionTimespan.Hours.ToString()) hour(s), $($FunctionExecutionTimespan.Minutes.ToString()) minute(s), $($FunctionExecutionTimespan.Seconds.ToString()) second(s), and $($FunctionExecutionTimespan.Milliseconds.ToString()) millisecond(s)"
-                      Write-Verbose -Message ($LoggingDetails.LogMessage)
+                      Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
                     
                     $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Function `'$($FunctionName)`' is completed."
-                    Write-Verbose -Message ($LoggingDetails.LogMessage)
+                    Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
                 }
               Catch
                 {
