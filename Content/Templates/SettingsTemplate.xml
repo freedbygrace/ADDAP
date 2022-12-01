@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-16"?>
+
+<?xml-stylesheet type='text/xsl' href='style.xsl'?>
+
+<!--Please specify the configuration settings that will be used by the driver package creation powershell script.-->
+
+<!--
+
+By default, the settings XML will be automatically modified by the 'Invoke-DriverPackageCreation' script to include the model you execute the script on, but only if it matches one of the manufacturers within the XML.
+
+To add a model manually, copy and paste the following code into the  Powershell ISE on the specific model you want to add to this XML.
+
+The text will be automatically copied to the clipboard.
+
+Add the model under the desired manufacturer in order to the entry to be processed correctly.
+    
+### Begin Code Snippet ###
+    $PropertyList = New-Object -TypeName 'System.Collections.Generic.List[Object]'
+        $PropertyList.Add(@{Name = 'Enabled'; Expression = {$True}})
+        $PropertyList.Add('SystemProductName')
+        $PropertyList.Add(@{Name = 'ProductID'; Expression = {$_.BaseboardProduct}})
+        $PropertyList.Add('BaseboardProduct')
+        $PropertyList.Add('SystemSKU')
+        $PropertyList.Add('SystemVersion')
+        $PropertyList.Add('SystemFamily')    
+        $PropertyList.Add('SystemManufacturer')
+                   
+    $MSSystemInformation = Get-CIMInstance -Namespace "root\WMI" -Class "MS_SystemInformation" | Select-Object -Property ($PropertyList)
+
+    $XMLAttributes = $MSSystemInformation.PSObject.Properties | ForEach-Object {"$($_.Name)=`"$($_.Value)`""}
+
+    $XMLNode = "<Model $($XMLAttributes -Join ' ') />"
+
+    Write-Output -InputObject ($XMLNode)
+
+    $Null = $XMLNode | Set-Clipboard -Verbose
+### End Code Snippet ###
+
+<ModelList>
+    ### Copy and paste the generated text from the clipboard in between the 'ModelList' section for the desired manufacturer ###
+</ModelList>
+
+As an example, the following details are available from the following powershell command
+
+Get-CIMInstance -Namespace 'Root\WMI' -Class 'MS_SystemInformation'
+
+BaseBoardManufacturer  : Dell Inc.
+BaseBoardProduct       : 01Y2TP
+BaseBoardVersion       : A00
+BiosMajorRelease       : 1
+BiosMinorRelease       : 6
+BIOSReleaseDate        : 09/05/2022
+BIOSVendor             : Dell Inc.
+BIOSVersion            : 1.6.1
+ECFirmwareMajorRelease : 255
+ECFirmwareMinorRelease : 255
+InstanceName           : ROOT\mssmbios\0000_0
+SystemFamily           : Latitude
+SystemManufacturer     : Dell Inc.
+SystemProductName      : Latitude 5430
+SystemSKU              : 0B04
+SystemVersion          : 
+
+-->
+
+<Settings>
+	<GeneratedBy>DSW\amote</GeneratedBy>
+	<GeneratedOn>NBAMOTE</GeneratedOn>
+	<GeneratedDate>2022-11-10T15:01</GeneratedDate>
+	<OperatingSystemList>
+		<OperatingSystem Enabled="True" Vendor="Microsoft" Name="Windows 10" NameExpression=".*10.*" ArchitectureExpression=".*64.*" ReleaseExpression=".*" LatestReleaseOnly="True" />
+		<OperatingSystem Enabled="True" Vendor="Microsoft" Name="Windows 11" NameExpression=".*11.*" ArchitectureExpression=".*64.*" ReleaseExpression=".*" LatestReleaseOnly="True" />
+	</OperatingSystemList>
+	<ManufacturerList>
+		<Manufacturer Enabled="True" Name="Dell" EligibilityExpression="(^.*Dell.*$)" ProductIDPropertyName="SystemSKU">
+			<URLs DriverPackCatalog="https://dl.dell.com/catalog/DriverPackCatalog.cab" DownloadBase="https://dl.dell.com" />
+			<ModelList>
+				<Model Enabled="False" SystemProductName="Latitude 5420" ProductID="0A20" BaseboardProduct="0M51J7" SystemSKU="0A20" SystemVersion="" SystemFamily="Latitude" SystemManufacturer="Dell" />
+			</ModelList>
+		</Manufacturer>
+		<Manufacturer Enabled="True" Name="HP" EligibilityExpression="(^.*HP.*$)|(^.*Hewlett.*Packard.*$)" ProductIDPropertyName="BaseboardProduct">
+			<URLs DriverPackCatalog="https://ftp.hp.com/pub/caps-softpaq/cmit/HPClientDriverPackCatalog.cab" DownloadBase="" />
+			<ModelList>
+				<Model Enabled="False" SystemProductName="HP ZBook Studio G7 Mobile Workstation" ProductID="8736" BaseboardProduct="8736" SystemSKU="8YP41AV" SystemVersion="" SystemFamily="103C_5336AN HP ZBook" SystemManufacturer="HP" />
+			</ModelList>
+		</Manufacturer>
+		<Manufacturer Enabled="True" Name="Lenovo" EligibilityExpression="(^.*LENOVO.*$)" ProductIDPropertyName="SystemProductName">
+			<URLs DriverPackCatalog="https://download.lenovo.com/cdrt/td/catalogv2.xml" DownloadBase="" />
+			<ModelList>
+				<Model Enabled="False" SystemProductName="10AXS2CQ00" ProductID="10AX" BaseboardProduct="10AXS2CQ00" SystemSKU="LENOVO_MT_10AX" SystemVersion="ThinkCentre M73" SystemFamily="To be filled by O.E.M." SystemManufacturer="Lenovo" />
+			</ModelList>
+		</Manufacturer>
+	</ManufacturerList>
+</Settings>
