@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<sequence version="3.00" name="Custom Task Sequence" description="Sample Custom Task Sequence">
+  <group expand="true" name="Driver Package Actions" description="" disable="false" continueOnError="false">
+    <action />
+    <group expand="true" name="Variables" description="" disable="false" continueOnError="false">
+      <action />
+      <step type="SMS_TaskSequence_SetVariableAction" name="CustomContentPath" description="" disable="false" continueOnError="false" successCodeList="0 3010">
+        <defaultVarList>
+          <variable name="VariableName" property="VariableName">CustomContentPath</variable>
+          <variable name="VariableValue" property="VariableValue">%ScriptRoot%\Custom</variable>
+        </defaultVarList>
+        <action>cscript.exe "%SCRIPTROOT%\ZTISetVariable.wsf"</action>
+      </step>
+      <step type="SMS_TaskSequence_SetVariableAction" name="DownloadSegmentSize" description="" disable="false" continueOnError="false" successCodeList="0 3010">
+        <defaultVarList>
+          <variable name="VariableName" property="VariableName">DownloadSegmentSize</variable>
+          <variable name="VariableValue" property="VariableValue">16384</variable>
+        </defaultVarList>
+        <action>cscript.exe "%SCRIPTROOT%\ZTISetVariable.wsf"</action>
+      </step>
+      <step type="SMS_TaskSequence_SetVariableAction" name="DriverPackageRootDirectory" description="This is the root directory where driver package(s) will be retrieved for download." disable="false" continueOnError="false" successCodeList="0 3010">
+        <defaultVarList>
+          <variable name="VariableName" property="VariableName">DriverPackageRootDirectory</variable>
+          <variable name="VariableValue" property="VariableValue">%DEPLOYROOT%\Out-Of-Box-Driver-Packages</variable>
+        </defaultVarList>
+        <action>cscript.exe "%SCRIPTROOT%\ZTISetVariable.wsf"</action>
+      </step>
+      <step type="SMS_TaskSequence_SetVariableAction" name="DriverPackageMetadataPath" description="This is the path to the XML that will be referenced to determine which of the downloaded driver package(s) are applicable to the device and operating system being deployed." disable="false" continueOnError="false" successCodeList="0 3010">
+        <defaultVarList>
+          <variable name="VariableName" property="VariableName">DriverPackageMetadataPath</variable>
+          <variable name="VariableValue" property="VariableValue">%DriverPackageRootDirectory%\Metadata\DriverPackageList.xml</variable>
+        </defaultVarList>
+        <action>cscript.exe "%SCRIPTROOT%\ZTISetVariable.wsf"</action>
+      </step>
+      <step type="SMS_TaskSequence_SetVariableAction" name="StagingRootDirectory" description="After the drivers have been downloaded and installed, the driver(s) can be optionally staged on the local disk for recovery/reinstallation situations." disable="false" continueOnError="false" successCodeList="0 3010">
+        <defaultVarList>
+          <variable name="VariableName" property="VariableName">StagingRootDirectory</variable>
+          <variable name="VariableValue" property="VariableValue">%OSDisk%\DriverCache</variable>
+        </defaultVarList>
+        <action>cscript.exe "%SCRIPTROOT%\ZTISetVariable.wsf"</action>
+      </step>
+    </group>
+    <group expand="true" name="Scripts" description="" disable="false" continueOnError="false">
+      <action />
+      <step type="BDD_RunPowerShellAction" name="Download and apply driver package(s)" description="Using the XML metadata file, an attempt to identify, download, mount, and apply any and all relevant driver package(s) for the platform." disable="false" continueOnError="false" successCodeList="0 3010">
+        <defaultVarList>
+          <variable name="ScriptName" property="ScriptName">%CustomContentPath%\Invoke-DriverPackageAction\Invoke-DriverPackageDownload.ps1</variable>
+          <variable name="Parameters" property="Parameters">-SegmentSize %DownloadSegmentSize% -DPRD '%DriverPackageRootDirectory%' -DPMDP '%DriverPackageMetadataPath%' -StageDriversLocally -SRD '%StagingRootDirectory%'</variable>
+          <variable name="PackageID" property="PackageID" />
+        </defaultVarList>
+        <action>cscript.exe "%SCRIPTROOT%\ZTIPowerShell.wsf</action>
+      </step>
+    </group>
+  </group>
+</sequence>
