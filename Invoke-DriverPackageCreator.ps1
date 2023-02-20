@@ -612,10 +612,6 @@ Else
                           }
                     }
 
-                  $AdditionalXMLNodeList.Add('<Model Enabled="True" SystemProductName="Latitude 5420" ProductID="0A21" BaseboardProduct="0M51J7" SystemSKU="0A20" SystemVersion="" SystemFamily="Latitude" SystemManufacturer="Dell" />')
-                  $AdditionalXMLNodeList.Add('<Model Enabled="True" SystemProductName="HP ZBook Studio G7 Mobile Workstation" ProductID="8732" BaseboardProduct="8736" SystemSKU="8YP41AV" SystemVersion="" SystemFamily="103C_5336AN HP ZBook" SystemManufacturer="HP" />')
-                  $AdditionalXMLNodeList.Add('<Model Enabled="True" SystemProductName="10AXS2CQ00" ProductID="10A7" BaseboardProduct="10AXS2CQ00" SystemSKU="LENOVO_MT_10AX" SystemVersion="ThinkCentre M73" SystemFamily="To be filled by O.E.M." SystemManufacturer="Lenovo" />')
-
                   $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - $($AdditionalXMLNodeList.Count) additional XML model nodes were specified."
                   Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
 
