@@ -38,44 +38,8 @@
     (
         [Parameter(Mandatory=$False)]
         [ValidateNotNullOrEmpty()]
-        [ValidateScript({Test-Path -Path $_})]
-        [Alias('SP')]
-        [System.IO.FileInfo]$SettingsPath,
-
-        [Parameter(Mandatory=$False)]
-        [ValidateNotNullOrEmpty()]
-        [Alias('CatalogRoot', 'CD', 'CDR')]
-        [System.IO.DirectoryInfo]$CatalogDirectory,
-
-        [Parameter(Mandatory=$False)]
-        [ValidateNotNullOrEmpty()]
-        [Alias('DLD')]
-        [System.IO.DirectoryInfo]$DownloadDirectory,
-
-        [Parameter(Mandatory=$False)]
-        [ValidateNotNullOrEmpty()]
-        [Alias('DPD')]
-        [System.IO.DirectoryInfo]$DriverPackageDirectory,
-
-        [Parameter(Mandatory=$False)]
-        [Alias('DD', 'DDL')]
-        [Switch]$DisableDownload,
-
-        [Parameter(Mandatory=$False)]
-        [Alias('ERI')]
-        [Switch]$EnableRobocopyIPG,
-
-        [Parameter(Mandatory=$False)]
-        [Alias('F')]
-        [Switch]$Force,
-
-        [Parameter(Mandatory=$False)]
-        [ValidateNotNullOrEmpty()]
-        [Alias('LogDir', 'LogPath')]
-        [System.IO.DirectoryInfo]$LogDirectory,
-
-        [Parameter(Mandatory=$False)]
-        [Switch]$ContinueOnError
+        [Alias('AXN')]
+        [String[]]$AdditionalXMLNodes
     )
 
 Function Get-AdministrativePrivilege
@@ -195,7 +159,7 @@ Else
                                                               Write-Warning -Message ($LoggingDetails.ErrorMessage) -Verbose
                                                           }
 
-                                                        Switch (($ContinueOnError.IsPresent -eq $False) -or ($ContinueOnError -eq $False))
+                                                        Switch (($ContinueOnError -eq $False) -or ($ContinueOnError -eq $False))
                                                           {
                                                               {($_ -eq $True)}
                                                                 {
@@ -205,64 +169,11 @@ Else
                                                     }
 
         #Determine default parameter value(s)
-          [System.IO.DirectoryInfo]$ApplicationDataRootDirectory = "$($Env:ProgramData)\$($ScriptPath.BaseName)"
-
-          [System.IO.DirectoryInfo]$StagingDirectory = "$($Env:Windir)\Temp\$($ScriptPath.BaseName)"
-
-          [System.IO.DirectoryInfo]$LocalDriverPackageDirectory = "$($StagingDirectory.FullName)\Packages"
-
           Switch ($True)
-            {
-                {([String]::IsNullOrEmpty($SettingsPath) -eq $True) -or ([String]::IsNullOrWhiteSpace($SettingsPath) -eq $True)}
-                  {
-                      [System.IO.FileInfo]$SettingsTemplate = "$($ContentDirectory.FullName)\Templates\SettingsTemplate.xml"
-
-                      [System.IO.FileInfo]$SettingsPath = "$($ApplicationDataRootDirectory.FullName)\Settings\$($ScriptPath.BaseName.Split('-')[1])Settings.xml"
-
-                      Switch ([System.IO.File]::Exists($SettingsPath.FullName))
-                        {
-                            {($_ -eq $True)}
-                              {
-                                  $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - The settings XML configuration file `"$($SettingsPath.FullName)`" already exists."
-                                  Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
-                              }
-
-                            {($_ -eq $False)}
-                              {
-                                  $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Attempting to create settings XML configuration file `"$($SettingsPath.FullName)`" from the settings XML template file `"$($SettingsTemplate.FullName)`". Please Wait..."
-                                  Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
-
-                                  Switch ([System.IO.Directory]::Exists($SettingsPath.Directory.FullName))
-                                    {
-                                        {($_ -eq $False)}
-                                          {
-                                              $Null = [System.IO.Directory]::CreateDirectory($SettingsPath.Directory.FullName)
-                                          }
-                                    }
-
-                                  $Null = Copy-Item -Path ($SettingsTemplate.FullName) -Destination ($SettingsPath.FullName) -Force
-                              }
-                        }
-                  }
-
-                {([String]::IsNullOrEmpty($CatalogDirectory) -eq $True) -or ([String]::IsNullOrWhiteSpace($CatalogDirectory) -eq $True)}
-                  {
-                      [System.IO.DirectoryInfo]$CatalogDirectory = "$($ApplicationDataRootDirectory.FullName)\Catalogs"
-                  }
-
-                {([String]::IsNullOrEmpty($DownloadDirectory) -eq $True) -or ([String]::IsNullOrWhiteSpace($DownloadDirectory) -eq $True)}
-                  {
-                      [System.IO.DirectoryInfo]$DownloadDirectory = "$($StagingDirectory.FullName)\Downloads"
-                  }
-
-                {([String]::IsNullOrEmpty($DriverPackageDirectory) -eq $True) -or ([String]::IsNullOrWhiteSpace($DriverPackageDirectory) -eq $True)}
-                  {
-                      [System.IO.DirectoryInfo]$DriverPackageDirectory = "$($ApplicationDataRootDirectory.FullName)\Out-Of-Box-Driver-Packages"
-                  }
-
+            {      
                 {([String]::IsNullOrEmpty($LogDirectory) -eq $True) -or ([String]::IsNullOrWhiteSpace($LogDirectory) -eq $True)}
                   {
-                      [System.IO.DirectoryInfo]$LogDirectory = "$($ApplicationDataRootDirectory.FullName)\Logs"
+                      [System.IO.DirectoryInfo]$LogDirectory = "$($Env:Windir)\Logs\Software\$($ScriptPath.BaseName)"
                   }
             }
 
@@ -572,6 +483,41 @@ Else
                   $ProcessExecutionTable.Is64BitOperatingSystem = [System.Environment]::Is64BitOperatingSystem -As [Boolean]
                   $ProcessExecutionTable.Is64BitProcess = [System.Environment]::Is64BitProcess -As [Boolean]
                   $ProcessExecutionTable.CommandLine = [System.Environment]::CommandLine -As [String]
+
+                  [System.IO.FileInfo]$SettingsTemplate = "$($ContentDirectory.FullName)\Settings\Template.xml"
+
+                  [System.IO.FileInfo]$SettingsPath = "$($SettingsTemplate.Directory.FullName)\Settings.xml"
+
+                  Switch ([System.IO.File]::Exists($SettingsPath.FullName))
+                    {
+                        {($_ -eq $True)}
+                          {
+                              $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - The settings XML configuration file `"$($SettingsPath.FullName)`" already exists."
+                              Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
+                          }
+  
+                        {($_ -eq $False)}
+                          {
+                              $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - The settings XML configuration file `"$($SettingsPath.FullName)`" does not exist and will be created."
+                              Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
+                            
+                              $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Attempting to create settings XML configuration file `"$($SettingsPath.FullName)`" from the settings XML template file `"$($SettingsTemplate.FullName)`". Please Wait..."
+                              Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
+  
+                              Switch ([System.IO.Directory]::Exists($SettingsPath.Directory.FullName))
+                                {
+                                    {($_ -eq $False)}
+                                      {
+                                          $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Attempting to create non-existent directory `"$($SettingsPath.Directory.FullName)`". Please Wait..."
+                                          Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
+                                        
+                                          $Null = [System.IO.Directory]::CreateDirectory($SettingsPath.Directory.FullName)
+                                      }
+                                }
+  
+                              $Null = Copy-Item -Path ($SettingsTemplate.FullName) -Destination ($SettingsPath.FullName) -Force
+                          }
+                    }
               
                 $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Settings Path: $($SettingsPath.FullName)"
                 Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
@@ -590,14 +536,245 @@ Else
                                                       $Script:SettingsXMLObject.PreserveWhitespace = $True
 
                                                     $Null = $Script:SettingsXMLObject.LoadXml($Script:SettingsXMLContent)
-
+ 
                                                     $Script:SettingsTable.OperatingSytemList = $Script:SettingsXMLObject.SelectNodes('/Settings/OperatingSystemList//OperatingSystem') | Where-Object {($_.Enabled -eq $True)}
                                                     $Script:SettingsTable.ManufacturerList = $Script:SettingsXMLObject.SelectNodes('/Settings/ManufacturerList//Manufacturer')
+                                                    
                                                }
 
                 $Null = $ReadXMLContent.InvokeReturnAsIs()
 
+                #Create variable(s) for script parameters stored within the XML
+                  $XMLParameterObjectList = New-Object -TypeName 'System.Collections.Generic.List[PSObject]'
+
+                  $XMLParameterNodeList = $Script:SettingsXMLObject.SelectNodes('/Settings/ParameterList//Parameter')
+
+                  ForEach ($XMLParameterNode In $XMLParameterNodeList)
+                    {
+                        $XMLParameterObjectProperties = New-Object -TypeName 'System.Collections.Specialized.OrderedDictionary' 
+                          $XMLParameterObjectProperties.Name = $XMLParameterNode.Name
+                          $XMLParameterObjectProperties.Type = $XMLParameterNode.Type
+                          $XMLParameterObjectProperties.OriginalValue = $XMLParameterNode.Value
+                          $XMLParameterObjectProperties.ExpandedValue = $ExecutionContext.InvokeCommand.ExpandString([System.Environment]::ExpandEnvironmentVariables($XMLParameterObjectProperties.OriginalValue))
+
+                          Switch ($XMLParameterObjectProperties.Type)
+                            {
+                                {($_ -iin @('Switch'))}
+                                  {
+                                      $XMLParameterObjectProperties.TypeCastedValue = New-Object -TypeName 'System.Management.Automation.SwitchParameter' -ArgumentList @($XMLParameterObjectProperties.ExpandedValue)
+                                  } 
+
+                                  {($_ -iin @('Boolean'))}
+                                  {
+                                      $XMLParameterObjectProperties.TypeCastedValue = [Boolean]::Parse($XMLParameterObjectProperties.ExpandedValue)
+                                  }
+
+                                Default
+                                  {
+                                      $XMLParameterObjectProperties.TypeCastedValue = $XMLParameterObjectProperties.ExpandedValue -As "$($XMLParameterObjectProperties.Type)"
+                                  }
+                            }
+                           
+                          $SetVariableParameters = New-Object -TypeName 'System.Collections.Specialized.OrderedDictionary'
+                            $SetVariableParameters.Name = $XMLParameterObjectProperties.Name
+                            $SetVariableParameters.Value = $XMLParameterObjectProperties.TypeCastedValue
+                            $SetVariableParameters.Force = $True
+                            $SetVariableParameters.Scope = 'Script'
+                            $SetVariableParameters.Verbose = $False
+
+                          $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Attempting to create the $($SetVariableParameters.Scope.ToLower()) scope powershell variable `"`$$($SetVariableParameters.Name)`" of type `"[$($XMLParameterObjectProperties.Type)]`" with a value of `"$($SetVariableParameters.Value)`". Please Wait..."
+                          Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
+                        
+                          $Null = Set-Variable @SetVariableParameters
+                        
+                        $XMLParameterObject = New-Object -TypeName 'PSObject' -Property ($XMLParameterObjectProperties)
+
+                        $XMLParameterObjectList.Add($XMLParameterObject)
+                    }
+                                                                                 
+                [System.IO.DirectoryInfo]$LocalDriverPackageDirectory = "$($StagingDirectory.FullName)\Packages"
+
+                [System.IO.DirectoryInfo]$CatalogDirectory = "$($ApplicationDataRootDirectory.FullName)\Catalogs"
+
                 $WindowsReleaseHistory = Get-WindowsReleaseHistory -Verbose
+
+                #Attempt to type cast the additional models that were provided within the additional XML node list parameter   
+                  $AdditionalXMLNodeList = New-Object -TypeName 'System.Collections.Generic.List[String]'
+
+                  Switch ($AdditionalXMLNodes.Count -gt 0)
+                    {
+                        {($_ -eq $True)}
+                          {
+                              ForEach ($AdditionalXMLNode In $AdditionalXMLNodes)
+                                {
+                                    $AdditionalXMLNodeList.Add($AdditionalXMLNode)
+                                }
+                          }
+                    }
+
+                  $AdditionalXMLNodeList.Add('<Model Enabled="True" SystemProductName="Latitude 5420" ProductID="0A21" BaseboardProduct="0M51J7" SystemSKU="0A20" SystemVersion="" SystemFamily="Latitude" SystemManufacturer="Dell" />')
+                  $AdditionalXMLNodeList.Add('<Model Enabled="True" SystemProductName="HP ZBook Studio G7 Mobile Workstation" ProductID="8732" BaseboardProduct="8736" SystemSKU="8YP41AV" SystemVersion="" SystemFamily="103C_5336AN HP ZBook" SystemManufacturer="HP" />')
+                  $AdditionalXMLNodeList.Add('<Model Enabled="True" SystemProductName="10AXS2CQ00" ProductID="10A7" BaseboardProduct="10AXS2CQ00" SystemSKU="LENOVO_MT_10AX" SystemVersion="ThinkCentre M73" SystemFamily="To be filled by O.E.M." SystemManufacturer="Lenovo" />')
+
+                  $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - $($AdditionalXMLNodeList.Count) additional XML model nodes were specified."
+                  Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
+
+                  Switch ($AdditionalXMLNodeList.Count -gt 0)
+                    {
+                        {($_ -eq $True)}
+                          {
+                              $ValidAdditionalXMLNodeList = New-Object -TypeName 'System.Collections.Generic.List[System.XML.XMLNode]'
+
+                              For ($AdditionalXMLNodeListIndex = 0; $AdditionalXMLNodeListIndex -lt $AdditionalXMLNodeList.Count; $AdditionalXMLNodeListIndex++)
+                                {
+                                    $AdditionalXMLNodeListItem = $AdditionalXMLNodeList[$AdditionalXMLNodeListIndex]
+
+                                    $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Attempting to validate additional XML node `"$($AdditionalXMLNodeListItem)`". Please Wait..."
+                                    Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
+
+                                    $XMLNodeConverter = New-Object -TypeName 'System.Collections.Specialized.OrderedDictionary'
+                                      $XMLNodeConverter.XMLTextReaderArguments = New-Object -TypeName 'System.Collections.Generic.List[Object]'
+                                        $XMLNodeConverter.XMLTextReaderArguments.Add((New-Object -TypeName 'System.IO.StringReader' -ArgumentList $AdditionalXMLNodeListItem))
+                                      $XMLNodeConverter.XMLTextReader = New-Object -TypeName 'System.XML.XMLTextReader' -ArgumentList ($XMLNodeConverter.XMLTextReaderArguments.ToArray())
+                                    $XMLNodeConverter.XMLDocument = New-Object -TypeName 'System.XML.XMLDocument'
+                                      $XMLNodeConverter.XMLNodeError = $Null
+                                      $XMLNodeConverter.XMLNode = Try {$XMLNodeConverter.XMLDocument.ReadNode($XMLNodeConverter.XMLTextReader) -As [System.XML.XMLNode]} Catch {$Null; $XMLNodeConverter.XMLNodeError = $_.Exception.Message}
+                                      $XMLNodeConverter.XMLNodeIsValid = $XMLNodeConverter.XMLNode -is [System.XML.XMLNode]
+
+                                    Switch ($XMLNodeConverter.XMLNodeIsValid)
+                                      {
+                                          {($_ -eq $True)}
+                                            {
+                                                $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - The provided XML node is valid."
+                                                Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
+                                    
+                                                $ValidAdditionalXMLNodeList.Add($XMLNodeConverter.XMLNode)
+                                            }
+
+                                          Default
+                                            {
+                                                $LoggingDetails.WarningMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - The provided XML node is invalid. [Error: $($XMLNodeConverter.XMLNodeError)]"
+                                                Write-Warning -Message ($LoggingDetails.WarningMessage) -Verbose       
+                                            }
+                                      }
+                                }
+
+                              $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - $($ValidAdditionalXMLNodeList.Count) of $($AdditionalXMLNodeList.Count) XML nodes were successfully type casted and added to the list of valid XML node objects."
+                              Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
+                          }
+                    }
+
+
+                Try
+                  {
+                      ForEach ($Manufacturer In $SettingsTable.ManufacturerList)
+                        {
+                            Switch ($Manufacturer.Enabled)
+                              {
+                                  {($_ -eq $True)}
+                                    {
+                                        $ManufacturerSettingsTable = New-Object -TypeName 'System.Collections.Specialized.OrderedDictionary'
+                                          $ManufacturerSettingsTable.ModelList = ($Script:SettingsTable.ManufacturerList | Where-Object {($_.Name -ieq $Manufacturer.Name)}).ModelList.Model
+
+                                        $AdditionalModelNodeList = $ValidAdditionalXMLNodeList | Where-Object {($_.SystemManufacturer -imatch $Manufacturer.EligibilityExpression)}
+
+                                        $AdditionalModelListCount = ($AdditionalModelNodeList | Measure-Object).Count
+
+                                        Switch ($AdditionalModelListCount -gt 0)
+                                          {
+                                              {($_ -eq $True)}
+                                                {
+                                                    $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - $($AdditionalModelListCount) additional model(s) whose system manufacturer matches `"$($Manufacturer.EligibilityExpression)`" need to be added to the model list for `"$($Manufacturer.Name)`"."
+                                                    Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
+                                                    
+                                                    [Int]$XMLModificationCount = 0
+                                                    
+                                                    ForEach ($AdditionalModelNode In $AdditionalModelNodeList)
+                                                      {
+                                                          Switch ($ManufacturerSettingsTable.ModelList.ProductID -inotcontains $AdditionalModelNode.ProductID)
+                                                            {
+                                                                {($_ -eq $True)}
+                                                                  {
+                                                                      Try
+                                                                        {
+                                                                            $OneTabNode = $Script:SettingsXMLObject.CreateTextNode("`t")
+                                                                            $ThreeTabNode = $Script:SettingsXMLObject.CreateTextNode("`t`t`t")
+                                                                            $WhitespaceNode = $Script:SettingsXMLObject.CreateTextNode("`r`n")
+                                                                            
+                                                                            $ImportedAdditionalModelNode = $Script:SettingsXMLObject.ImportNode($AdditionalModelNode, $True)
+
+                                                                            $ModelListNode = ($Script:SettingsTable.ManufacturerList | Where-Object {($_.Name -ieq $Manufacturer.Name)}).ModelList
+ 
+                                                                            $Null = $ModelListNode.AppendChild($OneTabNode)
+
+                                                                            $Null = $ModelListNode.AppendChild($ImportedAdditionalModelNode)
+
+                                                                            $Null = $ModelListNode.AppendChild($WhitespaceNode)
+
+                                                                            $Null = $ModelListNode.AppendChild($ThreeTabNode)
+
+                                                                            $XMLModificationCount = $XMLModificationCount + 1
+                                                                        }
+                                                                      Catch
+                                                                        {
+                                                                            $ErrorMessageList = New-Object -TypeName 'System.Collections.Specialized.OrderedDictionary'
+                                                                              $ErrorMessageList.Add('Message', $_.Exception.Message)
+                                                                              $ErrorMessageList.Add('Category', $_.Exception.ErrorRecord.FullyQualifiedErrorID)
+                                                                              $ErrorMessageList.Add('LineNumber', $_.InvocationInfo.ScriptLineNumber)
+                                                                              $ErrorMessageList.Add('LinePosition', $_.InvocationInfo.OffsetInLine)
+                                                                              $ErrorMessageList.Add('Code', $_.InvocationInfo.Line.Trim())
+
+                                                                            ForEach ($ErrorMessage In $ErrorMessageList.GetEnumerator())
+                                                                              {
+                                                                                  $LoggingDetails.ErrorMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) -  ERROR: $($ErrorMessage.Key): $($ErrorMessage.Value)"
+                                                                                  Write-Warning -Message ($LoggingDetails.ErrorMessage) -Verbose
+                                                                              }
+                                                                        }
+                                                                      Finally
+                                                                        {
+                                                                              
+                                                                        }
+                                                                  }
+
+                                                                Default
+                                                                  {
+                                                                      $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - XML node already exists! [Content: $($AdditionalModelNode.OuterXml)]"
+                                                                      Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
+                                                                  }
+                                                            }         
+                                                      }
+                                                }
+                                          }
+                                    }
+                              }
+                        }
+
+                      $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - $($XMLModificationCount) change(s) need to be committed into `"$($SettingsPath.FullName)`"."
+                      Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
+                      
+                      Switch ($XMLModificationCount -gt 0)
+                        {
+                            {($_ -eq $True)}
+                              {                                  
+                                  $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Attempting to save `"$($SettingsPath.FullName)`". Please Wait..."
+                                  Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
+                                  
+                                  $Null = $Script:SettingsXMLObject.Save($SettingsPath.FullName)
+
+                                  $Null = Start-Sleep -Seconds 3
+
+                                  $Null = $ReadXMLContent.InvokeReturnAsIs()
+                              }
+                        }    
+                  }
+                Catch
+                  {
+                      
+                  }
+                Finally
+                  {
+                      
+                  }
 
                 $DriverPackDownloadList = New-Object -TypeName 'System.Collections.Generic.List[PSObject]'
 
@@ -615,7 +792,7 @@ Else
                                         $LoggingDetails.WarningMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Attempting to process the driver pack catalog for `"$($Manufacturer.Name)`". Please Wait..."
                                         Write-Warning -Message ($LoggingDetails.WarningMessage) -Verbose
 
-                                        $DownloadDriverPackCatalog = Invoke-FileDownload -URL ($Manufacturer.URLs.DriverPackCatalog) -Destination "$($CatalogDirectory.FullName)\$($Manufacturer.Name)" -Verbose
+                                        $DownloadDriverPackCatalog = Invoke-FileDownloadWithProgress -URL ($Manufacturer.URLs.DriverPackCatalog) -Destination "$($CatalogDirectory.FullName)\$($Manufacturer.Name)" -Verbose
 
                                         Switch ($DownloadDriverPackCatalog.DownloadPath.Extension -imatch '\.(cab)')
                                           {
@@ -918,8 +1095,8 @@ Else
                                                                                                                                                 {
                                                                                                                                                     {($_ -eq $True)}
                                                                                                                                                       {
-                                                                                                                                                          $DateTimeFormatList = New-Object -TypeName 'System.Collections.Generic.List[String]'
-                                                                                                                                                            $Null = $DateTimeFormatList.Add('yyyyMM')
+                                                                                                                                                          $DateTimeFormatList = New-Object -TypeName 'System.Collections.Generic.List[String]' 
+                                                                                                                                                            $DateTimeFormatList.Add('yyyyMM')
 
                                                                                                                                                           $DateTime = New-Object -TypeName 'DateTime'
 
@@ -927,7 +1104,7 @@ Else
                                                                                                                                                             $DateTimeTryParseExactProperties.Input = $CatalogSearchMetadataCaptureGroup.Value
                                                                                                                                                             $DateTimeTryParseExactProperties.FormatList = $DateTimeFormatList.ToArray()
                                                                                                                                                             $DateTimeTryParseExactProperties.Styles = New-Object -TypeName 'System.Collections.Generic.List[System.Globalization.DateTimeStyles]'
-                                                                                                                                                              $DateTimeTryParseExactProperties.Styles.Add([System.Globalization.DateTimeStyles]::AdjustToUniversal)
+                                                                                                                                                              $DateTimeTryParseExactProperties.Styles.Add([System.Globalization.DateTimeStyles]::AssumeUniversal)
                                                                                                                                                               $DateTimeTryParseExactProperties.Styles.Add([System.Globalization.DateTimeStyles]::AllowWhiteSpaces)
                                                                                                                                                             $DateTimeTryParseExactProperties.DateTime = $Null
                                                                                                                                                             $DateTimeTryParseExactProperties.Successful = [DateTime]::TryParseExact($DateTimeTryParseExactProperties.Input, $DateTimeTryParseExactProperties.FormatList, $DateTimeTryParseExactProperties.Culture, $DateTimeTryParseExactProperties.Styles, [Ref]$DateTime)
@@ -1157,7 +1334,7 @@ Else
                         }
                   }
 
-                Switch ($DisableDownload.IsPresent)
+                Switch ($DisableDownload)
                   {
                       {($_ -eq $True)}
                         {
@@ -1208,326 +1385,344 @@ Else
                                                         $NewWindowsImageDetails.ImageFinalPath = $NewWindowsImageDetails.ImageStagingPath.FullName.Replace($LocalDriverPackageDirectory.FullName, $DriverPackageDirectory.FullName) -As [System.IO.FileInfo]
                                                         $NewWindowsImageDetails.LogPath = "$($LogDirectory.FullName)\DISM\$($ManufacturerGroup.Name)\$($ProductGroupMember.$($ProductGroupProperty))\$($NewWindowsImageDetails.ImageStagingPath.BaseName).log" -As [System.IO.FileInfo]
                                                     
-                                                      Switch (([System.IO.File]::Exists($NewWindowsImageDetails.ImageFinalPath.FullName) -eq $False) -or ($Force.IsPresent -eq $True))
+                                                      Switch (([System.IO.File]::Exists($NewWindowsImageDetails.ImageFinalPath.FullName) -eq $False) -or ($Force -eq $True))
                                                         {
                                                             {($_ -eq $True)}
                                                               {
-                                                                  $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Attempting to process the `"$($ProductGroupMember.OSName) $($ProductGroupMember.OSArchitecture)`" download list for product ID `"$($ProductGroup.Name)`" [Model: $($ProductGroupMember.$($ProductGroupAliasProperty))] manufactured by `"$($ManufacturerGroup.Name)`". Please Wait..."
-                                                                  Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
-            
-                                                                  :ProductGroupMemberDownloadLoop ForEach ($ProductGroupMemberDownload In $ProductGroupMember.DownloadLinkList.GetEnumerator())
+                                                                  Switch (([System.IO.File]::Exists($NewWindowsImageDetails.ImageStagingPath.FullName) -eq $False) -or ($Force -eq $True))
                                                                     {
-                                                                        Switch (([String]::IsNullOrEmpty($ProductGroupMemberDownload.Value) -eq $False) -and ([String]::IsNullOrWhiteSpace($ProductGroupMemberDownload.Value) -eq $False))
+                                                                        {($_ -eq $True)}
                                                                           {
-                                                                              {($_ -eq $True)}
+                                                                              $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Attempting to process the `"$($ProductGroupMember.OSName) $($ProductGroupMember.OSArchitecture)`" download list for product ID `"$($ProductGroup.Name)`" [Model: $($ProductGroupMember.$($ProductGroupAliasProperty))] manufactured by `"$($ManufacturerGroup.Name)`". Please Wait..."
+                                                                              Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
+                        
+                                                                              :ProductGroupMemberDownloadLoop ForEach ($ProductGroupMemberDownload In $ProductGroupMember.DownloadLinkList.GetEnumerator())
                                                                                 {
-                                                                                    $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Attempting to process the URL for `"$($ProductGroupMemberDownload.Key)`". Please Wait..."
-                                                                                    Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
-            
-                                                                                    Switch ($ProductGroupMemberDownload.Key)
+                                                                                    Switch (([String]::IsNullOrEmpty($ProductGroupMemberDownload.Value) -eq $False) -and ([String]::IsNullOrWhiteSpace($ProductGroupMemberDownload.Value) -eq $False))
                                                                                       {
-                                                                                          {($_ -iin @('DriverPack'))}
+                                                                                          {($_ -eq $True)}
                                                                                             {
-                                                                                                $InvokeFileDownloadParameters = New-Object -TypeName 'System.Collections.Specialized.OrderedDictionary'
-                                                                                                  $InvokeFileDownloadParameters.URL = $ProductGroupMemberDownload.Value
-                                                                                                  $InvokeFileDownloadParameters.Destination = "$($DownloadDirectory.FullName)\$($ProductGroupMember.Manufacturer)\$($ProductGroupMember.$($ProductGroupProperty))"
-                                                                                                  $InvokeFileDownloadParameters.ContinueOnError = $False
-                                                                                                  $InvokeFileDownloadParameters.Verbose = $True
-            
-                                                                                                $InvokeFileDownloadResult = Invoke-FileDownloadWithProgress @InvokeFileDownloadParameters
-            
-                                                                                                $FileDownloadExtractionParameters = New-Object -TypeName 'System.Collections.Specialized.OrderedDictionary'
-                                                                                                  $FileDownloadExtractionParameters.ExtractionPath = "$($DownloadDirectory.FullName)\$($ProductGroupMember.Manufacturer)\$($ProductGroupMember.$($ProductGroupProperty))\$($ProductGroupMember.OSAlias)-$($ProductGroupMember.OSArchitecture)-$($ProductGroupMember.DriverPackReleaseID)" -As [System.IO.DirectoryInfo]
-                                                                                                  $FileDownloadExtractionParameters.ArgumentList = New-Object -TypeName 'System.Collections.Generic.List[String]'
-                                                                                                  $FileDownloadExtractionParameters.CopyDriverPackMetadata = $True
-                                                                                                  $FileDownloadExtractionParameters.CreateWindowsImageDriverPack = $True
-            
-                                                                                              Switch ($ProductGroupMember.Manufacturer)
-                                                                                                {
-                                                                                                    {($_ -iin @('Lenovo'))}
-                                                                                                      {
-                                                                                                          $FileDownloadExtractionParameters.FilePath = $InvokeFileDownloadResult.DownloadPath.FullName -As [System.IO.FileInfo]
-            
-                                                                                                          $FileDownloadExtractionParameters.ArgumentList.Add("/VERYSILENT")
-                                                                                                          $FileDownloadExtractionParameters.ArgumentList.Add("/DIR=`"$($FileDownloadExtractionParameters.ExtractionPath.FullName)`"")
-                                                                                                          $FileDownloadExtractionParameters.ArgumentList.Add("/EXTRACT=`"YES`"")
-                                                                                                      }
-            
-                                                                                                    Default
-                                                                                                      {
-                                                                                                          $FileDownloadExtractionParameters.FilePath = $7ZipPath.FullName -As [System.IO.FileInfo]
-            
-                                                                                                          $FileDownloadExtractionParameters.ArgumentList.Add("x")
-                                                                                                          $FileDownloadExtractionParameters.ArgumentList.Add("`"$($InvokeFileDownloadResult.DownloadPath.FullName)`"")
-                                                                                                          $FileDownloadExtractionParameters.ArgumentList.Add("-o`"$($FileDownloadExtractionParameters.ExtractionPath.FullName)`"")
-                                                                                                          $FileDownloadExtractionParameters.ArgumentList.Add("*")
-                                                                                                          $FileDownloadExtractionParameters.ArgumentList.Add("-r")
-                                                                                                      }
-                                                                                                }
-            
-                                                                                              Switch ([System.IO.Directory]::Exists($FileDownloadExtractionParameters.ExtractionPath.FullName))
-                                                                                                {
-                                                                                                    {($_ -eq $True)}
-                                                                                                      {
-                                                                                                          $LoggingDetails.WarningMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Attempting to remove existing directory `"$($FileDownloadExtractionParameters.ExtractionPath.FullName)`" prior to extraction. Please Wait..."
-                                                                                                          Write-Warning -Message ($LoggingDetails.WarningMessage) -Verbose
-            
-                                                                                                          [String]$DeletionPath = $FileDownloadExtractionParameters.ExtractionPath.FullName
-                                                                        
-                                                                                                          $Null = [Alphaleonis.Win32.Filesystem.Directory]::Delete($DeletionPath, $True, $True)
-                                                                                                      }
-            
-                                                                                                    Default
-                                                                                                      {
-                                                                                                          $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Attempting to create non-existent directory `"$($FileDownloadExtractionParameters.ExtractionPath.FullName)`" prior to extraction. Please Wait..."
-                                                                                                          Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
-            
-                                                                                                          $Null = [System.IO.Directory]::CreateDirectory($FileDownloadExtractionParameters.ExtractionPath.FullName)
-                                                                                                      }
-                                                                                                }
-            
-                                                                                              $StartProcessWithOutputParameters = New-Object -TypeName 'System.Collections.Specialized.OrderedDictionary'
-                                                                                                $StartProcessWithOutputParameters.FilePath = $FileDownloadExtractionParameters.FilePath.FullName
-                                                                                                $StartProcessWithOutputParameters.ArgumentList = $FileDownloadExtractionParameters.ArgumentList
-                                                                                                $StartProcessWithOutputParameters.AcceptableExitCodeList = @(0, 3010)
-                                                                                                $StartProcessWithOutputParameters.CreateNoWindow = $True
-                                                                                                $StartProcessWithOutputParameters.LogOutput = $False
-                                                                                                $StartProcessWithOutputParameters.Verbose = $True
-            
-                                                                                              $FileDownloadExtractionResult = Start-ProcessWithOutput @StartProcessWithOutputParameters
-            
-                                                                                              Switch ($FileDownloadExtractionParameters.ExtractionPath.GetDirectories().Count -gt 2)
-                                                                                                {
-                                                                                                    {($_ -eq $True)}
-                                                                                                      {
-                                                                                                          $WindowsImageRootFolder = $FileDownloadExtractionParameters.ExtractionPath
-                                                                                                      }
-            
-                                                                                                    Default
-                                                                                                      {
-                                                                                                          $WindowsImageRootFolderList = Get-ChildItem -Path ($FileDownloadExtractionParameters.ExtractionPath.FullName) -Recurse | Where-Object {($_ -is [System.IO.DirectoryInfo]) -and ($_.GetDirectories().Count -gt 2)}
-            
-                                                                                                          Switch ($Null -ine $WindowsImageRootFolderList)
-                                                                                                            {
-                                                                                                                {($_ -eq $True)}
-                                                                                                                  {
-                                                                                                                      $WindowsImageRootFolder = $WindowsImageRootFolderList | Sort-Object -Property @{Expression = {($_.FullName.Length)}} | Select-Object -First 1
-                                                                                                                  }
-            
-                                                                                                                {($_ -eq $False)}
-                                                                                                                  {
-                                                                                                                      $LoggingDetails.WarningMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - The windows image root folder could not located within folder `"$($FileDownloadExtractionParameters.ExtractionPath.FullName)`"."
-                                                                                                                      Write-Warning -Message ($LoggingDetails.WarningMessage) -Verbose
-            
-                                                                                                                      $LoggingDetails.WarningMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Cleaning up and moving to the next driver pack. Please Wait..."
-                                                                                                                      Write-Warning -Message ($LoggingDetails.WarningMessage) -Verbose
-            
-                                                                                                                      $FileDownloadExtractionParameters.CopyDriverPackMetadata = $False
-            
-                                                                                                                      $FileDownloadExtractionParameters.CreateWindowsImageDriverPack = $False
-            
-                                                                                                                      $LoggingDetails.WarningMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Attempting to remove driver pack extraction directory `"$($FileDownloadExtractionParameters.ExtractionPath.FullName)`". Please Wait..."
-                                                                                                                      Write-Warning -Message ($LoggingDetails.WarningMessage) -Verbose
-            
-                                                                                                                      #Cleanup the extracted driver package content (If necessary)
-                                                                                                                        If ([System.IO.Directory]::Exists($FileDownloadExtractionParameters.ExtractionPath.FullName) -eq $True)
-                                                                                                                          {
-                                                                                                                              $LoggingDetails.WarningMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Attempting to remove driver pack extraction directory `"$($FileDownloadExtractionParameters.ExtractionPath.FullName)`". Please Wait..."
-                                                                                                                              Write-Warning -Message ($LoggingDetails.WarningMessage) -Verbose
-                                                                                                                            
-                                                                                                                              [String]$DeletionPath = $FileDownloadExtractionParameters.ExtractionPath.FullName
-
-                                                                                                                              $Null = [Alphaleonis.Win32.Filesystem.Directory]::Delete($DeletionPath, $True, $True)
-                                                                                                                          }
-            
-                                                                                                                      Break ProductGroupMemberLoop
-                                                                                                                  }
-                                                                                                            }
-                                                                                                      }
-                                                                                                }
-                                                                                            }
-            
-                                                                                          {($_ -iin @('DriverPackMetaData'))}
-                                                                                            {
-                                                                                                Switch ($FileDownloadExtractionParameters.CopyDriverPackMetadata)
+                                                                                                $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Attempting to process the URL for `"$($ProductGroupMemberDownload.Key)`". Please Wait..."
+                                                                                                Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
+                        
+                                                                                                Switch ($ProductGroupMemberDownload.Key)
                                                                                                   {
-                                                                                                      {($_ -eq $True)}
+                                                                                                      {($_ -iin @('DriverPack'))}
                                                                                                         {
-                                                                                                            $DriverPackMetaDataFileList = New-Object -TypeName 'System.Collections.Generic.List[System.IO.FileInfo]'
+                                                                                                            $InvokeFileDownloadParameters = New-Object -TypeName 'System.Collections.Specialized.OrderedDictionary'
+                                                                                                              $InvokeFileDownloadParameters.URL = $ProductGroupMemberDownload.Value
+                                                                                                              $InvokeFileDownloadParameters.Destination = "$($DownloadDirectory.FullName)\$($ProductGroupMember.Manufacturer)\$($ProductGroupMember.$($ProductGroupProperty))"
+                                                                                                              $InvokeFileDownloadParameters.ContinueOnError = $False
+                                                                                                              $InvokeFileDownloadParameters.Verbose = $True
+                        
+                                                                                                            $InvokeFileDownloadResult = Invoke-FileDownloadWithProgress @InvokeFileDownloadParameters
+                        
+                                                                                                            $FileDownloadExtractionParameters = New-Object -TypeName 'System.Collections.Specialized.OrderedDictionary'
+                                                                                                              $FileDownloadExtractionParameters.ExtractionPath = "$($DownloadDirectory.FullName)\$($ProductGroupMember.Manufacturer)\$($ProductGroupMember.$($ProductGroupProperty))\$($ProductGroupMember.OSAlias)-$($ProductGroupMember.OSArchitecture)-$($ProductGroupMember.DriverPackReleaseID)" -As [System.IO.DirectoryInfo]
+                                                                                                              $FileDownloadExtractionParameters.ArgumentList = New-Object -TypeName 'System.Collections.Generic.List[String]'
+                                                                                                              $FileDownloadExtractionParameters.CopyDriverPackMetadata = $True
+                                                                                                              $FileDownloadExtractionParameters.CreateWindowsImageDriverPack = $True
+                        
+                                                                                                            Switch ($ProductGroupMember.Manufacturer)
+                                                                                                              {
+                                                                                                                  {($_ -iin @('Lenovo'))}
+                                                                                                                    {
+                                                                                                                        $FileDownloadExtractionParameters.FilePath = $InvokeFileDownloadResult.DownloadPath.FullName -As [System.IO.FileInfo]
+                          
+                                                                                                                        $FileDownloadExtractionParameters.ArgumentList.Add("/VERYSILENT")
+                                                                                                                        $FileDownloadExtractionParameters.ArgumentList.Add("/DIR=`"$($FileDownloadExtractionParameters.ExtractionPath.FullName)`"")
+                                                                                                                        $FileDownloadExtractionParameters.ArgumentList.Add("/EXTRACT=`"YES`"")
+                                                                                                                    }
+                          
+                                                                                                                  Default
+                                                                                                                    {
+                                                                                                                        $FileDownloadExtractionParameters.FilePath = $7ZipPath.FullName -As [System.IO.FileInfo]
+                          
+                                                                                                                        $FileDownloadExtractionParameters.ArgumentList.Add("x")
+                                                                                                                        $FileDownloadExtractionParameters.ArgumentList.Add("`"$($InvokeFileDownloadResult.DownloadPath.FullName)`"")
+                                                                                                                        $FileDownloadExtractionParameters.ArgumentList.Add("-o`"$($FileDownloadExtractionParameters.ExtractionPath.FullName)`"")
+                                                                                                                        $FileDownloadExtractionParameters.ArgumentList.Add("*")
+                                                                                                                        $FileDownloadExtractionParameters.ArgumentList.Add("-r")
+                                                                                                                    }
+                                                                                                              }
+                        
+                                                                                                            Switch ([System.IO.Directory]::Exists($FileDownloadExtractionParameters.ExtractionPath.FullName))
+                                                                                                              {
+                                                                                                                  {($_ -eq $True)}
+                                                                                                                    {
+                                                                                                                        $LoggingDetails.WarningMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Attempting to remove existing directory `"$($FileDownloadExtractionParameters.ExtractionPath.FullName)`" prior to extraction. Please Wait..."
+                                                                                                                        Write-Warning -Message ($LoggingDetails.WarningMessage) -Verbose
+                          
+                                                                                                                        [String]$DeletionPath = $FileDownloadExtractionParameters.ExtractionPath.FullName
+                                                                                      
+                                                                                                                        $Null = [Alphaleonis.Win32.Filesystem.Directory]::Delete($DeletionPath, $True, $True)
+                                                                                                                    }
+                                                                                                              }
+
+                                                                                                            Switch ($ProductGroupMember.Manufacturer)
+                                                                                                              {
+                                                                                                                  {($_ -inotin @('Lenovo'))}
+                                                                                                                    {
+                                                                                                                        $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Attempting to create non-existent directory `"$($FileDownloadExtractionParameters.ExtractionPath.FullName)`" prior to extraction. Please Wait..."
+                                                                                                                        Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
+                        
+                                                                                                                        $Null = [System.IO.Directory]::CreateDirectory($FileDownloadExtractionParameters.ExtractionPath.FullName)
+                                                                                                                    }
+                                                                                                              }
+                        
+                                                                                                            $StartProcessWithOutputParameters = New-Object -TypeName 'System.Collections.Specialized.OrderedDictionary'
+                                                                                                              $StartProcessWithOutputParameters.FilePath = $FileDownloadExtractionParameters.FilePath.FullName
+                                                                                                              $StartProcessWithOutputParameters.ArgumentList = $FileDownloadExtractionParameters.ArgumentList
+                                                                                                              $StartProcessWithOutputParameters.AcceptableExitCodeList = @(0, 3010)
+                                                                                                              $StartProcessWithOutputParameters.CreateNoWindow = $True
+                                                                                                              $StartProcessWithOutputParameters.LogOutput = $False
+                                                                                                              $StartProcessWithOutputParameters.Verbose = $True
+                          
+                                                                                                            $FileDownloadExtractionResult = Start-ProcessWithOutput @StartProcessWithOutputParameters
+                        
+                                                                                                            Switch ($FileDownloadExtractionParameters.ExtractionPath.GetDirectories().Count -gt 2)
+                                                                                                              {
+                                                                                                                  {($_ -eq $True)}
+                                                                                                                    {
+                                                                                                                        $WindowsImageRootFolder = $FileDownloadExtractionParameters.ExtractionPath
+                                                                                                                    }
+                          
+                                                                                                                  Default
+                                                                                                                    {
+                                                                                                                        $WindowsImageRootFolderList = Get-ChildItem -Path ($FileDownloadExtractionParameters.ExtractionPath.FullName) -Recurse | Where-Object {($_ -is [System.IO.DirectoryInfo]) -and ($_.GetDirectories().Count -gt 2)}
+                          
+                                                                                                                        Switch ($Null -ine $WindowsImageRootFolderList)
+                                                                                                                          {
+                                                                                                                              {($_ -eq $True)}
+                                                                                                                                {
+                                                                                                                                    $WindowsImageRootFolder = $WindowsImageRootFolderList | Sort-Object -Property @{Expression = {($_.FullName.Length)}} | Select-Object -First 1
+                                                                                                                                }
+                          
+                                                                                                                              {($_ -eq $False)}
+                                                                                                                                {
+                                                                                                                                    $LoggingDetails.WarningMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - The windows image root folder could not located within folder `"$($FileDownloadExtractionParameters.ExtractionPath.FullName)`"."
+                                                                                                                                    Write-Warning -Message ($LoggingDetails.WarningMessage) -Verbose
+                          
+                                                                                                                                    $LoggingDetails.WarningMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Cleaning up and moving to the next driver pack. Please Wait..."
+                                                                                                                                    Write-Warning -Message ($LoggingDetails.WarningMessage) -Verbose
+                          
+                                                                                                                                    $FileDownloadExtractionParameters.CopyDriverPackMetadata = $False
+                          
+                                                                                                                                    $FileDownloadExtractionParameters.CreateWindowsImageDriverPack = $False
+                          
+                                                                                                                                    $LoggingDetails.WarningMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Attempting to remove driver pack extraction directory `"$($FileDownloadExtractionParameters.ExtractionPath.FullName)`". Please Wait..."
+                                                                                                                                    Write-Warning -Message ($LoggingDetails.WarningMessage) -Verbose
+                          
+                                                                                                                                    #Cleanup the extracted driver package content (If necessary)
+                                                                                                                                      If ([System.IO.Directory]::Exists($FileDownloadExtractionParameters.ExtractionPath.FullName) -eq $True)
+                                                                                                                                        {
+                                                                                                                                            $LoggingDetails.WarningMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Attempting to remove driver pack extraction directory `"$($FileDownloadExtractionParameters.ExtractionPath.FullName)`". Please Wait..."
+                                                                                                                                            Write-Warning -Message ($LoggingDetails.WarningMessage) -Verbose
+                                                                                                                                          
+                                                                                                                                            [String]$DeletionPath = $FileDownloadExtractionParameters.ExtractionPath.FullName
             
-                                                                                                            $DriverPackMetaDataExtensionList = New-Object -TypeName 'System.Collections.Generic.List[String]'
-                                                                                                              $DriverPackMetaDataExtensionList.Add('.xml')
-                                                                                                              $DriverPackMetaDataExtensionList.Add('.html')
-                                                                                                              $DriverPackMetaDataExtensionList.Add('.cva')
-                                                                                                              $DriverPackMetaDataExtensionList.Add('.json')
-                                                                                                              $DriverPackMetaDataExtensionList.Add('.txt')
-            
-                                                                                                              $DriverPackMetaDataFiles = Get-ChildItem -Path "$($FileDownloadExtractionParameters.ExtractionPath.FullName)\" -Depth 1 -Force -ErrorAction SilentlyContinue | Where-Object {($_ -is [System.IO.FileInfo]) -and ($_.Extension -iin $DriverPackMetaDataExtensionList.ToArray())}
-            
-                                                                                                              $DriverPackMetaDataFileCount = ($DriverPackMetaDataFiles | Measure-Object).Count
-            
-                                                                                                              $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - $($DriverPackMetaDataFileCount) metadata file(s) matching `"$($DriverPackMetaDataExtensionList -Join ' | ')`" were found in directory `"$($FileDownloadExtractionParameters.ExtractionPath.FullName)`"."
-                                                                                                              Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
-            
-                                                                                                              Switch ($DriverPackMetaDataFileCount -gt 0)
-                                                                                                                {
-                                                                                                                    {($_ -eq $True)}
-                                                                                                                      {
-                                                                                                                          $DriverPackMetaDataFiles | ForEach-Object {$DriverPackMetaDataFileList.Add($_.FullName)}
-                                                                                                                      }
-                                                                                                                }
-            
-                                                                                                              [System.IO.DirectoryInfo]$DriverPackMetaDataDirectory = "$($WindowsImageRootFolder.FullName)\Metadata"
-            
-                                                                                                              If ([System.IO.Directory]::Exists($DriverPackMetaDataDirectory.FullName) -eq $False) {$Null = [System.IO.Directory]::CreateDirectory($DriverPackMetaDataDirectory.FullName)}
-            
-                                                                                                              ForEach ($DriverPackMetaDataFile In $DriverPackMetaDataFileList)
-                                                                                                                {
-                                                                                                                    [System.IO.FileInfo]$DriverPackMetaDataFileDestination = "$($DriverPackMetaDataDirectory.FullName)\$($DriverPackMetaDataFile.Name)"
-            
-                                                                                                                    $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Attempting to copy metadata file `"$($DriverPackMetaDataFile.FullName)`" to `"$($DriverPackMetaDataFileDestination.FullName)`". Please Wait..."
-                                                                                                                    Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
-            
-                                                                                                                    $Null = [System.IO.File]::Copy($DriverPackMetaDataFile.FullName, $DriverPackMetaDataFileDestination.FullName, $True)
-                                                                                                                }
-            
-                                                                                                              $InvokeFileDownloadParameters = New-Object -TypeName 'System.Collections.Specialized.OrderedDictionary'
-                                                                                                                $InvokeFileDownloadParameters.URL = $ProductGroupMemberDownload.Value
-                                                                                                                $InvokeFileDownloadParameters.Destination = "$($DownloadDirectory.FullName)\$($ProductGroupMember.Manufacturer)\$($ProductGroupMember.$($ProductGroupProperty))"
-                                                                                                                $InvokeFileDownloadParameters.ContinueOnError = $False
-                                                                                                                $InvokeFileDownloadParameters.Verbose = $True
-            
-                                                                                                              $InvokeFileDownloadResult = Invoke-FileDownloadWithProgress @InvokeFileDownloadParameters
-            
-                                                                                                              $Null = [System.IO.File]::Copy($InvokeFileDownloadResult.DownloadPath.FullName, "$($DriverPackMetaDataFileDestination.Directory.FullName)\$($InvokeFileDownloadResult.DownloadPath.Name)", $True)
+                                                                                                                                            $Null = [Alphaleonis.Win32.Filesystem.Directory]::Delete($DeletionPath, $True, $True)
+                                                                                                                                        }
+                          
+                                                                                                                                    Break ProductGroupMemberLoop
+                                                                                                                                }
+                                                                                                                          }
+                                                                                                                    }
+                                                                                                              }
+                                                                                                        }
+                        
+                                                                                                      {($_ -iin @('DriverPackMetaData'))}
+                                                                                                        {
+                                                                                                            Switch ($FileDownloadExtractionParameters.CopyDriverPackMetadata)
+                                                                                                              {
+                                                                                                                  {($_ -eq $True)}
+                                                                                                                    {
+                                                                                                                        $DriverPackMetaDataFileList = New-Object -TypeName 'System.Collections.Generic.List[System.IO.FileInfo]'
+                        
+                                                                                                                        $DriverPackMetaDataExtensionList = New-Object -TypeName 'System.Collections.Generic.List[String]'
+                                                                                                                          $DriverPackMetaDataExtensionList.Add('.xml')
+                                                                                                                          $DriverPackMetaDataExtensionList.Add('.html')
+                                                                                                                          $DriverPackMetaDataExtensionList.Add('.cva')
+                                                                                                                          $DriverPackMetaDataExtensionList.Add('.json')
+                                                                                                                          $DriverPackMetaDataExtensionList.Add('.txt')
+                        
+                                                                                                                          $DriverPackMetaDataFiles = Get-ChildItem -Path "$($FileDownloadExtractionParameters.ExtractionPath.FullName)\" -Depth 1 -Force -ErrorAction SilentlyContinue | Where-Object {($_ -is [System.IO.FileInfo]) -and ($_.Extension -iin $DriverPackMetaDataExtensionList.ToArray())}
+                        
+                                                                                                                          $DriverPackMetaDataFileCount = ($DriverPackMetaDataFiles | Measure-Object).Count
+                        
+                                                                                                                          $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - $($DriverPackMetaDataFileCount) metadata file(s) matching `"$($DriverPackMetaDataExtensionList -Join ' | ')`" were found in directory `"$($FileDownloadExtractionParameters.ExtractionPath.FullName)`"."
+                                                                                                                          Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
+                        
+                                                                                                                          Switch ($DriverPackMetaDataFileCount -gt 0)
+                                                                                                                            {
+                                                                                                                                {($_ -eq $True)}
+                                                                                                                                  {
+                                                                                                                                      $DriverPackMetaDataFiles | ForEach-Object {$DriverPackMetaDataFileList.Add($_.FullName)}
+                                                                                                                                  }
+                                                                                                                            }
+                        
+                                                                                                                          [System.IO.DirectoryInfo]$DriverPackMetaDataDirectory = "$($WindowsImageRootFolder.FullName)\Metadata"
+                        
+                                                                                                                          If ([System.IO.Directory]::Exists($DriverPackMetaDataDirectory.FullName) -eq $False) {$Null = [System.IO.Directory]::CreateDirectory($DriverPackMetaDataDirectory.FullName)}
+                        
+                                                                                                                          ForEach ($DriverPackMetaDataFile In $DriverPackMetaDataFileList)
+                                                                                                                            {
+                                                                                                                                [System.IO.FileInfo]$DriverPackMetaDataFileDestination = "$($DriverPackMetaDataDirectory.FullName)\$($DriverPackMetaDataFile.Name)"
+                        
+                                                                                                                                $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Attempting to copy metadata file `"$($DriverPackMetaDataFile.FullName)`" to `"$($DriverPackMetaDataFileDestination.FullName)`". Please Wait..."
+                                                                                                                                Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
+                        
+                                                                                                                                $Null = [System.IO.File]::Copy($DriverPackMetaDataFile.FullName, $DriverPackMetaDataFileDestination.FullName, $True)
+                                                                                                                            }
+                        
+                                                                                                                          $InvokeFileDownloadParameters = New-Object -TypeName 'System.Collections.Specialized.OrderedDictionary'
+                                                                                                                            $InvokeFileDownloadParameters.URL = $ProductGroupMemberDownload.Value
+                                                                                                                            $InvokeFileDownloadParameters.Destination = "$($DownloadDirectory.FullName)\$($ProductGroupMember.Manufacturer)\$($ProductGroupMember.$($ProductGroupProperty))"
+                                                                                                                            $InvokeFileDownloadParameters.ContinueOnError = $False
+                                                                                                                            $InvokeFileDownloadParameters.Verbose = $True
+                        
+                                                                                                                          $InvokeFileDownloadResult = Invoke-FileDownloadWithProgress @InvokeFileDownloadParameters
+                        
+                                                                                                                          $Null = [System.IO.File]::Copy($InvokeFileDownloadResult.DownloadPath.FullName, "$($DriverPackMetaDataFileDestination.Directory.FullName)\$($InvokeFileDownloadResult.DownloadPath.Name)", $True)
+                                                                                                                    }
+                                                                                                              }
+                                                                                                        }
+                        
+                                                                                                      Default
+                                                                                                        {
+                                                                                                            $InvokeFileDownloadParameters = New-Object -TypeName 'System.Collections.Specialized.OrderedDictionary'
+                                                                                                              $InvokeFileDownloadParameters.URL = $ProductGroupMemberDownload.Value
+                                                                                                              $InvokeFileDownloadParameters.Destination = $FileDownloadExtractionParameters.ExtractionPath.FullName
+                                                                                                              $InvokeFileDownloadParameters.ContinueOnError = $False
+                                                                                                              $InvokeFileDownloadParameters.Verbose = $True
+                        
+                                                                                                            $InvokeFileDownloadResult = Invoke-FileDownloadWithProgress @InvokeFileDownloadParameters
                                                                                                         }
                                                                                                   }
                                                                                             }
-            
+                        
                                                                                           Default
                                                                                             {
-                                                                                                $InvokeFileDownloadParameters = New-Object -TypeName 'System.Collections.Specialized.OrderedDictionary'
-                                                                                                  $InvokeFileDownloadParameters.URL = $ProductGroupMemberDownload.Value
-                                                                                                  $InvokeFileDownloadParameters.Destination = $FileDownloadExtractionParameters.ExtractionPath.FullName
-                                                                                                  $InvokeFileDownloadParameters.ContinueOnError = $False
-                                                                                                  $InvokeFileDownloadParameters.Verbose = $True
-            
-                                                                                                $InvokeFileDownloadResult = Invoke-FileDownloadWithProgress @InvokeFileDownloadParameters
+                                                                                                $LoggingDetails.WarningMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - The `"$($ProductGroupMemberDownload.Key)`" URL will not be processed because the value does not contain any data. Please Wait..."
+                                                                                                Write-Warning -Message ($LoggingDetails.WarningMessage) -Verbose
                                                                                             }
                                                                                       }
                                                                                 }
+                      
+                                                                              #Create a windows image from the driver content if one does not already exist
+                                                                                Switch ([System.IO.File]::Exists($NewWindowsImageDetails.ImageStagingPath.FullName))
+                                                                                  {
+                                                                                      {($_ -eq $True)}
+                                                                                        {
+                                                                                            $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - The windows image file `"$($NewWindowsImageDetails.ImageStagingPath.FullName)`" already exists and will not be created. Skipping."
+                                                                                            Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
+                                                                                        }
+                                                                                    
+                                                                                      {($_ -eq $False)}
+                                                                                        {
+                                                                                            Switch ($True)
+                                                                                              {
+                                                                                                  {([System.IO.Directory]::Exists($NewWindowsImageDetails.ImageStagingPath.Directory.FullName) -eq $False)}
+                                                                                                    {
+                                                                                                        $Null = [System.IO.Directory]::CreateDirectory($NewWindowsImageDetails.ImageStagingPath.Directory.FullName)
+                                                                                                    }
+                      
+                                                                                                  {([System.IO.Directory]::Exists($NewWindowsImageDetails.LogPath.Directory.FullName) -eq $False)}
+                                                                                                    {
+                                                                                                        $Null = [System.IO.Directory]::CreateDirectory($NewWindowsImageDetails.LogPath.Directory.FullName)
+                                                                                                    }
+                                                                                              }
+                      
+                                                                                            $NewWindowsImageParameters = New-Object -TypeName 'System.Collections.Specialized.OrderedDictionary'
+                                                                                              $NewWindowsImageParameters.CapturePath = $WindowsImageRootFolder.FullName
+                                                                                              $NewWindowsImageParameters.ImagePath = $NewWindowsImageDetails.ImageStagingPath.FullName
+                                                                                              $NewWindowsImageParameters.Name = $ProductGroupMember.FileBaseName
+                                                                                              $NewWindowsImageParameters.Description = $ProductGroupMember | Select-Object -Property @('*') -ExcludeProperty @('Enabled') | ConvertTo-JSON -Depth 10 -Compress:$True
+                                                                                              $NewWindowsImageParameters.CompressionType = 'Max'
+                                                                                              $NewWindowsImageParameters.Verify = $False
+                                                                                              $NewWindowsImageParameters.LogPath = $NewWindowsImageDetails.LogPath.FullName
+                                                                                              $NewWindowsImageParameters.LogLevel = 'WarningsInfo'
+                                                                                              $NewWindowsImageParameters.Verbose = $False
+                      
+                                                                                            $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Attempting to compress the extracted content for the `"$($ProductGroupMember.OSName) $($ProductGroupMember.OSArchitecture)`" driver pack `"$($ProductGroupMember.DriverPackReleaseID)`" for product ID `"$($ProductGroupMember.BaseboardProduct)`" [Model: $($ProductGroupMember.$($ProductGroupAliasProperty))] manufactured by `"$($ManufacturerGroup.Name)`" into the windows image format. Please Wait..."
+                                                                                            Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
+                      
+                                                                                            $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Windows Image Capture Path: $($NewWindowsImageParameters.CapturePath)"
+                                                                                            Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
+                      
+                                                                                            $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Windows Image Export Path: $($NewWindowsImageParameters.ImagePath)"
+                                                                                            Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
+                      
+                                                                                            $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Windows Image Log Path: $($NewWindowsImageParameters.LogPath)"
+                                                                                            Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
+                      
+                                                                                            $CommandExecutionTimespan = Measure-Command -Expression {$Null = New-WindowsImage @NewWindowsImageParameters}
+                      
+                                                                                            If ($? -eq $True)
+                                                                                              {
+                                                                                                  $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Extracted content compression completed in $($CommandExecutionTimespan.Hours.ToString()) hour(s), $($CommandExecutionTimespan.Minutes.ToString()) minute(s), $($CommandExecutionTimespan.Seconds.ToString()) second(s), and $($CommandExecutionTimespan.Milliseconds.ToString()) millisecond(s)."
+                                                                                                  Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
+                      
+                                                                                                  $NewWindowsImageDetails.HashDetails = Get-FileHash -Path ($NewWindowsImageParameters.ImagePath) -Algorithm ($HashAlgorithm)
+                      
+                                                                                                  $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Windows Image Hash: $($NewWindowsImageDetails.HashDetails.Hash) [Algorithm: $($NewWindowsImageDetails.HashDetails.Algorithm)]"
+                                                                                                  Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
+                      
+                                                                                                  $ExtractedContentSize = Get-ChildItem -Path "$($NewWindowsImageParameters.CapturePath)\*" -Recurse | Where-Object {($_ -is [System.IO.FileInfo])} | Measure-Object -Property @('Length') -Sum | Select-Object -ExpandProperty 'Sum'
+                                                                                                  $ExtractedContentSizeDetails = Convert-FileSize -Size ($ExtractedContentSize) -DecimalPlaces 2
+                      
+                                                                                                  $WindowsImageDetails = Get-Item -Path ($NewWindowsImageParameters.ImagePath) -Force
+                                                                                                  $WindowsImageDetailsSizeDetails = Convert-FileSize -Size ($WindowsImageDetails.Length) -DecimalPlaces 2
+                      
+                                                                                                  $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - The extracted content was reduced from its original size of $($ExtractedContentSizeDetails.CalculatedSizeStr) to its compressed size of $($WindowsImageDetailsSizeDetails.CalculatedSizeStr)."
+                                                                                                  Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
+                      
+                                                                                                  #Export the Windows image metadata
+                                                                                                    $WindowsImageJSONTable = New-Object -TypeName 'System.Collections.Specialized.OrderedDictionary'
+                                                                                                      $WindowsImageJSONTable.Cryptography = New-Object -TypeName 'System.Collections.Specialized.OrderedDictionary'
+                                                                                                        $WindowsImageJSONTable.Cryptography.Hash = $NewWindowsImageDetails.HashDetails.Hash
+                                                                                                        $WindowsImageJSONTable.Cryptography.Algorithm = $NewWindowsImageDetails.HashDetails.Algorithm
+                                                                                                      $WindowsImageJSONTable.Content = New-Object -TypeName 'System.Collections.Specialized.OrderedDictionary'
+                                                                                                        $WindowsImageJSONTable.Content.OriginalSize = $ExtractedContentSize
+                                                                                                        $WindowsImageJSONTable.Content.CompressedSize = $WindowsImageDetails.Length
+                                                                                                      $WindowsImageJSONTable.Metadata = New-Object -TypeName 'System.Collections.Specialized.OrderedDictionary'
+                                                                                                        $WindowsImageJSONTable.Metadata = $ProductGroupMember | Select-Object -Property @('*') -ExcludeProperty @('Enabled', 'BaseboardProduct', 'SystemFamily', 'SystemManufacturer', 'SystemProductName', 'SystemSKU', 'SystemVersion', 'DirectoryPath', 'FileBaseName', 'FileName', 'MetadataFileName')
             
-                                                                              Default
-                                                                                {
-                                                                                    $LoggingDetails.WarningMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - The `"$($ProductGroupMemberDownload.Key)`" URL will not be processed because the value does not contain any data. Please Wait..."
-                                                                                    Write-Warning -Message ($LoggingDetails.WarningMessage) -Verbose
-                                                                                }
+                                                                                                    $WindowsImageJSONContents = $WindowsImageJSONTable | ConvertTo-JSON -Depth 10 -Compress:$False
+                      
+                                                                                                    [System.IO.FileInfo]$WindowsImageJSONExportPath = "$($NewWindowsImageDetails.ImageStagingPath.Directory.FullName)\$($NewWindowsImageDetails.ImageStagingPath.BaseName).json"
+                      
+                                                                                                    $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Attempting to export the driver package metadata to `"$($WindowsImageJSONExportPath.FullName)`". Please Wait..."
+                                                                                                    Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
+                      
+                                                                                                    If ([System.IO.Directory]::Exists($WindowsImageExportPath.Directory.FullName) -eq $False) {$Null = [System.IO.Directory]::CreateDirectory($WindowsImageJSONExportPath.Directory.FullName)}
+                      
+                                                                                                    $Null = [System.IO.File]::WriteAllText($WindowsImageJSONExportPath.FullName, $WindowsImageJSONContents, [System.Text.Encoding]::Default)
+                                                                                              }
+                                                                                        }
+                                                                                  }
+                      
+                                                                                #Cleanup the extracted driver package content (If necessary)
+                                                                                  If ([System.IO.Directory]::Exists($FileDownloadExtractionParameters.ExtractionPath.FullName) -eq $True)
+                                                                                    {
+                                                                                        $LoggingDetails.WarningMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Attempting to remove driver pack extraction directory `"$($FileDownloadExtractionParameters.ExtractionPath.FullName)`". Please Wait..."
+                                                                                        Write-Warning -Message ($LoggingDetails.WarningMessage) -Verbose
+            
+                                                                                        [String]$DeletionPath = $FileDownloadExtractionParameters.ExtractionPath.FullName
+                                                                                      
+                                                                                        $Null = [Alphaleonis.Win32.Filesystem.Directory]::Delete($DeletionPath, $True, $True)
+                                                                                    }
                                                                           }
-                                                                    }
-          
-                                                                  #Create a windows image from the driver content if one does not already exist
-                                                                    Switch ([System.IO.File]::Exists($NewWindowsImageDetails.ImageStagingPath.FullName))
-                                                                      {
-                                                                          {($_ -eq $True)}
-                                                                            {
-                                                                                $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - The windows image file `"$($NewWindowsImageDetails.ImageStagingPath.FullName)`" already exists and will not be created. Skipping."
-                                                                                Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
-                                                                            }
-                                                                        
-                                                                          {($_ -eq $False)}
-                                                                            {
-                                                                                Switch ($True)
-                                                                                  {
-                                                                                      {([System.IO.Directory]::Exists($NewWindowsImageDetails.ImageStagingPath.Directory.FullName) -eq $False)}
-                                                                                        {
-                                                                                            $Null = [System.IO.Directory]::CreateDirectory($NewWindowsImageDetails.ImageStagingPath.Directory.FullName)
-                                                                                        }
-          
-                                                                                      {([System.IO.Directory]::Exists($NewWindowsImageDetails.LogPath.Directory.FullName) -eq $False)}
-                                                                                        {
-                                                                                            $Null = [System.IO.Directory]::CreateDirectory($NewWindowsImageDetails.LogPath.Directory.FullName)
-                                                                                        }
-                                                                                  }
-          
-                                                                                $NewWindowsImageParameters = New-Object -TypeName 'System.Collections.Specialized.OrderedDictionary'
-                                                                                  $NewWindowsImageParameters.CapturePath = $WindowsImageRootFolder.FullName
-                                                                                  $NewWindowsImageParameters.ImagePath = $NewWindowsImageDetails.ImageStagingPath.FullName
-                                                                                  $NewWindowsImageParameters.Name = $ProductGroupMember.FileBaseName
-                                                                                  $NewWindowsImageParameters.Description = $ProductGroupMember | Select-Object -Property @('*') -ExcludeProperty @('Enabled') | ConvertTo-JSON -Depth 10 -Compress:$True
-                                                                                  $NewWindowsImageParameters.CompressionType = 'Max'
-                                                                                  $NewWindowsImageParameters.Verify = $False
-                                                                                  $NewWindowsImageParameters.LogPath = $NewWindowsImageDetails.LogPath.FullName
-                                                                                  $NewWindowsImageParameters.LogLevel = 'WarningsInfo'
-                                                                                  $NewWindowsImageParameters.Verbose = $False
-          
-                                                                                $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Attempting to compress the extracted content for the `"$($ProductGroupMember.OSName) $($ProductGroupMember.OSArchitecture)`" driver pack `"$($ProductGroupMember.DriverPackReleaseID)`" for product ID `"$($ProductGroupMember.BaseboardProduct)`" [Model: $($ProductGroupMember.$($ProductGroupAliasProperty))] manufactured by `"$($ManufacturerGroup.Name)`" into the windows image format. Please Wait..."
-                                                                                Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
-          
-                                                                                $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Windows Image Capture Path: $($NewWindowsImageParameters.CapturePath)"
-                                                                                Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
-          
-                                                                                $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Windows Image Export Path: $($NewWindowsImageParameters.ImagePath)"
-                                                                                Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
-          
-                                                                                $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Windows Image Log Path: $($NewWindowsImageParameters.LogPath)"
-                                                                                Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
-          
-                                                                                $CommandExecutionTimespan = Measure-Command -Expression {$Null = New-WindowsImage @NewWindowsImageParameters}
-          
-                                                                                If ($? -eq $True)
-                                                                                  {
-                                                                                      $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Extracted content compression completed in $($CommandExecutionTimespan.Hours.ToString()) hour(s), $($CommandExecutionTimespan.Minutes.ToString()) minute(s), $($CommandExecutionTimespan.Seconds.ToString()) second(s), and $($CommandExecutionTimespan.Milliseconds.ToString()) millisecond(s)."
-                                                                                      Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
-          
-                                                                                      $NewWindowsImageDetails.HashDetails = Get-FileHash -Path ($NewWindowsImageParameters.ImagePath) -Algorithm ($HashAlgorithm)
-          
-                                                                                      $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Windows Image Hash: $($NewWindowsImageDetails.HashDetails.Hash) [Algorithm: $($NewWindowsImageDetails.HashDetails.Algorithm)]"
-                                                                                      Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
-          
-                                                                                      $ExtractedContentSize = Get-ChildItem -Path "$($NewWindowsImageParameters.CapturePath)\*" -Recurse | Where-Object {($_ -is [System.IO.FileInfo])} | Measure-Object -Property @('Length') -Sum | Select-Object -ExpandProperty 'Sum'
-                                                                                      $ExtractedContentSizeDetails = Convert-FileSize -Size ($ExtractedContentSize) -DecimalPlaces 2
-          
-                                                                                      $WindowsImageDetails = Get-Item -Path ($NewWindowsImageParameters.ImagePath) -Force
-                                                                                      $WindowsImageDetailsSizeDetails = Convert-FileSize -Size ($WindowsImageDetails.Length) -DecimalPlaces 2
-          
-                                                                                      $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - The extracted content was reduced from its original size of $($ExtractedContentSizeDetails.CalculatedSizeStr) to its compressed size of $($WindowsImageDetailsSizeDetails.CalculatedSizeStr)."
-                                                                                      Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
-          
-                                                                                      #Export the Windows image metadata
-                                                                                        $WindowsImageJSONTable = New-Object -TypeName 'System.Collections.Specialized.OrderedDictionary'
-                                                                                          $WindowsImageJSONTable.Cryptography = New-Object -TypeName 'System.Collections.Specialized.OrderedDictionary'
-                                                                                            $WindowsImageJSONTable.Cryptography.Hash = $NewWindowsImageDetails.HashDetails.Hash
-                                                                                            $WindowsImageJSONTable.Cryptography.Algorithm = $NewWindowsImageDetails.HashDetails.Algorithm
-                                                                                          $WindowsImageJSONTable.Content = New-Object -TypeName 'System.Collections.Specialized.OrderedDictionary'
-                                                                                            $WindowsImageJSONTable.Content.OriginalSize = $ExtractedContentSize
-                                                                                            $WindowsImageJSONTable.Content.CompressedSize = $WindowsImageDetails.Length
-                                                                                          $WindowsImageJSONTable.Metadata = New-Object -TypeName 'System.Collections.Specialized.OrderedDictionary'
-                                                                                            $WindowsImageJSONTable.Metadata = $ProductGroupMember | Select-Object -Property @('*') -ExcludeProperty @('Enabled', 'BaseboardProduct', 'SystemFamily', 'SystemManufacturer', 'SystemProductName', 'SystemSKU', 'SystemVersion', 'DirectoryPath', 'FileBaseName', 'FileName', 'MetadataFileName')
 
-                                                                                        $WindowsImageJSONContents = $WindowsImageJSONTable | ConvertTo-JSON -Depth 10 -Compress:$False
-          
-                                                                                        [System.IO.FileInfo]$WindowsImageJSONExportPath = "$($NewWindowsImageDetails.ImageStagingPath.Directory.FullName)\$($NewWindowsImageDetails.ImageStagingPath.BaseName).json"
-          
-                                                                                        $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Attempting to export the driver package metadata to `"$($WindowsImageJSONExportPath.FullName)`". Please Wait..."
-                                                                                        Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
-          
-                                                                                        If ([System.IO.Directory]::Exists($WindowsImageExportPath.Directory.FullName) -eq $False) {$Null = [System.IO.Directory]::CreateDirectory($WindowsImageJSONExportPath.Directory.FullName)}
-          
-                                                                                        $Null = [System.IO.File]::WriteAllText($WindowsImageJSONExportPath.FullName, $WindowsImageJSONContents, [System.Text.Encoding]::Default)
-                                                                                  }
-                                                                            }
-                                                                      }
-          
-                                                                    #Cleanup the extracted driver package content (If necessary)
-                                                                      If ([System.IO.Directory]::Exists($FileDownloadExtractionParameters.ExtractionPath.FullName) -eq $True)
-                                                                        {
-                                                                            $LoggingDetails.WarningMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Attempting to remove driver pack extraction directory `"$($FileDownloadExtractionParameters.ExtractionPath.FullName)`". Please Wait..."
-                                                                            Write-Warning -Message ($LoggingDetails.WarningMessage) -Verbose
-
-                                                                            [String]$DeletionPath = $FileDownloadExtractionParameters.ExtractionPath.FullName
-                                                                          
-                                                                            $Null = [Alphaleonis.Win32.Filesystem.Directory]::Delete($DeletionPath, $True, $True)
-                                                                        }
+                                                                        Default
+                                                                          {
+                                                                              $LoggingDetails.WarningMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - A driver pack staging windows image already exists for `"$($ProductGroupMember.OSName) $($ProductGroupMember.OSArchitecture)`" for product ID `"$($ProductGroup.Name)`" [Model: $($ProductGroupMember.$($ProductGroupAliasProperty))] manufactured by `"$($ManufacturerGroup.Name)`". Skipping..."
+                                                                              Write-Warning -Message ($LoggingDetails.WarningMessage) -Verbose
+            
+                                                                              $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Windows Image Staging Path: $($NewWindowsImageDetails.ImageStagingPath.FullName)"
+                                                                              Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
+                                                                          }
+                                                                    }     
                                                               }
 
                                                             Default
@@ -1638,7 +1833,7 @@ Else
                                                                 $StartProcessParameters.ArgumentList.Add("/TEE")
                                                                 $StartProcessParameters.ArgumentList.Add("/XX")
                                                                 $StartProcessParameters.ArgumentList.Add("/MT:16")
-                                                                If ($EnableRobocopyIPG.IsPresent) {$StartProcessParameters.ArgumentList.Add("/IPG:125")}
+                                                                If ($EnableRobocopyIPG) {$StartProcessParameters.ArgumentList.Add("/IPG:125")}
                                                                 $StartProcessParameters.ArgumentList.Add("/LOG:`"$($CopyDriverPackagesLogPath.FullName)`"")
                                                               $StartProcessParameters.PassThru = $True
                                                               $StartProcessParameters.Wait = $True
@@ -1655,7 +1850,7 @@ Else
                                                           
                                                                 Default
                                                                   {
-                                                                        $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Session 0 was not detected [User: $($ProcessExecutionTable.ProcessNTAccount)]. The command window will be show."
+                                                                        $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Session 0 was not detected [User: $($ProcessExecutionTable.ProcessNTAccount)]. The command window will be shown."
                                                                         Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
                                                                     
                                                                         $StartProcessParameters.WindowStyle = [System.Diagnostics.Processwindowstyle]::Normal

@@ -25,15 +25,15 @@
     .EXAMPLE
     Use this command to execute a VBSCript that will launch this powershell script automatically with the specified parameters. This is useful to avoid powershell execution complexities.
     
-    cscript.exe /nologo "%FolderPathContainingScript%\%ScriptName%.vbs" /SwitchParameter /ScriptParameter:"%ScriptParameterValue%" /ScriptParameterArray:"%ScriptParameterValue1%,%ScriptParameterValue2%"
+    cscript.exe /nologo "%FolderPathContainingScript%\%ScriptName%.vbs" /Boolean /ScriptParameter:"%ScriptParameterValue%" /ScriptParameterArray:"%ScriptParameterValue1%,%ScriptParameterValue2%"
 
-    wscript.exe /nologo "%FolderPathContainingScript%\%ScriptName%.vbs" /SwitchParameter /ScriptParameter:"%ScriptParameterValue%" /ScriptParameterArray:"%ScriptParameterValue1%,%ScriptParameterValue2%"
-
-    .EXAMPLE
-    powershell.exe -ExecutionPolicy Bypass -NoProfile -NoLogo -File "%FolderPathContainingScript%\%ScriptName%.ps1" -SwitchParameter -ScriptParameter "%ScriptParameterValue%"
+    wscript.exe /nologo "%FolderPathContainingScript%\%ScriptName%.vbs" /Boolean /ScriptParameter:"%ScriptParameterValue%" /ScriptParameterArray:"%ScriptParameterValue1%,%ScriptParameterValue2%"
 
     .EXAMPLE
-    powershell.exe -ExecutionPolicy Bypass -NonInteractive -NoProfile -NoLogo -WindowStyle Hidden -Command "& '%FolderPathContainingScript%\%ScriptName%.ps1' -ScriptParameter1 '%ScriptParameter1Value%' -ScriptParameter2 %ScriptParameter2Value% -SwitchParameter"
+    powershell.exe -ExecutionPolicy Bypass -NoProfile -NoLogo -File "%FolderPathContainingScript%\%ScriptName%.ps1" -Boolean -ScriptParameter "%ScriptParameterValue%"
+
+    .EXAMPLE
+    powershell.exe -ExecutionPolicy Bypass -NonInteractive -NoProfile -NoLogo -WindowStyle Hidden -Command "& '%FolderPathContainingScript%\%ScriptName%.ps1' -ScriptParameter1 '%ScriptParameter1Value%' -ScriptParameter2 %ScriptParameter2Value% -Boolean"
   
     .NOTES
     If using the database query functionality to get the model list, just ensure that the following columns are returned in order for the XML schema to be generated correctly.
@@ -511,7 +511,7 @@ Else
                         }
 
                   $ManufacturerListObject = New-Object -TypeName 'PSObject' -Property ($ManufacturerListEntry)
-                  $ManufacturerList.Add($ManufacturerListEntry)
+                    $ManufacturerList.Add($ManufacturerListEntry)
 
                   $ManufacturerListEntry = New-Object -TypeName 'System.Collections.Specialized.OrderedDictionary'
                       $ManufacturerListEntry.Enabled = $True
@@ -530,7 +530,7 @@ Else
                         }   
 
                   $ManufacturerListObject = New-Object -TypeName 'PSObject' -Property ($ManufacturerListEntry)
-                  $ManufacturerList.Add($ManufacturerListEntry)
+                    $ManufacturerList.Add($ManufacturerListEntry)
 
                   $ManufacturerListEntry = New-Object -TypeName 'System.Collections.Specialized.OrderedDictionary'
                       $ManufacturerListEntry.Enabled = $True
@@ -549,7 +549,7 @@ Else
                         }
 
                   $ManufacturerListObject = New-Object -TypeName 'PSObject' -Property ($ManufacturerListEntry)
-                  $ManufacturerList.Add($ManufacturerListObject)
+                    $ManufacturerList.Add($ManufacturerListObject)
 
               Switch ($QuerySQLDatabase.IsPresent)
                   {
@@ -648,7 +648,7 @@ Else
                   $XMLWriterSettings = New-Object -TypeName 'System.XML.XMLWriterSettings'
                       $XMLWriterSettings.Indent = $True
                       $XMLWriterSettings.IndentChars = "`t" * 1
-                      $XMLWriterSettings.Encoding = [System.Text.Encoding]::Default
+                      $XMLWriterSettings.Encoding = [System.Text.Encoding]::UTF8
                       $XMLWriterSettings.NewLineHandling = [System.XML.NewLineHandling]::None
                       $XMLWriterSettings.ConformanceLevel = [System.XML.ConformanceLevel]::Auto
 
@@ -737,10 +737,40 @@ SystemVersion          :
 
                 $XMLWriter.WriteStartElement('Settings')
 
-                $XMLWriter.WriteElementString('GeneratedBy', [System.Security.Principal.WindowsIdentity]::GetCurrent().Name)
-                $XMLWriter.WriteElementString('GeneratedOn', $Env:ComputerName.ToUpper())
-                $XMLWriter.WriteElementString('GeneratedDate', $GetXMLDateCreated.InvokeReturnAsIs())
+                $TargetScriptParameterList = New-Object -TypeName 'System.Collections.Generic.List[PSObject]'
+                  $TargetScriptParameterList.Add((New-Object -TypeName 'PSObject' -Property ([Ordered]@{Name = 'ApplicationDataRootDirectory'; Value = '$($Env:Windir)\Temp\$($ScriptPath.BaseName)'; Type = 'System.IO.DirectoryInfo'})))
+                  $TargetScriptParameterList.Add((New-Object -TypeName 'PSObject' -Property ([Ordered]@{Name = 'StagingDirectory'; Value = '$($ApplicationDataRootDirectory.FullName)'; Type = 'System.IO.DirectoryInfo'})))
+                  $TargetScriptParameterList.Add((New-Object -TypeName 'PSObject' -Property ([Ordered]@{Name = 'DownloadDirectory'; Value = '$($StagingDirectory.FullName)\Downloads'; Type = 'System.IO.DirectoryInfo'})))
+                  $TargetScriptParameterList.Add((New-Object -TypeName 'PSObject' -Property ([Ordered]@{Name = 'DriverPackageDirectory'; Value = '$($ApplicationDataRootDirectory.FullName)\Out-Of-Box-Driver-Packages'; Type = 'System.IO.DirectoryInfo'})))
+                  $TargetScriptParameterList.Add((New-Object -TypeName 'PSObject' -Property ([Ordered]@{Name = 'DisableDownload'; Value = $False; Type = 'Boolean'})))
+                  $TargetScriptParameterList.Add((New-Object -TypeName 'PSObject' -Property ([Ordered]@{Name = 'EnableRobocopyIPG'; Value = $False; Type = 'Boolean'})))
+                  $TargetScriptParameterList.Add((New-Object -TypeName 'PSObject' -Property ([Ordered]@{Name = 'Force'; Value = $False; Type = 'Boolean'})))
+                  $TargetScriptParameterList.Add((New-Object -TypeName 'PSObject' -Property ([Ordered]@{Name = 'ContinueOnError'; Value = $False; Type = 'Boolean'})))
 
+                  Switch ($TargetScriptParameterList.Count -gt 0)
+                  {
+                      {($_ -eq $True)}
+                        {
+                            $XMLWriter.WriteStartElement('ParameterList')
+
+                            For ($TargetScriptParameterListIndex = 0; $TargetScriptParameterListIndex -lt $TargetScriptParameterList.Count; $TargetScriptParameterListIndex++)
+                              {
+                                  $TargetScriptParameterListItem = $TargetScriptParameterList[$TargetScriptParameterListIndex]
+
+                                  $XMLWriter.WriteStartElement('Parameter')
+
+                                  ForEach ($Property In $TargetScriptParameterListItem.PSObject.Properties)
+                                    {
+                                        $XMLWriter.WriteAttributeString($Property.Name, $Property.Value)
+                                    }
+
+                                  $XMLWriter.WriteEndElement()
+                              }
+
+                            $XMLWriter.WriteEndElement()
+                        }
+                  }
+                        
                 $XMLWriter.WriteStartElement('OperatingSystemList')
 
                 $OperatingSystemList = Get-WindowsReleaseHistory | Sort-Object -Property @('Name') -Unique
@@ -822,7 +852,7 @@ SystemVersion          :
 
                 $DriverPackageCreationXMLContents = $XMLStringBuilder.ToString()
 
-                [System.IO.FileInfo]$DriverPackageCreationXMLExportPath = "$($ContentDirectory.FullName)\Templates\SettingsTemplate.xml"
+                [System.IO.FileInfo]$DriverPackageCreationXMLExportPath = "$($ContentDirectory.FullName)\Settings\Template.xml"
 
                 [Scriptblock]$ExportDriverPackageCreationXML = {
                                                                     $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Attempting to export the driver package settings XML to `"$($DriverPackageCreationXMLExportPath.FullName)`". Please Wait..."
@@ -838,22 +868,23 @@ SystemVersion          :
                       {($_ -eq $True)}
                         {      
                             $MemoryStream = New-Object -TypeName 'System.IO.MemoryStream'
+
                             $StreamWriter = New-Object -TypeName 'System.IO.StreamWriter' -ArgumentList ($MemoryStream)
-                            $Null = $StreamWriter.Write($DriverPackageCreationXMLContents)
-                            $Null = $StreamWriter.Flush()
-                            $Null = $MemoryStream.Position = 0
+                              $Null = $StreamWriter.Write($DriverPackageCreationXMLContents)
+                              $Null = $StreamWriter.Flush()
+                              $Null = $MemoryStream.Position = 0
 
                             $DriverPackageCreationXMLContentHash = Get-FileHash -InputStream $MemoryStream -Algorithm ($HashAlgorithm)
 
-                            $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - New Driver Package Settings XML Hash: $($DriverPackageCreationXMLContentHash.Hash)"
+                            $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - New Driver Package Settings XML Hash: $($DriverPackageCreationXMLContentHash.Hash.ToUpper())"
                             Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
 
                             $DriverPackageCreationXMLExportPathHash = Get-FileHash -Path ($DriverPackageCreationXMLExportPath.FullName) -Algorithm ($HashAlgorithm)
 
-                            $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Current Driver Package Settings XML Hash: $($DriverPackageCreationXMLExportPathHash.Hash)"
+                            $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Current Driver Package Settings XML Hash: $($DriverPackageCreationXMLExportPathHash.Hash.ToUpper())"
                             Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
 
-                            Switch ($DriverPackageCreationXMLContentHash.Hash -ne $DriverPackageCreationXMLExportPathHash.Hash)
+                            Switch ($DriverPackageCreationXMLContentHash.Hash.ToUpper() -ne $DriverPackageCreationXMLExportPathHash.Hash.ToUpper())
                               {
                                   {($_ -eq $True)}
                                     {

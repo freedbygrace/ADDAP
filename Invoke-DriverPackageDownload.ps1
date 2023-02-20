@@ -46,14 +46,14 @@
     (        	     
         [Parameter(Mandatory=$False)]
         [ValidateNotNullOrEmpty()]
-        [ValidateScript({[System.IO.Directory]::Exists($_) -eq $True})]
+        [ValidateScript({Test-Path -Path $_})]
         [Alias('DPRD')]
         [System.IO.DirectoryInfo]$DriverPackageRootDirectory,
     
         [Parameter(Mandatory=$False)]
         [ValidateNotNullOrEmpty()]
         [ValidatePattern('^.+\.(xml)$')]
-        [ValidateScript({[System.IO.File]::Exists($_) -eq $True})]
+        [ValidateScript({Test-Path -Path $_})]
         [Alias('DPMDP')]
         [System.IO.FileInfo]$DriverPackageMetadataPath,
 
@@ -317,9 +317,7 @@ Else
                                           
                                         {($_ -eq $False)}
                                           {
-                                              [System.IO.DirectoryInfo]$ApplicationDataRootDirectory = "$($Env:ProgramData)\Invoke-DriverPackageCreator"
-
-                                              [System.IO.DirectoryInfo]$LogDirectory = "$($ApplicationDataRootDirectory.FullName)\Logs"
+                                              [System.IO.DirectoryInfo]$LogDirectory = "$($Env:Windir)\Logs\Software\$($ScriptPath.BaseName)"
                                           }
                                     }   
                               }
@@ -419,7 +417,7 @@ Else
                 Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
             }
       
-          $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Powershell Version: $($PSVersionTable.PSVersion.ToString())"
+          $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Powershell Version: $($PSVersionTable.PSVersion)"
           Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
       
           $ExecutionPolicyList = Get-ExecutionPolicy -List
@@ -428,7 +426,7 @@ Else
             {
                 $ExecutionPolicy = $ExecutionPolicyList[$ExecutionPolicyListIndex]
 
-                $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - The powershell execution policy is currently set to `"$($ExecutionPolicy.ExecutionPolicy.ToString())`" for the `"$($ExecutionPolicy.Scope.ToString())`" scope."
+                $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - The powershell execution policy is currently set to `"$($ExecutionPolicy.ExecutionPolicy)`" for the `"$($ExecutionPolicy.Scope)`" scope."
                 Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
             }
     
@@ -487,7 +485,7 @@ Else
 
                                   $LogAge = New-TimeSpan -Start ($Log.LastWriteTime) -End (Get-Date)
 
-                                  $LoggingDetails.WarningMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Attempting to cleanup log file `"$($Log.FullName)`". Please Wait... [Last Modified: $($Log.LastWriteTime.ToString($DateTimeMessageFormat))] [Age: $($LogAge.Days.ToString()) day(s); $($LogAge.Hours.ToString()) hours(s); $($LogAge.Minutes.ToString()) minute(s); $($LogAge.Seconds.ToString()) second(s)]."
+                                  $LoggingDetails.WarningMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Attempting to cleanup log file `"$($Log.FullName)`". Please Wait... [Last Modified: $($Log.LastWriteTime.ToString($DateTimeMessageFormat))] [Age: $($LogAge.Days) day(s); $($LogAge.Hours) hours(s); $($LogAge.Minutes) minute(s); $($LogAge.Seconds) second(s)]."
                                   Write-Verbose -Message ($LoggingDetails.WarningMessage) -Verbose
                   
                                   $Null = [System.IO.File]::Delete($Log.FullName)
@@ -520,7 +518,7 @@ Else
       
                       If ($Null -ine $LatestModuleVersion)
                         {
-                            $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Attempting to import dependency powershell module `"$($LatestModuleVersion.Name)`" [Version: $($LatestModuleVersion.Version.ToString())]. Please Wait..."
+                            $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Attempting to import dependency powershell module `"$($LatestModuleVersion.Name)`" [Version: $($LatestModuleVersion.Version)]. Please Wait..."
                             Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
 
                             Try {$Null = Import-Module -Name "$($LatestModuleVersion.Path)" -Global -DisableNameChecking -Force -Verbose:$False} Catch {}
@@ -690,27 +688,76 @@ Else
                                       }
                                 }
                           }
-
-                        Default
-                          {
-                              Switch ($True)
-                                {
-                                    {([String]::IsNullOrEmpty($DriverPackageRootDirectory) -eq $True) -or ([String]::IsNullOrWhiteSpace($DriverPackageRootDirectory) -eq $True)}
-                                      {
-                                          [System.IO.DirectoryInfo]$DriverPackageRootDirectory = "C:\ProgramData\Invoke-DriverPackageCreator\DriverPackages"
-                                      }
-
-                                    {([String]::IsNullOrEmpty($DriverPackageMetadataPath) -eq $True) -or ([String]::IsNullOrWhiteSpace($DriverPackageMetadataPath) -eq $True)}
-                                      {
-                                          [System.IO.FileInfo]$DriverPackageMetadataPath = "$($DriverPackageRootDirectory.FullName)\Metadata\DriverPackageList.xml"
-                                      }
-                                }
-                          }
                     }
 
                 #Determine which driver package(s) are applicable to the deployed operating system and product ID
                   $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - A task sequence is currently running."
                   Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
+
+                #Get the deployed operating system details
+                    $InvokeRegistryHiveActionParameters = New-Object -TypeName 'System.Collections.Specialized.OrderedDictionary'
+
+                    $FixedVolumeList = [System.IO.DriveInfo]::GetDrives() | Where-Object {($_.DriveType -iin @('Fixed')) -and ($_.IsReady -eq $True) -and ($_.Name.TrimEnd('\') -inotin @($Env:SystemDrive)) -and (([String]::IsNullOrEmpty($_.Name) -eq $False) -or ([String]::IsNullOrWhiteSpace($_.Name) -eq $False))} | Sort-Object -Property @('TotalSize')
+
+                    :FixedVolumeLoop ForEach ($FixedVolume In $FixedVolumeList)
+                        {
+                            $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Attempting to check fixed volume `"$($FixedVolume.Name.TrimEnd('\'))`" for a valid installation of Windows."
+                            Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
+                                                  
+                            [System.IO.DirectoryInfo]$WindowsDirectory = "$($FixedVolume.Name.TrimEnd('\'))\Windows"
+                                          
+                            Switch ([System.IO.Directory]::Exists($WindowsDirectory.FullName))
+                                {
+                                    {($_ -eq $True)}
+                                        {
+                                            $WindowsDirectoryItemList = Get-ChildItem -Path ($WindowsDirectory.FullName) -ErrorAction SilentlyContinue
+                                          
+                                            $WindowsDirectoryItemListCount = ($WindowsDirectoryItemList | Measure-Object).Count
+                                          
+                                            Switch (($WindowsDirectoryItemListCount -ge 2) -and ($WindowsDirectoryItemList | Where-Object {($_.Name -ieq 'explorer.exe')}))
+                                                {
+                                                    {($_ -eq $True)}
+                                                        {
+                                                            $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Fixed volume `"$($FixedVolume.Name.TrimEnd('\'))`" contains a valid installation of Windows."
+                                                            Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
+
+                                                            $WindowsImageDriveInfo = New-Object -TypeName 'System.IO.DriveInfo' -ArgumentList "$($FixedVolume.Name.TrimEnd('\'))"
+
+                                                            $InvokeRegistryHiveActionParameters.HivePath = "$($WindowsImageDriveInfo.Name.TrimEnd('\').Toupper())\Windows\System32\Config\SOFTWARE"
+                                                                                  
+                                                            Break FixedVolumeLoop
+                                                        }
+                                                }       
+                                        }
+                                }    
+                        }
+                                          
+                    [System.IO.DirectoryInfo]$DriverPackageDownloadDirectory = "$($WindowsImageDriveInfo.Name.TrimEnd('\').Toupper())\Downloads"
+
+                    $InvokeRegistryHiveActionParameters.KeyPath = New-Object -TypeName 'System.Collections.Generic.List[String]'
+                        $InvokeRegistryHiveActionParameters.KeyPath.Add('Root\Microsoft\Windows NT\CurrentVersion')
+                    $InvokeRegistryHiveActionParameters.ValueNameExpression = New-Object -TypeName 'System.Collections.Generic.List[Regex]'
+                        $InvokeRegistryHiveActionParameters.ValueNameExpression.Add('.*')
+                    $InvokeRegistryHiveActionParameters.ContinueOnError = $False
+                    $InvokeRegistryHiveActionParameters.Verbose = $True
+                                      
+                    $InvokeRegistryHiveActionResult = Invoke-RegistryHiveAction @InvokeRegistryHiveActionParameters
+
+                    $WindowsImageDetails = New-Object -TypeName 'System.Collections.Specialized.OrderedDictionary'
+                        $WindowsImageDetails.MajorVersionNumber = ($InvokeRegistryHiveActionResult[0].ValueList | Where-Object {($_.Name -ieq 'CurrentMajorVersionNumber')}).Value
+                        $WindowsImageDetails.MinorVersionNumber = ($InvokeRegistryHiveActionResult[0].ValueList | Where-Object {($_.Name -ieq 'CurrentMinorVersionNumber')}).Value
+                        $WindowsImageDetails.BuildNumber = ($InvokeRegistryHiveActionResult[0].ValueList | Where-Object {($_.Name -ieq 'CurrentBuildNumber')}).Value
+                        $WindowsImageDetails.RevisionNumber = ($InvokeRegistryHiveActionResult[0].ValueList | Where-Object {($_.Name -ieq 'UBR')}).Value
+                        $WindowsImageDetails.Version = New-Object -TypeName 'System.Version' -ArgumentList @($WindowsImageDetails.MajorVersionNumber, $WindowsImageDetails.MinorVersionNumber, $WindowsImageDetails.BuildNumber, $WindowsImageDetails.RevisionNumber)
+                        $WindowsImageDetails.ReleaseNumber = ($InvokeRegistryHiveActionResult[0].ValueList | Where-Object {($_.Name -ieq 'ReleaseID')}).Value
+                        $WindowsImageDetails.ReleaseID = ($InvokeRegistryHiveActionResult[0].ValueList | Where-Object {($_.Name -ieq 'DisplayVersion')}).Value
+                        $WindowsImageDetails.BuildLabEX = ($InvokeRegistryHiveActionResult[0].ValueList | Where-Object {($_.Name -ieq 'BuildLabEX')}).Value
+
+                    ForEach ($WindowsImageDetail In $WindowsImageDetails.GetEnumerator())
+                        {
+                            $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Deployed Operating System - $($WindowsImageDetail.Key): $($WindowsImageDetail.Value)"
+                            Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
+                        }
 
                   $DriverPackageDownloadList = New-Object -TypeName 'System.Collections.Generic.List[PSObject]'
 
@@ -768,74 +815,6 @@ Else
                                             $OperatingSystemPropertyList.Add('*')
                                           
                                           $OperatingSystemList = $ModelDetails.OperatingSystemList.OperatingSystem | Select-Object -Property ($OperatingSystemPropertyList) -ExcludeProperty @('MinimumVersion')
-
-                                          $InvokeRegistryHiveActionParameters = New-Object -TypeName 'System.Collections.Specialized.OrderedDictionary'
-
-                                          $FixedVolumeList = [System.IO.DriveInfo]::GetDrives() | Where-Object {($_.DriveType -iin @('Fixed')) -and ($_.IsReady -eq $True) -and ($_.Name.TrimEnd('\') -inotin @($Env:SystemDrive)) -and (([String]::IsNullOrEmpty($_.Name) -eq $False) -or ([String]::IsNullOrWhiteSpace($_.Name) -eq $False))} | Sort-Object -Property @('TotalSize')
-
-                                          :FixedVolumeLoop ForEach ($FixedVolume In $FixedVolumeList)
-                                              {
-                                                  $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Attempting to check fixed volume `"$($FixedVolume.Name.TrimEnd('\'))`" for a valid installation of Windows."
-                                                  Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
-                                                  
-                                                  [System.IO.DirectoryInfo]$WindowsDirectory = "$($FixedVolume.Name.TrimEnd('\'))\Windows"
-                                          
-                                                  Switch ([System.IO.Directory]::Exists($WindowsDirectory.FullName))
-                                                      {
-                                                          {($_ -eq $True)}
-                                                              {
-                                                                  $WindowsDirectoryItemList = Get-ChildItem -Path ($WindowsDirectory.FullName) -ErrorAction SilentlyContinue
-                                          
-                                                                  $WindowsDirectoryItemListCount = ($WindowsDirectoryItemList | Measure-Object).Count
-                                          
-                                                                  Switch (($WindowsDirectoryItemListCount -ge 2) -and ($WindowsDirectoryItemList | Where-Object {($_.Name -ieq 'explorer.exe')}))
-                                                                      {
-                                                                          {($_ -eq $True)}
-                                                                              {
-                                                                                  $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Fixed volume `"$($FixedVolume.Name.TrimEnd('\'))`" contains a valid installation of Windows."
-                                                                                  Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
-
-                                                                                  $WindowsImageDriveInfo = New-Object -TypeName 'System.IO.DriveInfo' -ArgumentList "$($FixedVolume.Name.TrimEnd('\'))"
-
-                                                                                  $InvokeRegistryHiveActionParameters.HivePath = "$($WindowsImageDriveInfo.Name.TrimEnd('\').Toupper())\Windows\System32\Config\SOFTWARE"
-                                                                                  
-                                                                                  Break FixedVolumeLoop
-                                                                              }
-                                                                      }       
-                                                              }
-                                                      }    
-                                              }
-
-                                          #$SecondLargestVolume = ($FixedVolumeList | Sort-Object -Property 'TotalSize' -Descending)[1]
-
-                                          #[System.IO.DirectoryInfo]$DriverPackageDownloadDirectory = "$($SecondLargestVolume.Name.TrimEnd('\'))\Downloads"
-                                          
-                                          [System.IO.DirectoryInfo]$DriverPackageDownloadDirectory = "$($WindowsImageDriveInfo.Name.TrimEnd('\').Toupper())\Downloads"
-  
-                                          $InvokeRegistryHiveActionParameters.KeyPath = New-Object -TypeName 'System.Collections.Generic.List[String]'
-                                            $InvokeRegistryHiveActionParameters.KeyPath.Add('Root\Microsoft\Windows NT\CurrentVersion')
-                                          $InvokeRegistryHiveActionParameters.ValueNameExpression = New-Object -TypeName 'System.Collections.Generic.List[Regex]'
-                                            $InvokeRegistryHiveActionParameters.ValueNameExpression.Add('.*')
-                                          $InvokeRegistryHiveActionParameters.ContinueOnError = $False
-                                          $InvokeRegistryHiveActionParameters.Verbose = $True
-                                      
-                                          $InvokeRegistryHiveActionResult = Invoke-RegistryHiveAction @InvokeRegistryHiveActionParameters
-
-                                          $WindowsImageDetails = New-Object -TypeName 'System.Collections.Specialized.OrderedDictionary'
-                                            $WindowsImageDetails.MajorVersionNumber = ($InvokeRegistryHiveActionResult[0].ValueList | Where-Object {($_.Name -ieq 'CurrentMajorVersionNumber')}).Value
-                                            $WindowsImageDetails.MinorVersionNumber = ($InvokeRegistryHiveActionResult[0].ValueList | Where-Object {($_.Name -ieq 'CurrentMinorVersionNumber')}).Value
-                                            $WindowsImageDetails.BuildNumber = ($InvokeRegistryHiveActionResult[0].ValueList | Where-Object {($_.Name -ieq 'CurrentBuildNumber')}).Value
-                                            $WindowsImageDetails.RevisionNumber = ($InvokeRegistryHiveActionResult[0].ValueList | Where-Object {($_.Name -ieq 'UBR')}).Value
-                                            $WindowsImageDetails.Version = New-Object -TypeName 'System.Version' -ArgumentList @($WindowsImageDetails.MajorVersionNumber, $WindowsImageDetails.MinorVersionNumber, $WindowsImageDetails.BuildNumber, $WindowsImageDetails.RevisionNumber)
-                                            $WindowsImageDetails.ReleaseNumber = ($InvokeRegistryHiveActionResult[0].ValueList | Where-Object {($_.Name -ieq 'ReleaseID')}).Value
-                                            $WindowsImageDetails.ReleaseID = ($InvokeRegistryHiveActionResult[0].ValueList | Where-Object {($_.Name -ieq 'DisplayVersion')}).Value
-                                            $WindowsImageDetails.BuildLabEX = ($InvokeRegistryHiveActionResult[0].ValueList | Where-Object {($_.Name -ieq 'BuildLabEX')}).Value
-
-                                          ForEach ($WindowsImageDetail In $WindowsImageDetails.GetEnumerator())
-                                              {
-                                                  $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Deployed Operating System - $($WindowsImageDetail.Key): $($WindowsImageDetail.Value)"
-                                                  Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
-                                              }
 
                                           $OperatingSystemCriteria = New-Object -TypeName 'System.Collections.Specialized.OrderedDictionary'
                                             
@@ -1085,7 +1064,7 @@ Else
 
                                                                                   Default
                                                                                   {
-                                                                                      $LoggingDetails.WarningMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - The generic driver package of `"$($GenericDriverPackageDetails.Metadata.Name)`" is excluded because the minimum required operating system version of `"$($GenericDriverPackageOSVersion.ToString())`" is not less than or equal to the deployed operating system version of `"$($OperatingSystemCriteria.Version.ToString())`". Skipping..."
+                                                                                      $LoggingDetails.WarningMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - The generic driver package of `"$($GenericDriverPackageDetails.Metadata.Name)`" is excluded because the minimum required operating system version of `"$($GenericDriverPackageOSVersion)`" is not less than or equal to the deployed operating system version of `"$($OperatingSystemCriteria.Version)`". Skipping..."
                                                                                       Write-Verbose -Message ($LoggingDetails.WarningMessage) -Verbose
                                                                                   }
                                                                             }
@@ -1372,7 +1351,7 @@ Else
                       #Log the total script execution time  
                         $ScriptExecutionTimespan = New-TimeSpan -Start ($ScriptStartTime) -End ($ScriptEndTime)
 
-                        $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Script execution took $($ScriptExecutionTimespan.Hours.ToString()) hour(s), $($ScriptExecutionTimespan.Minutes.ToString()) minute(s), $($ScriptExecutionTimespan.Seconds.ToString()) second(s), and $($ScriptExecutionTimespan.Milliseconds.ToString()) millisecond(s)"
+                        $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Script execution took $($ScriptExecutionTimespan.Hours) hour(s), $($ScriptExecutionTimespan.Minutes) minute(s), $($ScriptExecutionTimespan.Seconds) second(s), and $($ScriptExecutionTimespan.Milliseconds) millisecond(s)"
                         Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
             
                       $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Exiting script `"$($ScriptPath.FullName)`" with exit code $($Script:LASTEXITCODE)."

@@ -63,7 +63,6 @@ Function Invoke-FileDownload
           (        
               [Parameter(Mandatory=$True, ValueFromPipelineByPropertyName = $True)]
               [ValidateNotNullOrEmpty()]
-              [ValidatePattern('^http(s)\:\/\/.*\/.*\.(.{3,4})$')]
               [System.URI]$URL,
                 
               [Parameter(Mandatory=$False, ValueFromPipelineByPropertyName = $True)]
@@ -209,18 +208,13 @@ Function Invoke-FileDownload
 
                                                         $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Download Size: $($ContentLengthInMB) MegaBytes"
                                                         Write-Verbose -Message ($LoggingDetails.LogMessage)
-                                                        
-                                                        $Null = Measure-Command -Expression {[Byte[]]$DownloadedData = $WebClient.DownloadData($URL.OriginalString)} -OutVariable 'DownloadExecutionTimespan'
-                                                          
-                                                        $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Stream download took $($DownloadExecutionTimespan.Hours.ToString()) hour(s), $($DownloadExecutionTimespan.Minutes.ToString()) minute(s), $($DownloadExecutionTimespan.Seconds.ToString()) second(s), and $($DownloadExecutionTimespan.Milliseconds.ToString()) millisecond(s)"
-                                                        Write-Verbose -Message ($LoggingDetails.LogMessage)
-                                                        
-                                                        $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Attempting to flush the downloaded data stream to file `"$($DestinationPath.FullName)`". Please Wait..."
-                                                        Write-Verbose -Message ($LoggingDetails.LogMessage)
-
+                                                                                                                                                                          
                                                         If ([System.IO.Directory]::Exists($DestinationPath.Directory.FullName) -eq $False) {$Null = [System.IO.Directory]::CreateDirectory($DestinationPath.Directory.FullName)}
+
+                                                        $Null = Measure-Command -Expression {$Null = $WebClient.DownloadFile($URL.OriginalString, $DestinationPath.FullName)} -OutVariable 'DownloadExecutionTimespan'
             
-                                                        $Null = [System.IO.File]::WriteAllBytes($DestinationPath.FullName, $DownloadedData)
+                                                        $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - File download took $($Global:DownloadExecutionTimespan.Hours.ToString()) hour(s), $($Global:DownloadExecutionTimespan.Minutes.ToString()) minute(s), $($Global:DownloadExecutionTimespan.Seconds.ToString()) second(s), and $($Global:DownloadExecutionTimespan.Milliseconds.ToString()) millisecond(s)"
+                                                        Write-Verbose -Message ($LoggingDetails.LogMessage)
             
                                                         [Int]$SecondsToWait = 3
                       
@@ -240,7 +234,7 @@ Function Invoke-FileDownload
 
                                                         $Null = (Get-Item -Path $DestinationPath.FullName -Force).LastWriteTimeUTC = $WebRequestHeaders.'Last-Modified'
 
-                                                        $Null = $WebClient.Dispose()
+                                                        Try {$Null = $WebClient.Dispose()} Catch {}
                                                     }
  
                     Switch ([System.IO.File]::Exists($DestinationPath.FullName))
@@ -268,7 +262,7 @@ Function Invoke-FileDownload
 
                                             $OutputObjectProperties.DownloadRequired = $True
                                     
-                                            $ExecuteDownload.InvokeReturnAsIs()
+                                            $ExecuteDownload.Invoke()
                                         }
 
                                       Default
@@ -289,7 +283,7 @@ Function Invoke-FileDownload
 
                                 $OutputObjectProperties.DownloadRequired = $True
                         
-                                $ExecuteDownload.InvokeReturnAsIs()
+                                $ExecuteDownload.Invoke()
                             }
                       } 
                 }
@@ -298,7 +292,7 @@ Function Invoke-FileDownload
                     $ErrorHandlingDefinition.Invoke()
                 }
               Finally
-                {
+                { 
                     Try {$Null = $WebRequestResponse.Dispose()} Catch {}
                 }
           }
@@ -333,6 +327,16 @@ Function Invoke-FileDownload
                     $OutputObjectProperties.DownloadPath = $DestinationPathDetails
                     $OutputObjectProperties.URL = $URL
                     $OutputObjectProperties.URLHeaders = $WebRequestHeaders
+
+                    $OutputObjectProperties.CompletionTimespan = $Null
+
+                    Switch ($True)
+                      {
+                          {($OutputObjectProperties.DownloadRequired -eq $True)}
+                            {
+                                $OutputObjectProperties.CompletionTimespan = $Global:DownloadExecutionTimespan
+                            }
+                      }
                       
                     $OutputObject = New-Object -TypeName 'PSObject' -Property ($OutputObjectProperties)
 

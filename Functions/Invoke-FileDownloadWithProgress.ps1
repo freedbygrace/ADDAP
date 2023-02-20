@@ -64,7 +64,6 @@ Function Invoke-FileDownloadWithProgress
           (        
               [Parameter(Mandatory=$True, ValueFromPipelineByPropertyName = $True)]
               [ValidateNotNullOrEmpty()]
-              [ValidatePattern('^http(s)\:\/\/.*\/.*\.(.{3,4})$')]
               [System.URI]$URL,
                 
               [Parameter(Mandatory=$False, ValueFromPipelineByPropertyName = $True)]
@@ -395,6 +394,8 @@ Function Invoke-FileDownloadWithProgress
                                                                       $WriteProgressParameters.CurrentOperation = "Downloaded $($EventDetails.Received.CalculatedSizeStr) of $($EventDetails.TotalToReceive.CalculatedSizeStr) @ $($TransferRate) Mbps"
 
                                                                     Write-Progress @WriteProgressParameters
+
+                                                                    $Null = Start-Sleep -Milliseconds 1500
                                                                 }
                                                           }
                                                         Catch
@@ -432,14 +433,18 @@ Function Invoke-FileDownloadWithProgress
                                                                       }
                                                                 }
 
-                                                              $Null = $WebClient.Dispose()
+                                                              Try {$Null = $Downloader.CancelAsync()} Catch {}
+
+                                                              Try {$Null = $WebClient.CancelAsync()} Catch {}
+
+                                                              Try {$Null = $WebClient.Dispose()} Catch {}
 
                                                               $Null = $DownloadExecutionStopwatch.Stop()      
                                                           }
                                                                                                                                      
-                                                        $DownloadExecutionTimespan = $DownloadExecutionStopwatch.Elapsed
+                                                        $Global:DownloadExecutionTimespan = $DownloadExecutionStopwatch.Elapsed
                                                                                                                                      
-                                                        $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Download completed in $($DownloadExecutionTimespan.Hours.ToString()) hour(s), $($DownloadExecutionTimespan.Minutes.ToString()) minute(s), $($DownloadExecutionTimespan.Seconds.ToString()) second(s), and $($DownloadExecutionTimespan.Milliseconds.ToString()) millisecond(s)."
+                                                        $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Download completed in $($Global:DownloadExecutionTimespan.Hours.ToString()) hour(s), $($Global:DownloadExecutionTimespan.Minutes.ToString()) minute(s), $($Global:DownloadExecutionTimespan.Seconds.ToString()) second(s), and $($Global:DownloadExecutionTimespan.Milliseconds.ToString()) millisecond(s)."
                                                         Write-Verbose -Message ($LoggingDetails.LogMessage)
 
                                                         $Null = $DownloadExecutionStopwatch.Reset()
@@ -490,7 +495,7 @@ Function Invoke-FileDownloadWithProgress
 
                                             $OutputObjectProperties.DownloadRequired = $True
                                     
-                                            $ExecuteDownload.InvokeReturnAsIs()
+                                            $ExecuteDownload.Invoke()
                                         }
 
                                       Default
@@ -511,7 +516,7 @@ Function Invoke-FileDownloadWithProgress
 
                                 $OutputObjectProperties.DownloadRequired = $True
                         
-                                $ExecuteDownload.InvokeReturnAsIs()
+                                $ExecuteDownload.Invoke()
                             }
                       } 
                 }
@@ -555,6 +560,15 @@ Function Invoke-FileDownloadWithProgress
                     $OutputObjectProperties.DownloadPath = $DestinationPathDetails
                     $OutputObjectProperties.URL = $URL
                     $OutputObjectProperties.URLHeaders = $WebRequestHeaders
+                    $OutputObjectProperties.CompletionTimespan = $Null
+
+                    Switch ($True)
+                      {
+                          {($OutputObjectProperties.DownloadRequired -eq $True)}
+                            {
+                                $OutputObjectProperties.CompletionTimespan = $Global:DownloadExecutionTimespan
+                            }
+                      }
                       
                     $OutputObject = New-Object -TypeName 'PSObject' -Property ($OutputObjectProperties)
 
