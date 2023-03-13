@@ -1064,7 +1064,7 @@ Else
 
                                                                                   Default
                                                                                   {
-                                                                                      $LoggingDetails.WarningMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - The generic driver package of `"$($GenericDriverPackageDetails.Metadata.Name)`" is excluded because the minimum required operating system version of `"$($GenericDriverPackageOSVersion)`" is not less than or equal to the deployed operating system version of `"$($OperatingSystemCriteria.Version)`". Skipping..."
+                                                                                      $LoggingDetails.WarningMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - The generic driver package of `"$($GenericDriverPackageDetails.Metadata.Name)`" is excluded because the minimum required operating system version of `"$($GenericDriverPackageOSVersion)`" is not less than or equal to the deployed operating system version of `"$($WindowsImageDetails.Version)`". Skipping..."
                                                                                       Write-Verbose -Message ($LoggingDetails.WarningMessage) -Verbose
                                                                                   }
                                                                             }

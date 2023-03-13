@@ -4,19 +4,37 @@
     <action />
     <group expand="true" name="Variables" description="" disable="false" continueOnError="false">
       <action />
-      <step type="SMS_TaskSequence_SetVariableAction" name="CustomContentPath" description="" disable="false" continueOnError="false" successCodeList="0 3010">
+      <step type="SMS_TaskSequence_SetVariableAction" name="CustomContentPath" description="Set this location to the path where " disable="false" continueOnError="false" successCodeList="0 3010">
         <defaultVarList>
           <variable name="VariableName" property="VariableName">CustomContentPath</variable>
           <variable name="VariableValue" property="VariableValue">%ScriptRoot%\Custom</variable>
         </defaultVarList>
         <action>cscript.exe "%SCRIPTROOT%\ZTISetVariable.wsf"</action>
+        <condition>
+          <operator type="not">
+            <expression type="SMS_TaskSequence_VariableConditionExpression">
+              <variable name="Variable">CustomContentPath</variable>
+              <variable name="Operator">exists</variable>
+              <variable name="Value"></variable>
+            </expression>
+          </operator>
+        </condition>
       </step>
-      <step type="SMS_TaskSequence_SetVariableAction" name="DownloadSegmentSize" description="" disable="false" continueOnError="false" successCodeList="0 3010">
+      <step type="SMS_TaskSequence_SetVariableAction" name="DownloadSegmentSize" description="Controls the download buffer for the script that performs the downloading of the driver package(s)." disable="false" continueOnError="false" successCodeList="0 3010">
         <defaultVarList>
           <variable name="VariableName" property="VariableName">DownloadSegmentSize</variable>
-          <variable name="VariableValue" property="VariableValue">16384</variable>
+          <variable name="VariableValue" property="VariableValue">102400</variable>
         </defaultVarList>
         <action>cscript.exe "%SCRIPTROOT%\ZTISetVariable.wsf"</action>
+        <condition>
+          <operator type="not">
+            <expression type="SMS_TaskSequence_VariableConditionExpression">
+              <variable name="Variable">DownloadSegmentSize</variable>
+              <variable name="Operator">exists</variable>
+              <variable name="Value"></variable>
+            </expression>
+          </operator>
+        </condition>
       </step>
       <step type="SMS_TaskSequence_SetVariableAction" name="DriverPackageRootDirectory" description="This is the root directory where driver package(s) will be retrieved for download." disable="false" continueOnError="false" successCodeList="0 3010">
         <defaultVarList>
