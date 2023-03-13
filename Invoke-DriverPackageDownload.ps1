@@ -978,6 +978,26 @@ Else
                       {
                           {($_ -eq $True)}
                             {
+                                $OperatingSystemCriteria = New-Object -TypeName 'System.Collections.Specialized.OrderedDictionary'
+                                            
+                                Switch ($WindowsImageDetails.BuildLabEX)
+                                  {
+                                      {($_ -imatch '.*amd64.*')}
+                                        {
+                                            $OperatingSystemCriteria.Architecture = 'X64'
+                                        }
+
+                                      Default
+                                        {
+                                            $OperatingSystemCriteria.Architecture = 'X86'
+                                        }
+                                  }
+
+                                $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Deployed Operating System - Architecture: $($OperatingSystemCriteria.Architecture)"
+                                Write-Verbose -Message ($LoggingDetails.LogMessage) -Verbose
+
+                                $OperatingSystemCriteria.Version = $WindowsImageDetails.Version
+                                
                                 $GenericDriverPackageMetadataFileList = Get-ChildItem -Path ($GenericDriverPackageRootDirectory.FullName) -Filter '*.json' -Recurse -Force | Where-Object {($_ -is [System.IO.FileInfo])}
 
                                 ForEach ($GenericDriverPackageMetadataFile In $GenericDriverPackageMetadataFileList)
@@ -1064,7 +1084,7 @@ Else
 
                                                                                   Default
                                                                                   {
-                                                                                      $LoggingDetails.WarningMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - The generic driver package of `"$($GenericDriverPackageDetails.Metadata.Name)`" is excluded because the minimum required operating system version of `"$($GenericDriverPackageOSVersion)`" is not less than or equal to the deployed operating system version of `"$($WindowsImageDetails.Version)`". Skipping..."
+                                                                                      $LoggingDetails.WarningMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - The generic driver package of `"$($GenericDriverPackageDetails.Metadata.Name)`" is excluded because the minimum required operating system version of `"$($GenericDriverPackageOSVersion)`" is not less than or equal to the deployed operating system version of `"$($OperatingSystemCriteria.Version)`". Skipping..."
                                                                                       Write-Verbose -Message ($LoggingDetails.WarningMessage) -Verbose
                                                                                   }
                                                                             }
