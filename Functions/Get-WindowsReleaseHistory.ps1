@@ -152,6 +152,16 @@ Function Get-WindowsReleaseHistory
                                                               
                     #Create an object that will contain the functions output.
                       $OutputObjectList = New-Object -TypeName 'System.Collections.Generic.List[PSObject]'
+
+                    #region Adjust security protocol type(s)
+                      [System.Net.SecurityProtocolType]$DesiredSecurityProtocol = [System.Net.SecurityProtocolType]::TLS12
+  
+                      $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Attempting to set the desired security protocol to `"$($DesiredSecurityProtocol.ToString().ToUpper())`". Please Wait..."
+                      Write-Verbose -Message ($LoggingDetails.LogMessage)
+          
+                      $Null = [System.Net.ServicePointManager]::SecurityProtocol = ($DesiredSecurityProtocol)
+                    #endregion
+
                 }
               Catch
                 {
@@ -192,7 +202,7 @@ Function Get-WindowsReleaseHistory
 
                                       $OGTitle = ($MetadataList[0].Attributes | Where-Object {($_.Name -ieq 'Content')}).Value
    
-                                      $HistoryTableList = $HTMLDocumentObject.SelectNodes('//table') | Where-Object {($_.ID -imatch '(^HistoryTable_\d+$)')}
+                                      $Global:HistoryTableList = $HTMLDocumentObject.SelectNodes('//table') | Where-Object {($_.ID -imatch '(^HistoryTable_\d+$)')}
 
                                       $RootNodeList = $HTMLDocumentObject.SelectNodes('//strong')
 
@@ -215,19 +225,67 @@ Function Get-WindowsReleaseHistory
                                                           $OutputObjectProperties.ReleaseHistory = New-Object -TypeName 'System.Collections.Generic.List[PSObject]'
 
                                                           <#
-                                                          $HistoryTableChildNodeList = ($HistoryTableList | Where-Object {($_.InnerText -imatch ".*$($OutputObjectProperties.Build).*")}).ChildNodes | Where-Object {([String]::IsNullOrEmpty($_.InnerText) -eq $False) -and ([String]::IsNullOrWhiteSpace($_.InnerText) -eq $False)} | Sort-Object -Property @('InnerText') -Unique
+                                                          $HistoryTableRowList = ($HistoryTableList.ChildNodes | Where-Object {($_.ChildNodes.Count -gt 0)})
 
-                                                          For ($HistoryTableChildNodeIndex = 0; $HistoryTableChildNodeIndex -lt $HistoryTableChildNodeList.Count; $HistoryTableChildNodeIndex++)
-                                                            {
-                                                                $HistoryTableChildNode = $HistoryTableChildNodeList[$HistoryTableChildNodeIndex]
- 
-                                                                $InnerTextLines = $HistoryTableChildNode.InnerText.Split("`n", [System.StringSplitOptions]::RemoveEmptyEntries).Trim()
+                                                          For ($HistoryTableRowListIndex = 0; $HistoryTableRowListIndex -lt $HistoryTableRowList.Count; $HistoryTableRowListIndex++)
+                                                            { 
+                                                                $HistoryTableRow = $HistoryTableRowList[$HistoryTableRowListIndex]
 
-                                                                For ($InnerTextLineIndex = 0; $InnerTextLineIndex -lt $InnerTextLines.Count; $InnerTextLineIndex++)
+                                                                Switch ($HistoryTableRowListIndex)
                                                                   {
-                                                                      $InnerTextLine = $InnerTextLines[$InnerTextLineIndex]
+                                                                      {($_ -eq 0)}
+                                                                        {
+                                                                            $HistoryTableRowNodeList = $HistoryTableRow.ChildNodes | Where-Object {([String]::IsNullOrEmpty($_.InnerText) -eq $False) -and ([String]::IsNullOrWhiteSpace($_.InnerText) -eq $False)}
+                  
+                                                                            $HistoryTableRowPropertyList = ($HistoryTableRowNodeList | ForEach-Object {($TextInfo.ToTitleCase($_.InnerText) -ireplace '(\s+)', '')}) -As [System.Collections.Generic.List[String]]                  
+                                                                        }
 
-                                                                      #$InnerTextLine
+                                                                      Default
+                                                                        {
+                                                                            Switch ($HistoryTableRowPropertyList.Count -gt 0)
+                                                                              {
+                                                                                  {($_ -eq $True)}
+                                                                                    {
+                                                                                        $ReleaseHistoryObjectProperties = New-Object -TypeName 'System.Collections.Specialized.OrderedDictionary'
+                              
+                                                                                        $HistoryTableRowData = $HistoryTableRow.ChildNodes | Where-Object {($_.ChildNodes.Count -gt 0)}
+                              
+                                                                                        For ($HistoryTableRowPropertyListIndex = 0; $HistoryTableRowPropertyListIndex -lt $HistoryTableRowPropertyList.Count; $HistoryTableRowPropertyListIndex++)
+                                                                                          {
+                                                                                              $HistoryTableRowPropertyName = $HistoryTableRowPropertyList[$HistoryTableRowPropertyListIndex]
+
+                                                                                              $HistoryTableRowPropertyValue = $HistoryTableRowData[$HistoryTableRowPropertyListIndex]
+
+                                                                                              Switch ($Null -ine $HistoryTableRowPropertyValue)
+                                                                                                {
+                                                                                                    {($_ -eq $True)}
+                                                                                                      {
+                                                                                                          $ValuesMatchingRowNodeList = $HistoryTableRowNodeList | Where-Object {($_.InnerText -imatch ".*$($HistoryTableRowPropertyValue.InnerText).*")}
+
+                                                                                                          $ValuesMatchingRowNodeListCount = ($ValuesMatchingRowNodeList | Measure-Object).Count
+                                                
+                                                                                                          Switch ($ValuesMatchingRowNodeListCount -eq 0)
+                                                                                                            {
+                                                                                                                {($_ -eq $True)}
+                                                                                                                  {
+                                                                                                                      $ReleaseHistoryObjectProperties."$($HistoryTableRowPropertyName)" = $HistoryTableRowPropertyValue.InnerText
+                                                                                                                  }
+
+                                                                                                                Default
+                                                                                                                  {
+                                                                                                                      $ReleaseHistoryObjectProperties."$($HistoryTableRowPropertyName)" = $Null
+                                                                                                                  }
+                                                                                                            }           
+                                                                                                      }
+                                                                                                }
+                                                                                          }
+
+                                                                                        $ReleaseHistoryObject = New-Object -TypeName 'PSObject' -Property ($ReleaseHistoryObjectProperties)
+
+                                                                                        $OutputObjectProperties.ReleaseHistory.Add($ReleaseHistoryObject)
+                                                                                    }
+                                                                              }
+                                                                        }
                                                                   }
                                                             }
                                                           #>
@@ -239,12 +297,13 @@ Function Get-WindowsReleaseHistory
                                               }
                                         }
 
+                                      $Null = $OutputObjectProperties.ReleaseHistory = $OutputObjectProperties.ReleaseHistory.ToArray() | Where-Object {($Null -ine $_)}
                                   }
 
                                 #Write the object to the powershell pipeline
                                   $OutputObjectList = $OutputObjectList.ToArray()
 
-                                  $Global:WindowsReleaseHistory = $OutputObjectList | Sort-Object -Property @('Version')
+                                  $Global:WindowsReleaseHistory = $OutputObjectList | Sort-Object -Property @('Version') | Group-Object -Property @('Name')
                             }
 
                           Default
@@ -296,5 +355,5 @@ Function Get-WindowsReleaseHistory
 #endregion
 
 <#
-  Get-WindowsReleaseHistory -Force:$False -Verbose
+  Get-WindowsReleaseHistory -Verbose
 #>

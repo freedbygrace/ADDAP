@@ -11,18 +11,25 @@ Function Invoke-SQLDBQuery
             The database connection will be opened, each database query will be executed, the results will be stored, and the database connection will be closed.
            
             .PARAMETER Server
+            The FQDN or IP Address of a MS SQL database server.
 
             .PARAMETER Instance
+            A valid instance name of the desired MS SQL database server instance. (Optional)
             
             .PARAMETER Port
+            A valid port number of the MS SQL database server. (Optional)
 
             .PARAMETER UserID
+            A valid SQL authentication username (If not specified, Windows authentication will be used.)
 
             .PARAMETER Password
+            A valid SQL authentication password (If not specified, Windows authentication will be used.)
 
             .PARAMETER Database
+            A valid database name that resides on the specified MS SQL database server.
 
             .PARAMETER DBQueryList
+            One or more valid SQL queries for the specified database.
     
             .EXAMPLE
             $DBQueryResults = Invoke-SQLDBQuery -Server 'MyDBServer.mydomain.com' -UserID 'SQLAuthUser' -Password 'SQLAuthUserPassword' -Database 'YourDatabaseName' -DBQueryList @('Select * From YourTableName') -Verbose
@@ -30,7 +37,7 @@ Function Invoke-SQLDBQuery
             Write-Output -InputObject ($DBQueryResults)
             
             .EXAMPLE
-            $DBQueryList = [System.Collections.Generic.List[String]]@()
+            $DBQueryList = New-Object -TypeName 'System.Collections.Generic.List[String]'
               $DBQueryList.Add(@"
 Select Distinct
     dbo.v_Add_Remove_Programs.DisplayName0 As 'DisplayName'
@@ -51,6 +58,26 @@ Order By
             $DBQueryResults = Invoke-SQLDBQuery -Server 'MyDBServer.mydomain.com' -Port '4530' -Database 'YourDatabaseName' -DBQueryList @('Select * From YourTableName1', 'Select * From YourTableName2')
 
             Write-Output -InputObject ($DBQueryResults)
+
+            .EXAMPLE
+            $InvokeSQLDBQueryParameters = New-Object -TypeName 'System.Collections.Specialized.OrderedDictionary'
+	            $InvokeSQLDBQueryParameters.Server = "MyDBServer.mydomain.com"
+	            $InvokeSQLDBQueryParameters.Instance = "MyDBInstance"
+	            $InvokeSQLDBQueryParameters.Port = "1433"
+	            $InvokeSQLDBQueryParameters.UserID = "sa"
+	            $InvokeSQLDBQueryParameters.Password = "Password1"
+	            $InvokeSQLDBQueryParameters.Database = "YourDatabaseName"
+	            $InvokeSQLDBQueryParameters.DBQueryList = New-Object -TypeName 'System.Collections.Generic.List[String]'
+		            $InvokeSQLDBQueryParameters.DBQueryList.Add('Select * From YourTableName1')
+                $InvokeSQLDBQueryParameters.DBQueryList.Add('Select * From YourTableName2')
+	            $InvokeSQLDBQueryParameters.ExportJSON = $True
+	            $InvokeSQLDBQueryParameters.ExportDirectory = "$($Env:Public)\Desktop\SQLDBQueryResults"
+	            $InvokeSQLDBQueryParameters.ContinueOnError = $True
+	            $InvokeSQLDBQueryParameters.Verbose = $True
+
+            $InvokeSQLDBQueryResult = Invoke-SQLDBQuery @InvokeSQLDBQueryParameters
+
+            Write-Output -InputObject ($InvokeSQLDBQueryResult)
                     
             .LINK
             https://www.SQLshack.com/connecting-powershell-to-SQL-server/
@@ -59,7 +86,7 @@ Order By
             https://stackoverflow.com/questions/64681003/fetch-a-whole-row-from-SQL-server-with-powershell
         #>
         
-        [CmdletBinding(ConfirmImpact = 'Low', HelpURI = '', DefaultParameterSetName = '_AllParameterSets', SupportsShouldProcess = $True, PositionalBinding = $True)]       
+        [CmdletBinding(ConfirmImpact = 'Low', HelpURI = '', DefaultParameterSetName = '_AllParameterSets', SupportsShouldProcess = $True)]       
           Param
             (        	     
                 [Parameter(Mandatory=$True)]
@@ -139,39 +166,7 @@ Order By
               
                     #Define Default Action Preferences
                       $ErrorActionPreference = 'Stop'
-                      
-                    $LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - The following parameters and values were provided to the `'$($CmdletName)`' function." 
-                    Write-Verbose -Message $LogMessage
-
-                    $FunctionProperties = Get-Command -Name $CmdletName
-                    
-                    $FunctionParameters = $FunctionProperties.Parameters.Keys | Where-Object {($_ -inotmatch '(^Password$)|(^UserID$)|(^DBQueryList$)')}
-              
-                    ForEach ($Parameter In $FunctionParameters)
-                      {
-                          If (!([String]::IsNullOrEmpty($Parameter)))
-                            {
-                                $ParameterProperties = Get-Variable -Name $Parameter -ErrorAction SilentlyContinue
-                                $ParameterValueCount = $ParameterProperties.Value | Measure-Object | Select-Object -ExpandProperty Count
-                          
-                                If ($ParameterValueCount -gt 1)
-                                  {
-                                      $ParameterValueStringFormat = ($ParameterProperties.Value | ForEach-Object {"`"$($_)`""}) -Join ", "
-                                      $LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - $($ParameterProperties.Name):`r`n`r`n$($ParameterValueStringFormat)"
-                                  }
-                                Else
-                                  {
-                                      $ParameterValueStringFormat = ($ParameterProperties.Value | ForEach-Object {"`"$($_)`""}) -Join ', '
-                                      $LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - $($ParameterProperties.Name): $($ParameterValueStringFormat)"
-                                  }
-                           
-                                If (!([String]::IsNullOrEmpty($ParameterProperties.Name)))
-                                  {
-                                      Write-Verbose -Message $LogMessage
-                                  }
-                            }
-                      }
-
+                     
                     $LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - Execution of $($CmdletName) began on $($FunctionStartTime.ToString($DateTimeLogFormat))"
                     Write-Verbose -Message $LogMessage
                                         
@@ -185,10 +180,10 @@ Order By
                         $LoggingDetails.Add('ErrorMessage', $Null)
 
                     #Create a database connection string builder
-                      $DBConnectionStringBuilder = [System.Data.SQLClient.SQLConnectionStringBuilder]::New()
+                      $DBConnectionStringBuilder = New-Object -TypeName 'System.Data.SQLClient.SQLConnectionStringBuilder'
 
                     #Create a database data source builder
-                      $DataSourceBuilder = [System.Text.StringBuilder]::New()
+                      $DataSourceBuilder = New-Object -TypeName 'System.Text.StringBuilder'
 
                     #Dynamically build the connection string based on parameter values
                       Switch ($True)
@@ -219,26 +214,34 @@ Order By
                               }   
                         }
 
-                    $DBConnection = [System.Data.SQLClient.SQLConnection]::New()
+                    $DBConnection = New-Object -TypeName 'System.Data.SQLClient.SQLConnection'
         
-                    Switch (([String]::IsNullOrEmpty($UserID) -eq $True) -or ([String]::IsNullOrWhiteSpace($UserID) -eq $True) -or ([String]::IsNullOrEmpty($Password) -eq $True) -or ([String]::IsNullOrWhiteSpace($Password) -eq $True))
+                    Switch ((([String]::IsNullOrEmpty($UserID) -eq $False) -and ([String]::IsNullOrWhiteSpace($UserID) -eq $False)) -and (([String]::IsNullOrEmpty($Password) -eq $False) -or ([String]::IsNullOrWhiteSpace($Password) -eq $False)))
                       {
                           {($_ -eq $True)}
                             {
-                                $DBConnectionStringBuilder.PSBase.IntegratedSecurity = $True
+                                $DBConnectionStringBuilder.PSBase.IntegratedSecurity = $False
+          
+                                $CredentialParameters = New-Object -TypeName 'System.Collections.Generic.List[Object]'
+                                  $CredentialParameters.Add($UserID)
+                                  $CredentialParameters.Add((ConvertTo-SecureString -String $Password -AsPlainText -Force))
+                                
+                                $Credential = New-Object -TypeName 'System.Management.Automation.PSCredential' -ArgumentList ($CredentialParameters.ToArray())
+
+                                $Null = $Credential.Password.MakeReadOnly()
+          
+                                $DBConnectionCredentialParameters = New-Object -TypeName 'System.Collections.Generic.List[Object]'
+                                  $DBConnectionCredentialParameters.Add($Credential.UserName)
+                                  $DBConnectionCredentialParameters.Add($Credential.Password)
+                                
+                                $DBConnectionCredential = New-Object -TypeName 'System.Data.SQLClient.SQLCredential' -ArgumentList ($DBConnectionCredentialParameters.ToArray())
+                  
+                                $DBConnection.Credential = ($DBConnectionCredential)    
                             }
                             
                           Default
                             {
-                                $DBConnectionStringBuilder.PSBase.IntegratedSecurity = $False
-          
-                                $Credential = [System.Management.Automation.PSCredential]::New($UserID, (ConvertTo-SecureString -String $Password -AsPlainText -Force))
-
-                                $Null = $Credential.Password.MakeReadOnly()
-          
-                                $DBConnectionCredential = [System.Data.SQLClient.SQLCredential]::New($Credential.UserName, $Credential.Password)
-                  
-                                $DBConnection.Credential = ($DBConnectionCredential)
+                                $DBConnectionStringBuilder.PSBase.IntegratedSecurity = $True
                             }
                       }
 
@@ -271,7 +274,7 @@ Order By
                           [String]$DBQuery = $DBQueryList[$DBQueryListIndex]
                           [Int]$DBQueryNumber = $DBQueryListIndex + 1
                           
-                          $DBCommand = [System.Data.SQLClient.SQLCommand]::New()
+                          $DBCommand = New-Object -TypeName 'System.Data.SQLClient.SQLCommand'
                             $DBCommand.Connection = ($DBConnection)
                             $DBCommand.CommandText = ($DBQuery)
 
@@ -280,10 +283,14 @@ Order By
         
                           $Null = $DBCommand.ExecuteScalar()
       
-                          $DBQueryResults = [System.Data.DataTable]::New()
+                          $DBQueryResults = New-Object -TypeName 'System.Data.DataTable'
+
+                          $DBDataAdapterParameters = New-Object -TypeName 'System.Collections.Generic.List[Object]'
+                            $DBDataAdapterParameters.Add($DBCommand)
       
-                          $DBDataAdapter = [System.Data.SQLClient.SQLDataAdapter]::New($DBCommand)
-                            $Null = $DBDataAdapter.Fill($DBQueryResults)
+                          $DBDataAdapter = New-Object -TypeName 'System.Data.SQLClient.SQLDataAdapter' -ArgumentList ($DBDataAdapterParameters.ToArray())
+                            
+                          $Null = $DBDataAdapter.Fill($DBQueryResults)
 
                           $DBQueryRowCount = $DBQueryResults.Rows.Count
 
@@ -305,10 +312,10 @@ Order By
                           $LoggingDetails.LogMessage = "$($GetCurrentDateTimeMessageFormat.Invoke()) - " + "Attempting to add the result(s) from database query #$($DBQueryNumber) to property `"$($ResultSetPropertyName)`". Please Wait..."
                           Write-Verbose -Message ($LoggingDetails.LogMessage)
 
-                          $PropertyInclusionList = [System.Collections.Generic.List[Object]]@()
+                          $PropertyInclusionList = New-Object -TypeName 'System.Collections.Generic.List[Object]'
                             $Null = $PropertyInclusionList.Add('*')
                           
-                          $PropertyExclusionList = [System.Collections.Generic.List[Object]]@()
+                          $PropertyExclusionList = New-Object -TypeName 'System.Collections.Generic.List[Object]'
                             $Null = $PropertyExclusionList.AddRange(('HasErrors', 'ItemArray', 'RowError', 'RowState', 'Table'))
 
                           $DBQueryRows = $DBQueryResults.Rows | Select-Object -Property ($PropertyInclusionList) -ExcludeProperty ($PropertyExclusionList)
@@ -353,7 +360,7 @@ Order By
                             {($ExportJSON.IsPresent)}
                               {
                                   $ExportParameters = New-Object -TypeName 'System.Collections.Specialized.OrderedDictionary'
-                                    $ExportParameters.Add('Compress', $False)
+                                    $ExportParameters.Add('Compress', $True)
                                     $ExportParameters.Add('Encoding', [System.Text.Encoding]::Default)
                                     $ExportParameters.Add('Depth', 10)
                                   
